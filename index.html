@@ -86,17 +86,20 @@
 
   .featured-card{
     position:relative; border-radius:14px; overflow:hidden; background:var(--surface);
-    min-height:340px; display:flex; flex-direction:column; justify-content:flex-end;
+    min-height:340px; perspective:1800px;
   }
-  .featured-card .photo{ position:absolute; inset:0; z-index:0; }
-  .featured-card .photo img{ position:absolute; inset:0; opacity:0; transition:opacity .8s ease; }
-  .featured-card .photo img.active{ opacity:1; }
-  .featured-card .photo::after{
+  .feat-cube{ position:absolute; inset:0; transform-style:preserve-3d; }
+  .feat-face{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:14px; overflow:hidden;
+    display:flex; flex-direction:column; justify-content:flex-end; background:var(--surface);
+  }
+  .feat-face .photo{ position:absolute; inset:0; z-index:0; }
+  .feat-face .photo::after{
     content:''; position:absolute; inset:0; z-index:1;
     background:linear-gradient(180deg, rgba(10,10,10,.15) 0%, rgba(10,10,10,.55) 55%, rgba(10,10,10,.92) 100%);
   }
   .feat-arrow{
-    position:absolute; top:50%; transform:translateY(-50%); z-index:3;
+    position:absolute; top:50%; transform:translateY(-50%); z-index:5;
     width:2.6rem; height:2.6rem; border-radius:50%; border:1px solid rgba(255,255,255,.25);
     background:rgba(0,0,0,.4); color:#fff; font-size:1.3rem; line-height:1; cursor:pointer;
     display:flex; align-items:center; justify-content:center; transition:background .2s, border-color .2s, opacity .2s;
@@ -115,8 +118,6 @@
   }
   .featured-play:hover{ background:var(--grad); border-color:transparent; }
   .featured-play.playing{ background:var(--grad); border-color:transparent; }
-  .featured-meta{ transition:opacity .3s ease, transform .3s ease; }
-  .featured-meta.fading{ opacity:0; transform:translateY(6px); }
   .featured-meta .eyebrow{ font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--fog); font-weight:700; }
   .featured-meta h2{ font-family:var(--display); font-weight:400; font-size:clamp(1.8rem,3.6vw,2.5rem); line-height:1.25; margin-top:.2rem; }
   .featured-meta .sub{ color:var(--fog); font-size:.86rem; margin-top:.15rem; }
@@ -132,8 +133,8 @@
   .grain-overlay{ position:fixed; inset:0; z-index:200; pointer-events:none; opacity:.035; mix-blend-mode:overlay; }
 
   .featured-bottom{ position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.8rem 1.6rem; flex-wrap:wrap; }
-  .feat-dots{ display:flex; gap:.45rem; }
-  .feat-dots .dot{ width:.5rem; height:.5rem; border-radius:50%; background:rgba(255,255,255,.28); cursor:pointer; transition:background .2s, transform .2s; border:none; padding:0; }
+  .feat-dots{ position:absolute; left:50%; bottom:.9rem; transform:translateX(-50%); z-index:5; display:flex; gap:.45rem; }
+  .feat-dots .dot{ width:.5rem; height:.5rem; border-radius:50%; background:rgba(255,255,255,.35); cursor:pointer; transition:background .2s, transform .2s; border:none; padding:0; }
   .feat-dots .dot.active{ background:var(--orange); transform:scale(1.3); }
   .featured-actions{ display:flex; align-items:center; gap:.6rem; }
   .icon-btn{
@@ -300,36 +301,63 @@
   </div>
 
   <div class="featured-card reveal" id="featured-card">
-    <div class="photo">
-      <img id="feat-photo-a" class="active" src="hero-crowd-back.jpg" alt="Más y Atrás tocando en vivo frente al público">
-      <img id="feat-photo-b" src="" alt="">
+    <div class="feat-cube" id="feat-cube">
+
+      <div class="feat-face" data-face="a">
+        <div class="photo"><img class="feat-face-photo" src="hero-crowd-back.jpg" alt="Más y Atrás tocando en vivo frente al público"></div>
+        <div class="featured-top">
+          <div class="featured-play" data-src="te-necesito.mp3" data-name="Te Necesito" data-album="Sencillo" data-art="cover-te-necesito.jpg" role="button" tabindex="0" aria-label="Reproducir Te Necesito">▶</div>
+          <div class="featured-meta">
+            <span class="eyebrow">Sencillo</span>
+            <h2>Te Necesito</h2>
+            <span class="sub">El single que abrió el camino.</span>
+          </div>
+        </div>
+        <div class="waveform" data-src="te-necesito.mp3" data-bars="140">
+          <div class="wf-bars wf-bg"></div>
+          <div class="wf-bars wf-fg"></div>
+        </div>
+        <div class="featured-bottom">
+          <span class="featured-time"><span class="wf-current">0:00</span> / <span class="wf-duration">0:00</span></span>
+          <div class="featured-actions">
+            <a class="icon-btn dl-btn" href="te-necesito.mp3" download="Te Necesito.mp3" aria-label="Descargar Te Necesito" style="width:auto; height:2.7rem; border-radius:999px; padding:0 1.2rem 0 .5rem;">
+              <span style="width:1.7rem; height:1.7rem; border-radius:50%; background:rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; flex-shrink:0;">⬇</span>
+              <span class="dl-label">Descargar</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat-face" data-face="b">
+        <div class="photo"><img class="feat-face-photo" src="" alt=""></div>
+        <div class="featured-top">
+          <div class="featured-play" data-src="" data-name="" data-album="" data-art="" role="button" tabindex="0" aria-label="Reproducir">▶</div>
+          <div class="featured-meta">
+            <span class="eyebrow"></span>
+            <h2></h2>
+            <span class="sub"></span>
+          </div>
+        </div>
+        <div class="waveform" data-src="" data-bars="140">
+          <div class="wf-bars wf-bg"></div>
+          <div class="wf-bars wf-fg"></div>
+        </div>
+        <div class="featured-bottom">
+          <span class="featured-time"><span class="wf-current">0:00</span> / <span class="wf-duration">0:00</span></span>
+          <div class="featured-actions">
+            <a class="icon-btn dl-btn" href="" download="" aria-label="Descargar" style="width:auto; height:2.7rem; border-radius:999px; padding:0 1.2rem 0 .5rem;">
+              <span style="width:1.7rem; height:1.7rem; border-radius:50%; background:rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; flex-shrink:0;">⬇</span>
+              <span class="dl-label">Descargar</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <button class="feat-arrow prev" id="feat-prev" aria-label="Canción anterior">‹</button>
     <button class="feat-arrow next" id="feat-next" aria-label="Canción siguiente">›</button>
-
-    <div class="featured-top">
-      <div class="featured-play" id="feat-play-btn" data-src="te-necesito.mp3" data-name="Te Necesito" data-album="Sencillo" data-art="cover-te-necesito.jpg" role="button" tabindex="0" aria-label="Reproducir Te Necesito">▶</div>
-      <div class="featured-meta" id="feat-meta">
-        <span class="eyebrow" id="feat-eyebrow">Sencillo</span>
-        <h2 id="feat-title">Te Necesito</h2>
-        <span class="sub" id="feat-sub">El single que abrió el camino.</span>
-      </div>
-    </div>
-    <div class="waveform" id="feat-waveform" data-src="te-necesito.mp3" data-bars="140">
-      <div class="wf-bars wf-bg"></div>
-      <div class="wf-bars wf-fg"></div>
-    </div>
-    <div class="featured-bottom">
-      <span class="featured-time"><span class="wf-current">0:00</span> / <span class="wf-duration">0:00</span></span>
-      <div class="feat-dots" id="feat-dots"></div>
-      <div class="featured-actions">
-        <a class="icon-btn dl-btn" id="feat-download" href="te-necesito.mp3" download="Te Necesito.mp3" aria-label="Descargar Te Necesito" style="width:auto; height:2.7rem; border-radius:999px; padding:0 1.2rem 0 .5rem;">
-          <span style="width:1.7rem; height:1.7rem; border-radius:50%; background:rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; flex-shrink:0;">⬇</span>
-          <span class="dl-label">Descargar</span>
-        </a>
-      </div>
-    </div>
+    <div class="feat-dots" id="feat-dots"></div>
   </div>
 </section>
 
@@ -801,9 +829,6 @@
   const pDuration = document.getElementById('p-duration');
   const pScrub = document.getElementById('p-scrub');
   const pDownload = document.getElementById('p-download');
-  const featuredPlay = document.querySelector('.featured-play');
-  const featuredCur = document.querySelector('.wf-current');
-  const featuredDur = document.querySelector('.wf-duration');
 
   let activeEls = []; // play-like elements currently marked "playing"
   let pendingSeekFn = null;
@@ -871,10 +896,13 @@
     pFgEl.style.clipPath = 'inset(0 '+((1-ratio)*100)+'% 0 0)';
 
     const curFile = audio.currentSrc.split('/').pop();
-    if(featWf && featWf.dataset.src && featWf.dataset.src.split('/').pop() === curFile){
-      if(featuredCur) featuredCur.textContent = fmt(audio.currentTime);
-      if(featuredDur) featuredDur.textContent = fmt(audio.duration);
-    }
+    document.querySelectorAll('.feat-face').forEach(face=>{
+      const wf = face.querySelector('.waveform');
+      if(wf && wf.dataset.src && wf.dataset.src.split('/').pop() === curFile){
+        face.querySelector('.wf-current').textContent = fmt(audio.currentTime);
+        face.querySelector('.wf-duration').textContent = fmt(audio.duration);
+      }
+    });
     Object.keys(waveformRegistry).forEach(src=>{
       if(src.split('/').pop() === curFile){
         waveformRegistry[src].forEach(w=> w.fgEl.style.clipPath = 'inset(0 '+((1-ratio)*100)+'% 0 0)');
@@ -884,9 +912,12 @@
   audio.addEventListener('loadedmetadata', ()=>{
     pDuration.textContent = fmt(audio.duration);
     const curFile = audio.currentSrc.split('/').pop();
-    if(featWf && featWf.dataset.src && featWf.dataset.src.split('/').pop() === curFile && featuredDur){
-      featuredDur.textContent = fmt(audio.duration);
-    }
+    document.querySelectorAll('.feat-face').forEach(face=>{
+      const wf = face.querySelector('.waveform');
+      if(wf && wf.dataset.src && wf.dataset.src.split('/').pop() === curFile){
+        face.querySelector('.wf-duration').textContent = fmt(audio.duration);
+      }
+    });
   });
   audio.addEventListener('ended', ()=>{
     clearActive();
@@ -901,7 +932,7 @@
     audio.currentTime = ratio * audio.duration;
   });
 
-  // ---------- featured card carousel ----------
+  // ---------- featured card carousel (cube rotation) ----------
   // ✎ Cada track usa una foto de placeholder repetida. Si me pasás una foto
   // por tema, la reemplazo acá (campo "photo" de cada objeto).
   const featuredTracks = [
@@ -917,25 +948,71 @@
   ];
 
   let featIndex = 0;
-  const featPhotoA = document.getElementById('feat-photo-a');
-  const featPhotoB = document.getElementById('feat-photo-b');
-  let featActiveImg = featPhotoA, featStandbyImg = featPhotoB;
-  const featPlayBtn = document.getElementById('feat-play-btn');
-  const featMeta = document.getElementById('feat-meta');
-  const featEyebrow = document.getElementById('feat-eyebrow');
-  const featTitle = document.getElementById('feat-title');
-  const featSub = document.getElementById('feat-sub');
-  const featWf = document.getElementById('feat-waveform');
-  const featDownload = document.getElementById('feat-download');
+  let featAnimating = false;
+  const featCardEl = document.getElementById('featured-card');
+  const featCubeEl = document.getElementById('feat-cube');
+  const featFaces = Array.from(document.querySelectorAll('.feat-face'));
+  let currentFace = featFaces[0];
+  let standbyFace = featFaces[1];
   const featDotsWrap = document.getElementById('feat-dots');
-  const featPrev = document.getElementById('feat-prev');
-  const featNext = document.getElementById('feat-next');
+  const featPrevBtn = document.getElementById('feat-prev');
+  const featNextBtn = document.getElementById('feat-next');
+
+  function featHalfWidth(){ return featCardEl.offsetWidth / 2; }
+
+  function populateFace(face, t){
+    const img = face.querySelector('.feat-face-photo');
+    img.src = t.photo;
+    img.alt = t.name;
+
+    const playBtn = face.querySelector('.featured-play');
+    playBtn.dataset.src = t.src;
+    playBtn.dataset.name = t.name;
+    playBtn.dataset.album = t.album;
+    playBtn.dataset.art = t.art;
+    playBtn.setAttribute('aria-label', 'Reproducir '+t.name);
+
+    face.querySelector('.eyebrow').textContent = t.eyebrow;
+    face.querySelector('h2').textContent = t.name;
+    face.querySelector('.sub').textContent = t.sub;
+
+    const wf = face.querySelector('.waveform');
+    wf.dataset.src = t.src;
+    renderWaveformBars(wf);
+
+    const dl = face.querySelector('.dl-btn');
+    dl.href = t.src;
+    dl.download = t.name + '.mp3';
+    dl.setAttribute('aria-label', 'Descargar '+t.name);
+
+    const curFile = audio.currentSrc ? audio.currentSrc.split('/').pop() : null;
+    const isPlaying = !!(curFile && t.src.split('/').pop() === curFile && !audio.paused);
+    activeEls = activeEls.filter(el=> el !== playBtn);
+    if(isPlaying){
+      activeEls.push(playBtn);
+      playBtn.classList.add('playing');
+      playBtn.textContent = '❚❚';
+    } else {
+      playBtn.classList.remove('playing');
+      playBtn.textContent = '▶';
+    }
+
+    const curSpan = face.querySelector('.wf-current');
+    const durSpan = face.querySelector('.wf-duration');
+    if(curFile && t.src.split('/').pop() === curFile && audio.duration){
+      curSpan.textContent = fmt(audio.currentTime);
+      durSpan.textContent = fmt(audio.duration);
+    } else {
+      curSpan.textContent = '0:00';
+      durSpan.textContent = '0:00';
+    }
+  }
 
   featuredTracks.forEach((t,i)=>{
     const dot = document.createElement('button');
     dot.className = 'dot' + (i===0 ? ' active' : '');
     dot.setAttribute('aria-label', 'Ir a '+t.name);
-    dot.addEventListener('click', (e)=>{ e.stopPropagation(); renderFeatured(i); });
+    dot.addEventListener('click', (e)=>{ e.stopPropagation(); goToFeatured(i); });
     featDotsWrap.appendChild(dot);
   });
 
@@ -943,71 +1020,75 @@
     featDotsWrap.querySelectorAll('.dot').forEach((d,i)=> d.classList.toggle('active', i===index));
   }
 
-  function renderFeatured(index, animate){
-    if(animate === undefined) animate = true;
-    featIndex = (index + featuredTracks.length) % featuredTracks.length;
-    const t = featuredTracks[featIndex];
+  function goToFeatured(targetIndex){
+    if(featAnimating) return;
+    const n = featuredTracks.length;
+    targetIndex = ((targetIndex % n) + n) % n;
+    if(targetIndex === featIndex) return;
 
-    featStandbyImg.onload = null;
-    featStandbyImg.src = t.photo;
-    featStandbyImg.onload = ()=>{
-      featStandbyImg.classList.add('active');
-      featActiveImg.classList.remove('active');
-      const tmp = featActiveImg; featActiveImg = featStandbyImg; featStandbyImg = tmp;
-    };
+    // shortest circular direction
+    let fwd = (targetIndex - featIndex + n) % n;
+    let bwd = (featIndex - targetIndex + n) % n;
+    const direction = fwd <= bwd ? 'next' : 'prev';
 
-    const applyText = ()=>{
-      featEyebrow.textContent = t.eyebrow;
-      featTitle.textContent = t.name;
-      featSub.textContent = t.sub;
-    };
-    if(animate){
-      featMeta.classList.add('fading');
-      setTimeout(()=>{ applyText(); featMeta.classList.remove('fading'); }, 220);
-    } else {
-      applyText();
-    }
-
-    featPlayBtn.dataset.src = t.src;
-    featPlayBtn.dataset.name = t.name;
-    featPlayBtn.dataset.album = t.album;
-    featPlayBtn.dataset.art = t.art;
-    featPlayBtn.setAttribute('aria-label', 'Reproducir '+t.name);
-
-    const curFile = audio.currentSrc ? audio.currentSrc.split('/').pop() : null;
-    const isPlaying = !!(curFile && t.src.split('/').pop() === curFile && !audio.paused);
-    activeEls = activeEls.filter(el=> el !== featPlayBtn);
-    if(isPlaying){
-      activeEls.push(featPlayBtn);
-      featPlayBtn.classList.add('playing');
-      featPlayBtn.textContent = '❚❚';
-    } else {
-      featPlayBtn.classList.remove('playing');
-      featPlayBtn.textContent = '▶';
-    }
-
-    featDownload.href = t.src;
-    featDownload.download = t.name + '.mp3';
-    featDownload.setAttribute('aria-label', 'Descargar '+t.name);
-
-    featWf.dataset.src = t.src;
-    renderWaveformBars(featWf);
-
-    if(curFile && t.src.split('/').pop() === curFile && audio.duration){
-      featuredCur.textContent = fmt(audio.currentTime);
-      featuredDur.textContent = fmt(audio.duration);
-    } else {
-      featuredCur.textContent = '0:00';
-      featuredDur.textContent = '0:00';
-    }
-
-    updateFeatDots(featIndex);
+    rotateFeatured(targetIndex, direction);
   }
 
-  featPrev.addEventListener('click', (e)=>{ e.stopPropagation(); renderFeatured(featIndex-1); });
-  featNext.addEventListener('click', (e)=>{ e.stopPropagation(); renderFeatured(featIndex+1); });
+  function rotateFeatured(targetIndex, direction){
+    featAnimating = true;
+    featIndex = targetIndex;
+    const t = featuredTracks[featIndex];
+    const halfW = featHalfWidth();
 
-  renderFeatured(0, false);
+    populateFace(standbyFace, t);
+
+    const startDeg = direction === 'prev' ? -90 : 90;
+    standbyFace.style.transition = 'none';
+    standbyFace.style.transform = 'rotateY('+startDeg+'deg) translateZ('+halfW+'px)';
+    // force reflow so the "none" transition takes effect before animating
+    standbyFace.getBoundingClientRect();
+    standbyFace.style.transition = '';
+
+    featCubeEl.style.transition = 'transform .9s cubic-bezier(.65,0,.35,1)';
+    featCubeEl.style.transform = 'rotateY('+(direction === 'prev' ? 90 : -90)+'deg)';
+
+    const onEnd = (e)=>{
+      if(e.target !== featCubeEl) return;
+      featCubeEl.removeEventListener('transitionend', onEnd);
+
+      featCubeEl.style.transition = 'none';
+      featCubeEl.style.transform = 'rotateY(0deg)';
+      standbyFace.style.transition = 'none';
+      standbyFace.style.transform = 'rotateY(0deg) translateZ('+halfW+'px)';
+      featCubeEl.getBoundingClientRect();
+      featCubeEl.style.transition = '';
+      standbyFace.style.transition = '';
+
+      const tmp = currentFace; currentFace = standbyFace; standbyFace = tmp;
+      updateFeatDots(featIndex);
+      featAnimating = false;
+    };
+    featCubeEl.addEventListener('transitionend', onEnd);
+  }
+
+  featPrevBtn.addEventListener('click', (e)=>{ e.stopPropagation(); if(!featAnimating) rotateFeatured((featIndex-1+featuredTracks.length)%featuredTracks.length, 'prev'); });
+  featNextBtn.addEventListener('click', (e)=>{ e.stopPropagation(); if(!featAnimating) rotateFeatured((featIndex+1)%featuredTracks.length, 'next'); });
+
+  // initial layout: current face front-facing, standby parked to the right
+  (function initFeatured(){
+    const halfW = featHalfWidth();
+    populateFace(currentFace, featuredTracks[0]);
+    currentFace.style.transform = 'rotateY(0deg) translateZ('+halfW+'px)';
+    populateFace(standbyFace, featuredTracks[1]);
+    standbyFace.style.transform = 'rotateY(90deg) translateZ('+halfW+'px)';
+    updateFeatDots(0);
+  })();
+
+  window.addEventListener('resize', ()=>{
+    if(featAnimating) return;
+    const halfW = featHalfWidth();
+    currentFace.style.transform = 'rotateY(0deg) translateZ('+halfW+'px)';
+  });
 </script>
 
 </body>
