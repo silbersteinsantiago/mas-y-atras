@@ -136,6 +136,16 @@
   .feat-dots{ position:absolute; left:50%; bottom:.9rem; transform:translateX(-50%); z-index:5; display:flex; gap:.45rem; }
   .feat-dots .dot{ width:.5rem; height:.5rem; border-radius:50%; background:rgba(255,255,255,.35); cursor:pointer; transition:background .2s, transform .2s; border:none; padding:0; }
   .feat-dots .dot.active{ background:var(--orange); transform:scale(1.3); }
+  .feat-album-tabs{ position:absolute; top:1rem; right:1rem; z-index:5; display:flex; gap:.4rem; flex-wrap:wrap; max-width:65%; justify-content:flex-end; }
+  .feat-album-tabs .tab{
+    font-size:.68rem; font-weight:700; letter-spacing:.03em; color:rgba(255,255,255,.75);
+    background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.2); border-radius:999px;
+    padding:.35rem .8rem; cursor:pointer; transition:background .2s, border-color .2s, color .2s;
+    white-space:nowrap;
+  }
+  .feat-album-tabs .tab:hover{ border-color:var(--orange); color:#fff; }
+  .feat-album-tabs .tab.active{ background:var(--grad); border-color:transparent; color:#fff; }
+  @media (max-width:760px){ .feat-album-tabs{ max-width:100%; top:.6rem; right:.6rem; } .feat-album-tabs .tab{ font-size:.6rem; padding:.3rem .6rem; } }
   .featured-actions{ display:flex; align-items:center; gap:.6rem; }
   .icon-btn{
     width:2.7rem; height:2.7rem; border-radius:50%; border:1px solid rgba(255,255,255,.22);
@@ -357,6 +367,7 @@
 
     <button class="feat-arrow prev" id="feat-prev" aria-label="Canción anterior">‹</button>
     <button class="feat-arrow next" id="feat-next" aria-label="Canción siguiente">›</button>
+    <div class="feat-album-tabs" id="feat-album-tabs"></div>
     <div class="feat-dots" id="feat-dots"></div>
   </div>
 </section>
@@ -850,6 +861,30 @@
 
   let activeEls = []; // play-like elements currently marked "playing"
   let pendingSeekFn = null;
+  let fadeTimer = null;
+  let fadeOutTriggered = false;
+  const FADE_OUT_SECONDS = 1.2;
+  const FADE_IN_MS = 700;
+
+  function stopFade(){
+    if(fadeTimer){ clearInterval(fadeTimer); fadeTimer = null; }
+  }
+
+  function fadeVolume(from, to, durationMs, onDone){
+    stopFade();
+    audio.volume = from;
+    const steps = Math.max(1, Math.round(durationMs/40));
+    let i = 0;
+    fadeTimer = setInterval(()=>{
+      i++;
+      audio.volume = Math.min(1, Math.max(0, from + (to-from)*(i/steps)));
+      if(i>=steps){
+        stopFade();
+        audio.volume = to;
+        if(onDone) onDone();
+      }
+    }, 40);
+  }
 
   function clearActive(){
     activeEls.forEach(el=>{ el.classList.remove('playing'); el.textContent = '▶'; });
@@ -864,6 +899,9 @@
     if(isSame && audio.paused){ audio.play(); if(afterPlayCb) afterPlayCb(); return; }
 
     clearActive();
+    stopFade();
+    fadeOutTriggered = false;
+    audio.volume = 1;
     audio.src = src;
     audio.play();
     if(afterPlayCb) pendingSeekFn = afterPlayCb;
@@ -885,6 +923,32 @@
     pToggle.textContent = '❚❚';
   }
 
+  // play a track by data object (used for auto-advance, not tied to a specific DOM element)
+  function playTrackData(t, fadeIn){
+    const btn = document.querySelector('.play-btn[data-src="'+t.src+'"], .featured-play[data-src="'+t.src+'"]');
+    if(btn){
+      playFromEl(btn);
+    } else {
+      clearActive();
+      stopFade();
+      fadeOutTriggered = false;
+      audio.volume = 1;
+      audio.src = t.src;
+      audio.play();
+      pArt.src = t.art;
+      pTrack.textContent = t.name;
+      pAlbum.textContent = t.album;
+      pDownload.href = t.src;
+      pDownload.download = t.name + '.mp3';
+      player.classList.add('active');
+      pToggle.textContent = '❚❚';
+    }
+    if(fadeIn){
+      audio.volume = 0;
+      fadeVolume(0, 1, FADE_IN_MS);
+    }
+  }
+
   document.querySelectorAll('.play-btn, .featured-play').forEach(el=>{
     el.addEventListener('click', (e)=>{ e.stopPropagation(); playFromEl(el); });
     el.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); e.stopPropagation(); playFromEl(el); } });
@@ -904,6 +968,7 @@
     if(pendingSeekFn){ pendingSeekFn(); pendingSeekFn=null; }
   });
   audio.addEventListener('pause', ()=>{
+    stopFade();
     pToggle.textContent = '▶';
     activeEls.forEach(el=> el.textContent = '▶');
   });
@@ -912,6 +977,12 @@
     const ratio = audio.currentTime/audio.duration;
     pCurrent.textContent = fmt(audio.currentTime);
     pFgEl.style.clipPath = 'inset(0 '+((1-ratio)*100)+'% 0 0)';
+
+    // start a short fade-out right before the track ends
+    if(!fadeOutTriggered && (audio.duration - audio.currentTime) <= FADE_OUT_SECONDS && (audio.duration - audio.currentTime) > 0){
+      fadeOutTriggered = true;
+      fadeVolume(audio.volume, 0, FADE_OUT_SECONDS*1000);
+    }
 
     const curFile = audio.currentSrc.split('/').pop();
     document.querySelectorAll('.feat-face').forEach(face=>{
@@ -938,9 +1009,21 @@
     });
   });
   audio.addEventListener('ended', ()=>{
+    stopFade();
+    const endedFile = audio.currentSrc ? audio.currentSrc.split('/').pop() : null;
     clearActive();
     pFgEl.style.clipPath = 'inset(0 100% 0 0)';
     Object.values(waveformRegistry).forEach(list=> list.forEach(w=> w.fgEl.style.clipPath='inset(0 100% 0 0)'));
+
+    // auto-advance: if the track that just ended is part of the curated queue, play the next one
+    if(typeof featuredTracks !== 'undefined' && endedFile){
+      const idx = featuredTracks.findIndex(t=> t.src.split('/').pop() === endedFile);
+      if(idx !== -1){
+        const nextIndex = (idx + 1) % featuredTracks.length;
+        if(typeof goToFeatured === 'function') goToFeatured(nextIndex);
+        setTimeout(()=>{ playTrackData(featuredTracks[nextIndex], true); }, 950);
+      }
+    }
   });
 
   pScrub.addEventListener('click', (e)=>{
@@ -973,6 +1056,7 @@
   let currentFace = featFaces[0];
   let standbyFace = featFaces[1];
   const featDotsWrap = document.getElementById('feat-dots');
+  const featAlbumTabsWrap = document.getElementById('feat-album-tabs');
   const featPrevBtn = document.getElementById('feat-prev');
   const featNextBtn = document.getElementById('feat-next');
 
@@ -1034,8 +1118,24 @@
     featDotsWrap.appendChild(dot);
   });
 
+  // one tab per album, jumping to that album's first track in the carousel
+  const featAlbumOrder = [];
+  featuredTracks.forEach((t,i)=>{
+    if(!featAlbumOrder.some(a=> a.album === t.album)) featAlbumOrder.push({ album: t.album, firstIndex: i });
+  });
+  featAlbumOrder.forEach((a, ai)=>{
+    const tab = document.createElement('button');
+    tab.className = 'tab' + (ai===0 ? ' active' : '');
+    tab.textContent = a.album;
+    tab.setAttribute('aria-label', 'Ir al álbum '+a.album);
+    tab.addEventListener('click', (e)=>{ e.stopPropagation(); goToFeatured(a.firstIndex); });
+    featAlbumTabsWrap.appendChild(tab);
+  });
+
   function updateFeatDots(index){
     featDotsWrap.querySelectorAll('.dot').forEach((d,i)=> d.classList.toggle('active', i===index));
+    const activeAlbum = featuredTracks[index].album;
+    featAlbumTabsWrap.querySelectorAll('.tab').forEach((tabEl, ai)=> tabEl.classList.toggle('active', featAlbumOrder[ai].album === activeAlbum));
   }
 
   function goToFeatured(targetIndex){
