@@ -118,13 +118,16 @@
   .featured-bottom{ position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.8rem 1.6rem; }
   .featured-actions{ display:flex; align-items:center; gap:.6rem; }
   .icon-btn{
-    width:2.4rem; height:2.4rem; border-radius:50%; border:1px solid rgba(255,255,255,.22);
+    width:2.7rem; height:2.7rem; border-radius:50%; border:1px solid rgba(255,255,255,.22);
     display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.04); color:var(--cream);
-    cursor:pointer; transition:background .2s, border-color .2s, color .2s; font-size:.75rem; flex-shrink:0;
+    cursor:pointer; transition:background .2s, border-color .2s, color .2s; font-size:.95rem; flex-shrink:0;
   }
   .icon-btn:hover{ border-color:var(--orange); color:var(--orange); }
   .icon-btn.playing{ background:var(--grad); border-color:transparent; color:#fff; }
-  .icon-btn.small{ width:2.05rem; height:2.05rem; font-size:.65rem; }
+  .icon-btn.small{ width:2.3rem; height:2.3rem; font-size:.8rem; }
+  .dl-label{ font-size:.82rem; font-weight:600; color:var(--fog); }
+  .icon-btn:hover + .dl-label, .dl-btn:hover .dl-label{ color:var(--orange); }
+  .dl-btn{ display:flex; align-items:center; gap:.55rem; }
   .featured-time{ font-size:.76rem; color:var(--fog); font-variant-numeric:tabular-nums; }
 
   section{ position:relative; padding: 4.4rem var(--edge); }
@@ -199,7 +202,7 @@
   .version-row{ display:flex; align-items:center; justify-content:space-between; gap:.8rem; padding:.5rem 0; border-top:1px solid var(--line); }
   .version-row .v-label{ font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; color:var(--fog); font-weight:700; }
   .version-row .v-actions{ display:flex; gap:.5rem; }
-  .icon-btn.small{ width:1.9rem; height:1.9rem; font-size:.6rem; }
+  .icon-btn.small{ width:2.15rem; height:2.15rem; font-size:.75rem; }
   @media (max-width:860px){ .session-grid{ grid-template-columns:1fr; } }
 
   .session-card .story-toggle{ margin-top:.8rem; }
@@ -293,7 +296,10 @@
     <div class="featured-bottom">
       <span class="featured-time"><span class="wf-current">0:00</span> / <span class="wf-duration">0:00</span></span>
       <div class="featured-actions">
-        <a class="icon-btn" href="te-necesito.mp3" download="Te Necesito.mp3" aria-label="Descargar Te Necesito">⬇</a>
+        <a class="icon-btn dl-btn" href="te-necesito.mp3" download="Te Necesito.mp3" aria-label="Descargar Te Necesito" style="width:auto; height:2.7rem; border-radius:999px; padding:0 1.2rem 0 .5rem;">
+          <span style="width:1.7rem; height:1.7rem; border-radius:50%; background:rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; flex-shrink:0;">⬇</span>
+          <span class="dl-label">Descargar</span>
+        </a>
       </div>
     </div>
   </div>
@@ -750,7 +756,7 @@
   let pendingSeekFn = null;
 
   function clearActive(){
-    activeEls.forEach(el=> el.classList.remove('playing'));
+    activeEls.forEach(el=>{ el.classList.remove('playing'); el.textContent = '▶'; });
     activeEls = [];
   }
 
@@ -798,9 +804,13 @@
 
   audio.addEventListener('play', ()=>{
     pToggle.textContent = '❚❚';
+    activeEls.forEach(el=> el.textContent = '❚❚');
     if(pendingSeekFn){ pendingSeekFn(); pendingSeekFn=null; }
   });
-  audio.addEventListener('pause', ()=>{ pToggle.textContent = '▶'; });
+  audio.addEventListener('pause', ()=>{
+    pToggle.textContent = '▶';
+    activeEls.forEach(el=> el.textContent = '▶');
+  });
   audio.addEventListener('timeupdate', ()=>{
     if(!audio.duration) return;
     const ratio = audio.currentTime/audio.duration;
