@@ -112,12 +112,15 @@
 
   .featured-top{ position:relative; z-index:2; display:flex; align-items:center; gap:1.1rem; padding:1.6rem 1.8rem 0; }
   .featured-play{
-    width:3.4rem; height:3.4rem; border-radius:50%; background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.25);
-    display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; cursor:pointer;
-    transition:background .2s, border-color .2s;
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:4;
+    width:5rem; height:5rem; border-radius:50%; background:rgba(0,0,0,.68); border:1px solid rgba(255,255,255,.30);
+    backdrop-filter:blur(4px); box-shadow:0 10px 30px rgba(0,0,0,.38);
+    display:flex; align-items:center; justify-content:center; font-size:1.45rem; flex-shrink:0; cursor:pointer;
+    transition:background .2s, border-color .2s, transform .2s;
   }
-  .featured-play:hover{ background:var(--grad); border-color:transparent; }
-  .featured-play.playing{ background:var(--grad); border-color:transparent; }
+  .featured-play:hover{ background:rgba(0,0,0,.82); border-color:rgba(255,255,255,.5); }
+  .featured-play.playing{ background:rgba(0,0,0,.88); border-color:rgba(255,255,255,.55); }
+  @media (max-width:640px){ .featured-play{ width:4.2rem; height:4.2rem; font-size:1.2rem; } }
   .featured-meta .eyebrow{ font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--fog); font-weight:700; }
   .featured-meta h2{ font-family:var(--display); font-weight:400; font-size:clamp(1.8rem,3.6vw,2.5rem); line-height:1.25; margin-top:.2rem; }
   .featured-meta .sub{ color:var(--fog); font-size:.86rem; margin-top:.15rem; }
@@ -322,8 +325,8 @@
 
       <div class="feat-face" data-face="a">
         <div class="photo"><img class="feat-face-photo" src="hero-crowd-back.jpg" alt="Más y Atrás tocando en vivo frente al público"></div>
+        <div class="featured-play" data-src="Te Necesito (En vivo).mp3" data-name="Te Necesito" data-album="Sencillo" data-art="cover-te-necesito.jpg" role="button" tabindex="0" aria-label="Reproducir Te Necesito">▶</div>
         <div class="featured-top">
-          <div class="featured-play" data-src="Te Necesito (En vivo).mp3" data-name="Te Necesito" data-album="Sencillo" data-art="cover-te-necesito.jpg" role="button" tabindex="0" aria-label="Reproducir Te Necesito">▶</div>
           <div class="featured-meta">
             <span class="eyebrow">Sencillo</span>
             <h2>Te Necesito</h2>
@@ -347,8 +350,8 @@
 
       <div class="feat-face" data-face="b">
         <div class="photo"><img class="feat-face-photo" src="" alt=""></div>
+        <div class="featured-play" data-src="" data-name="" data-album="" data-art="" role="button" tabindex="0" aria-label="Reproducir">▶</div>
         <div class="featured-top">
-          <div class="featured-play" data-src="" data-name="" data-album="" data-art="" role="button" tabindex="0" aria-label="Reproducir">▶</div>
           <div class="featured-meta">
             <span class="eyebrow"></span>
             <h2></h2>
@@ -757,6 +760,16 @@
   // ---------- seeded waveform generator ----------
   const audio = document.getElementById('audio');
 
+  function fileNameFromPath(path){
+    return (path || '').split('/').pop();
+  }
+
+  function getCurrentAudioFile(){
+    if(!audio.currentSrc) return '';
+    try { return decodeURIComponent(fileNameFromPath(audio.currentSrc)); }
+    catch(e){ return fileNameFromPath(audio.currentSrc); }
+  }
+
   function seedNum(str){
     let h = 1779033703 ^ str.length;
     for(let i=0;i<str.length;i++){
@@ -812,8 +825,8 @@
     });
     registerWaveform(wf, src, fgEl);
 
-    const curFile = audio.currentSrc ? audio.currentSrc.split('/').pop() : null;
-    if(curFile && src.split('/').pop() === curFile && audio.duration){
+    const curFile = getCurrentAudioFile() || null;
+    if(curFile && fileNameFromPath(src) === curFile && audio.duration){
       fgEl.style.clipPath = 'inset(0 '+((1-audio.currentTime/audio.duration)*100)+'% 0 0)';
     } else {
       fgEl.style.clipPath = 'inset(0 100% 0 0)';
@@ -900,7 +913,7 @@
 
   function playFromEl(el, afterPlayCb){
     const src = el.dataset.src;
-    const isSame = audio.currentSrc && audio.currentSrc.endsWith(src.split('/').pop());
+    const isSame = getCurrentAudioFile() === fileNameFromPath(src);
 
     if(isSame && !audio.paused){ audio.pause(); return; }
     if(isSame && audio.paused){ audio.play(); if(afterPlayCb) afterPlayCb(); return; }
@@ -991,40 +1004,40 @@
       fadeVolume(audio.volume, 0, FADE_OUT_SECONDS*1000);
     }
 
-    const curFile = audio.currentSrc.split('/').pop();
+    const curFile = getCurrentAudioFile();
     document.querySelectorAll('.feat-face').forEach(face=>{
       const wf = face.querySelector('.waveform');
-      if(wf && wf.dataset.src && wf.dataset.src.split('/').pop() === curFile){
+      if(wf && wf.dataset.src && fileNameFromPath(wf.dataset.src) === curFile){
         face.querySelector('.wf-current').textContent = fmt(audio.currentTime);
         face.querySelector('.wf-duration').textContent = fmt(audio.duration);
       }
     });
     Object.keys(waveformRegistry).forEach(src=>{
-      if(src.split('/').pop() === curFile){
+      if(fileNameFromPath(src) === curFile){
         waveformRegistry[src].forEach(w=> w.fgEl.style.clipPath = 'inset(0 '+((1-ratio)*100)+'% 0 0)');
       }
     });
   });
   audio.addEventListener('loadedmetadata', ()=>{
     pDuration.textContent = fmt(audio.duration);
-    const curFile = audio.currentSrc.split('/').pop();
+    const curFile = getCurrentAudioFile();
     document.querySelectorAll('.feat-face').forEach(face=>{
       const wf = face.querySelector('.waveform');
-      if(wf && wf.dataset.src && wf.dataset.src.split('/').pop() === curFile){
+      if(wf && wf.dataset.src && fileNameFromPath(wf.dataset.src) === curFile){
         face.querySelector('.wf-duration').textContent = fmt(audio.duration);
       }
     });
   });
   audio.addEventListener('ended', ()=>{
     stopFade();
-    const endedFile = audio.currentSrc ? audio.currentSrc.split('/').pop() : null;
+    const endedFile = getCurrentAudioFile() || null;
     clearActive();
     pFgEl.style.clipPath = 'inset(0 100% 0 0)';
     Object.values(waveformRegistry).forEach(list=> list.forEach(w=> w.fgEl.style.clipPath='inset(0 100% 0 0)'));
 
     // auto-advance: if the track that just ended is part of the curated queue, play the next one
     if(typeof featuredTracks !== 'undefined' && endedFile){
-      const idx = featuredTracks.findIndex(t=> t.src.split('/').pop() === endedFile);
+      const idx = featuredTracks.findIndex(t=> fileNameFromPath(t.src) === endedFile);
       if(idx !== -1){
         const nextIndex = (idx + 1) % featuredTracks.length;
         if(typeof goToFeatured === 'function') goToFeatured(nextIndex);
@@ -1094,8 +1107,8 @@
     dl.download = t.name + '.mp3';
     dl.setAttribute('aria-label', 'Descargar '+t.name);
 
-    const curFile = audio.currentSrc ? audio.currentSrc.split('/').pop() : null;
-    const isPlaying = !!(curFile && t.src.split('/').pop() === curFile && !audio.paused);
+    const curFile = getCurrentAudioFile() || null;
+    const isPlaying = !!(curFile && t.fileNameFromPath(src) === curFile && !audio.paused);
     activeEls = activeEls.filter(el=> el !== playBtn);
     if(isPlaying){
       activeEls.push(playBtn);
@@ -1108,7 +1121,7 @@
 
     const curSpan = face.querySelector('.wf-current');
     const durSpan = face.querySelector('.wf-duration');
-    if(curFile && t.src.split('/').pop() === curFile && audio.duration){
+    if(curFile && t.fileNameFromPath(src) === curFile && audio.duration){
       curSpan.textContent = fmt(audio.currentTime);
       durSpan.textContent = fmt(audio.duration);
     } else {
