@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MÁS Y ATRÁS — Rock en vivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --ink:#0A0B0B;
+    --ink-2:#141311;
+    --cream:#E7DBC6;
+    --gold:#B08A44;
+    --gold-dim:#6E5326;
+    --crimson:#8E3728;
+    --fog:#8C8071;
+
+    --display: 'Fraunces', serif;
+    --body: 'Work Sans', sans-serif;
+    --mono: 'Space Mono', monospace;
+
+    --edge: 6vw;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--ink);
+    color:var(--cream);
+    font-family:var(--body);
+    font-weight:300;
+    line-height:1.5;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{ background:var(--gold); color:var(--ink); }
+  a{ color:inherit; text-decoration:none; }
+  img{ display:block; width:100%; height:100%; object-fit:cover; }
+
+  /* ---------- signature: sepia-gold duotone + grain (matches the band's own poster look) ---------- */
+  .grain-overlay{
+    position:fixed; inset:0; z-index:200; pointer-events:none;
+    opacity:.045; mix-blend-mode:overlay;
+  }
+  .photo{ position:relative; overflow:hidden; background:var(--ink-2); }
+  .photo img{ filter:grayscale(1) contrast(1.18) brightness(.82); }
+  .photo::after{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(155deg, var(--crimson) 0%, transparent 50%, var(--gold) 135%);
+    mix-blend-mode:color;
+    opacity:.8;
+  }
+  .photo::before{
+    content:''; position:absolute; inset:0; z-index:2;
+    box-shadow: inset 0 0 8vw rgba(0,0,0,.6);
+    pointer-events:none;
+  }
+  .photo.flat img{ filter:none; }
+  .photo.flat::after{ display:none; }
+
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity 1s ease, transform 1s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: .9rem var(--edge);
+    background:linear-gradient(to bottom, rgba(10,11,11,.85), transparent);
+  }
+  .nav .mark{ display:flex; align-items:center; gap:.6rem; }
+  .nav .mark img{ width:2.6rem; height:2.6rem; object-fit:contain; }
+  .nav .mark span{ font-family:var(--display); font-size:1rem; letter-spacing:.1em; font-weight:500; }
+  .nav ul{ list-style:none; display:flex; gap:2.2rem; font-family:var(--mono); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; }
+  .nav ul li a{ opacity:.75; transition:opacity .3s; }
+  .nav ul li a:hover{ opacity:1; color:var(--gold); }
+  @media (max-width:720px){ .nav ul{ gap:1rem; } .nav .mark span{ display:none; } }
+
+  /* ---------- hero ---------- */
+  .hero{ position:relative; height:100svh; min-height:580px; display:flex; flex-direction:column; justify-content:flex-end; }
+  .hero .photo{ position:absolute; inset:0; z-index:0; }
+  .hero-content{ position:relative; z-index:3; padding: 0 var(--edge) 4.5rem; }
+  .hero-eyebrow{ font-family:var(--mono); font-size:.7rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:1.1rem; display:block; }
+  .hero h1{ font-family:var(--display); font-weight:400; font-size:clamp(3rem, 10.5vw, 8rem); line-height:.92; letter-spacing:-.01em; }
+  .hero h1 em{ font-style:italic; font-weight:300; color:var(--cream); opacity:.85; }
+  .hero p.tag{ font-family:var(--display); font-style:italic; font-weight:400; font-size:clamp(1.05rem,2vw,1.4rem); max-width:36ch; margin-top:1.3rem; opacity:.92; }
+  .hero-cta{ display:flex; gap:1rem; margin-top:2.2rem; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+    padding:.9rem 1.5rem; border:1px solid var(--cream); border-radius:2px; transition:all .3s ease;
+    display:inline-flex; align-items:center; gap:.5rem;
+  }
+  .btn:hover{ background:var(--cream); color:var(--ink); }
+  .btn.solid{ background:var(--gold); border-color:var(--gold); color:var(--ink); }
+  .btn.solid:hover{ background:var(--cream); border-color:var(--cream); }
+
+  .scroll-cue{ position:absolute; bottom:1.6rem; left:var(--edge); z-index:3; font-family:var(--mono); font-size:.66rem; letter-spacing:.15em; text-transform:uppercase; opacity:.6; display:flex; align-items:center; gap:.6rem; }
+  .scroll-cue .line{ width:34px; height:1px; background:var(--cream); position:relative; overflow:hidden; }
+  .scroll-cue .line::after{ content:''; position:absolute; left:-100%; top:0; bottom:0; width:100%; background:var(--gold); animation:tideline 2.6s ease-in-out infinite; }
+  @keyframes tideline{ 0%{left:-100%;} 50%{left:0;} 100%{left:100%;} }
+
+  section{ position:relative; padding: 8rem var(--edge); }
+  .section-label{ font-family:var(--mono); font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); display:flex; align-items:center; gap:.9rem; margin-bottom:2.4rem; }
+  .section-label::after{ content:''; flex:1; height:1px; background:rgba(231,219,198,.15); }
+  h2.title{ font-family:var(--display); font-weight:400; font-size:clamp(2.1rem,4.6vw,3.7rem); line-height:1.03; letter-spacing:-.01em; max-width:18ch; }
+
+  /* ---------- historia ---------- */
+  .historia{ background:var(--ink-2); }
+  .historia-grid{ display:grid; grid-template-columns: .85fr 1.15fr; gap:5vw; align-items:start; margin-top:3.3rem; }
+  .historia-photo{ aspect-ratio: 4/5; position:sticky; top:6rem; }
+  .historia-copy p{ font-size:1.06rem; max-width:58ch; margin-bottom:1.25rem; color:rgba(231,219,198,.85); }
+  .pull{ font-family:var(--display); font-style:italic; font-weight:400; font-size:clamp(1.35rem,2.4vw,1.9rem); line-height:1.35; color:var(--cream); border-left:2px solid var(--gold); padding-left:1.5rem; margin:2.4rem 0; }
+  .placeholder-note{
+    font-family:var(--mono); font-size:.72rem; color:var(--crimson); border:1px dashed rgba(142,55,40,.5);
+    padding:.9rem 1.1rem; margin-top:2.2rem; line-height:1.6; background:rgba(142,55,40,.06);
+  }
+  .placeholder-note.small{ font-size:.68rem; margin-top:0; padding:.7rem .9rem; }
+
+  @media (max-width: 860px){ .historia-grid{ grid-template-columns:1fr; } .historia-photo{ position:relative; top:0; aspect-ratio:16/11; } }
+
+  /* ---------- discografia ---------- */
+  .featured-single{
+    display:grid; grid-template-columns: 11rem 1fr; gap:2.2rem; align-items:center;
+    padding:2rem; border:1px solid rgba(176,138,68,.35); margin-top:3.2rem; background:rgba(176,138,68,.05);
+  }
+  .featured-single .photo{ aspect-ratio:1/1; }
+  .featured-single .eyebrow{ font-family:var(--mono); font-size:.68rem; letter-spacing:.14em; color:var(--crimson); text-transform:uppercase; }
+  .featured-single h3{ font-family:var(--display); font-weight:400; font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:.3rem; }
+  .featured-single .sub{ color:var(--fog); font-size:.9rem; margin-top:.4rem; }
+  .featured-single .fs-actions{ display:flex; gap:.8rem; margin-top:1.2rem; align-items:center; }
+  @media (max-width:640px){ .featured-single{ grid-template-columns:6rem 1fr; padding:1.2rem; gap:1.2rem; } }
+
+  .album{ margin-bottom: 4.4rem; border-top:1px solid rgba(231,219,198,.15); padding-top:2.6rem; }
+  .album:first-child{ border-top:none; padding-top:0; }
+  .album-head{ display:grid; grid-template-columns: 9rem 1fr; gap:2rem; align-items:start; }
+  .album-cover{ width:9rem; aspect-ratio:1/1; flex-shrink:0; }
+  .album-meta .eyebrow{ font-family:var(--mono); font-size:.66rem; letter-spacing:.14em; color:var(--gold); text-transform:uppercase; }
+  .album-meta h3{ font-family:var(--display); font-weight:400; font-size:clamp(1.5rem,3vw,2.1rem); margin-top:.3rem; }
+  .album-meta .sub{ color:var(--fog); font-size:.86rem; margin-top:.3rem; font-style:italic; font-family:var(--display); }
+
+  /* concept: meaning of the name + why the album is built the way it is */
+  .album-concept{ margin-top:1.3rem; max-width:62ch; }
+  .album-concept .concept-label{ font-family:var(--mono); font-size:.64rem; letter-spacing:.14em; text-transform:uppercase; color:var(--crimson); display:block; margin-bottom:.5rem; }
+  .album-concept p{ font-size:.94rem; color:rgba(231,219,198,.8); margin-bottom:.7rem; }
+  .album-concept p:last-child{ margin-bottom:0; }
+
+  .tracklist{ margin-top:2.2rem; }
+  .track{ border-top:1px solid rgba(231,219,198,.08); }
+  .track-row{ display:grid; grid-template-columns: 2.4rem 1fr auto auto; align-items:center; gap:1.2rem; padding: .9rem 0 .9rem 9rem; cursor:pointer; }
+  .track-num{ font-family:var(--mono); font-size:.8rem; color:var(--fog); }
+  .track-name{ font-size:1rem; }
+  .track-actions{ display:flex; align-items:center; gap:.6rem; }
+  .story-toggle{
+    font-family:var(--mono); font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; color:var(--fog);
+    display:flex; align-items:center; gap:.4rem; white-space:nowrap; transition:color .25s;
+  }
+  .story-toggle .plus{ display:inline-block; transition:transform .35s ease; color:var(--gold); }
+  .track.open .story-toggle .plus, .session-card.open .story-toggle .plus{ transform:rotate(45deg); }
+  .track.open .story-toggle, .session-card.open .story-toggle{ color:var(--gold); }
+  .track-story{ max-height:0; overflow:hidden; transition:max-height .5s ease; padding-left:9rem; }
+  .track.open .track-story, .session-card.open .track-story{ max-height:400px; }
+  .track-story-inner{ padding:0 0 1.6rem; }
+  .track-story-inner p{ font-size:.92rem; color:rgba(231,219,198,.78); max-width:56ch; font-style:italic; font-family:var(--display); line-height:1.55; }
+
+  /* tracks with more than one version (e.g. Estudio + En Vivo / Paradise Chill) */
+  .track-multi-head{ display:grid; grid-template-columns: 2.4rem 1fr; align-items:center; gap:1.2rem; padding: .9rem 0 .3rem 9rem; }
+  .track-multi-body{ padding: 0 0 .3rem 9rem; }
+  .track-multi .version-row{ padding:.55rem 0; border-top:1px solid rgba(231,219,198,.08); }
+  .track-multi .story-toggle{ margin-top:.7rem; cursor:pointer; display:inline-flex; }
+  @media (max-width:720px){
+    .track-multi-head{ padding-left:0; grid-template-columns: 1.6rem 1fr; }
+    .track-multi-body{ padding-left:0; }
+  }
+  .icon-btn{
+    width:2.1rem; height:2.1rem; border-radius:50%; border:1px solid rgba(231,219,198,.3);
+    display:flex; align-items:center; justify-content:center; background:transparent; color:var(--cream);
+    cursor:pointer; transition:background .25s, border-color .25s, color .25s; font-size:.7rem;
+  }
+  .icon-btn:hover{ border-color:var(--gold); color:var(--gold); }
+  .icon-btn.playing{ background:var(--gold); border-color:var(--gold); color:var(--ink); }
+
+  @media (max-width:720px){
+    .album-head{ grid-template-columns: 4.6rem 1fr; }
+    .album-cover{ width:4.6rem; }
+    .track-row{ padding-left:0; grid-template-columns: 1.6rem 1fr auto; gap:.7rem; }
+    .story-toggle span:last-child{ display:none; }
+    .track-story{ padding-left:0; }
+  }
+
+  /* ---------- sesiones (bonus tracks) ---------- */
+  .sessions{ background:var(--ink-2); }
+  .session-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem; margin-top:3.2rem; }
+  .session-card{ border:1px solid rgba(231,219,198,.12); padding:1.3rem; }
+  .session-card .photo{ aspect-ratio:1/1; margin-bottom:1.1rem; }
+  .session-card h4{ font-family:var(--display); font-weight:400; font-size:1.3rem; margin-bottom:.9rem; }
+  .version-row{ display:flex; align-items:center; justify-content:space-between; padding:.6rem 0; border-top:1px solid rgba(231,219,198,.1); }
+  .version-row .v-label{ font-family:var(--mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--fog); }
+  .version-row .v-actions{ display:flex; gap:.5rem; }
+  .icon-btn.small{ width:1.9rem; height:1.9rem; font-size:.62rem; }
+  @media (max-width:860px){ .session-grid{ grid-template-columns:1fr; } }
+
+  .session-card .story-toggle{ margin-top:.9rem; cursor:pointer; }
+  .session-card .track-story{ padding-left:0; }
+  .session-card .track-story-inner{ padding-top:1rem; padding-bottom:.3rem; }
+
+  /* ---------- galeria ---------- */
+  .gallery-grid{ display:grid; grid-template-columns: repeat(6,1fr); gap:1rem; margin-top:2.6rem; }
+  .gallery-grid .photo:nth-child(1){ grid-column:span 3; aspect-ratio:4/5; }
+  .gallery-grid .photo:nth-child(2){ grid-column:span 3; aspect-ratio:4/5; }
+  .gallery-grid .photo:nth-child(3){ grid-column:span 2; aspect-ratio:3/4; }
+  .gallery-grid .photo:nth-child(4){ grid-column:span 2; aspect-ratio:3/4; }
+  .gallery-grid .photo:nth-child(5){ grid-column:span 2; aspect-ratio:3/4; }
+  @media (max-width:820px){ .gallery-grid{ grid-template-columns: repeat(2,1fr); } .gallery-grid .photo{ grid-column:span 1 !important; aspect-ratio:4/5 !important; } }
+
+  /* ---------- contacto / footer ---------- */
+  footer{ padding: 6rem var(--edge) 8rem; }
+  .contact-row{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:2rem; }
+  footer h2.title{ max-width:20ch; }
+  .social{ display:flex; gap:1.5rem; font-family:var(--mono); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; flex-wrap:wrap; }
+  .social a{ opacity:.75; border-bottom:1px solid transparent; padding-bottom:2px; transition:opacity .3s, border-color .3s; }
+  .social a:hover{ opacity:1; border-color:var(--gold); color:var(--gold); }
+  .fine{ margin-top:5rem; display:flex; justify-content:space-between; font-family:var(--mono); font-size:.66rem; color:var(--fog); flex-wrap:wrap; gap:1rem; }
+
+  /* ---------- fixed player ---------- */
+  .player{
+    position:fixed; left:0; right:0; bottom:0; z-index:150;
+    background:rgba(10,11,11,.94); backdrop-filter: blur(10px);
+    border-top:1px solid rgba(176,138,68,.3);
+    display:flex; align-items:center; gap:1.2rem;
+    padding: .8rem var(--edge);
+    transform:translateY(110%); transition:transform .45s ease;
+  }
+  .player.active{ transform:translateY(0); }
+  .player-art{ width:2.6rem; height:2.6rem; flex-shrink:0; }
+  .player-info{ min-width:0; }
+  .player-info .p-track{ font-size:.86rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .player-info .p-album{ font-family:var(--mono); font-size:.66rem; color:var(--fog); }
+  .player-controls{ display:flex; align-items:center; gap:.7rem; flex-shrink:0; }
+  .player-scrub{ flex:1; display:flex; align-items:center; gap:.8rem; min-width:0; }
+  .p-time{ font-family:var(--mono); font-size:.66rem; color:var(--fog); width:2.6rem; flex-shrink:0; }
+  .p-time.end{ text-align:right; }
+  .scrub-track{ flex:1; height:2px; background:rgba(231,219,198,.18); position:relative; cursor:pointer; }
+  .scrub-fill{ position:absolute; left:0; top:0; bottom:0; width:0%; background:var(--gold); }
+  .scrub-fill::after{ content:''; position:absolute; right:-3px; top:50%; transform:translateY(-50%); width:7px; height:7px; border-radius:50%; background:var(--gold); }
+  .player-dl{ font-family:var(--mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; opacity:.7; flex-shrink:0; }
+  .player-dl:hover{ opacity:1; color:var(--gold); }
+  @media (max-width:720px){ .player-info{ display:none; } .player-dl{ display:none; } }
+
+</style>
+</head>
+<body>
+
+<svg class="grain-overlay" width="100%" height="100%">
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter>
+  <rect width="100%" height="100%" filter="url(#grain)"/>
+</svg>
+
+<header class="nav">
+  <a href="#top" class="mark"><img src="assets/img/logo.png" alt="Más y Atrás"><span>Más y Atrás</span></a>
+  <ul>
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#discografia">Música</a></li>
+    <li><a href="#galeria">Fotos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</header>
+
+<section class="hero" id="top">
+  <div class="photo"><img src="assets/img/hero-crowd-back.jpg" alt="Más y Atrás tocando en vivo frente al público"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">Rock en vivo — dúo</span>
+    <h1>MÁS<br><em>y atrás</em></h1>
+    <p class="tag">Como la marea: cada show es ida, cada canción es vuelta.</p>
+    <div class="hero-cta">
+      <a href="#discografia" class="btn solid">Escuchar ahora</a>
+      <a href="#contacto" class="btn">Fechas y contacto</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="line"></span> Desliza</div>
+</section>
+
+<section class="historia" id="historia">
+  <span class="section-label">01 — Historia</span>
+  <h2 class="title">Dos voces, un mismo ruido.</h2>
+
+  <div class="historia-grid">
+    <div class="historia-photo photo reveal"><img src="assets/img/duo-bw-sign.jpg" alt="Más y Atrás en formato acústico"></div>
+    <div class="historia-copy">
+      <p class="reveal">Todo empezó hace ocho años, en 2018. Santiago Silberstein y Germán Farías se conocieron en el Club GEBA, pero no tocando la guitarra: él trabajaba como instructor de musculación y Santiago como guardavidas. Entre turno y turno, en esos ratos muertos que deja un club de día completo, empezó una charla que terminó siendo mucho más que la típica cortesía entre compañeros de trabajo — descubrieron que a los dos les gustaba la música, y de ahí a juntarse con las guitarras hubo un solo paso.</p>
+
+      <p class="reveal">Al principio no había plan ni nombre: se juntaban simplemente a tocar covers, dos guitarras y un cancionero prestado, sin pensar todavía en formar una banda. Pero la costumbre de encontrarse a tocar fue abriendo la puerta a algo propio, y en algún momento los covers empezaron a quedarse cortos. Entre ensayo y ensayo aparecieron las primeras canciones que eran solo de ellos.</p>
+
+      <p class="reveal">Ensayaron donde pudieron. Primero en una casa, después en una sala de ensayo compartida con otros colaboradores que fueron sumándose y restándose con los años. Hubo una época en la que ni siquiera eso alcanzaba: los vecinos se quejaban del volumen a cualquier hora, y la solución de emergencia terminó siendo meterse a practicar adentro de un baño — el único rincón con paredes lo bastante gruesas como para amortiguar un poco el ruido. De cada uno de esos lugares quedó algo: una canción, un arreglo, una anécdota para contar arriba del escenario.</p>
+
+      <p class="pull reveal">"No importa si es enchufado o acústico: la esencia es la misma. Sólo cambia el camino."</p>
+
+      <p class="reveal">Esa frase — misma esencia, distinto camino — es la que persiguieron en <em>Musilencio (Acústico)</em>, la contracara íntima de <em>Ruido Interior (En Vivo)</em>, grabado con el público al frente y la sangre caliente. Ocho años después de aquel primer cruce en el Club GEBA, Santiago y Germán siguen siendo los mismos dos de siempre, ahora con discos propios y un nombre que resume todo lo que aprendieron en el camino: se avanza, se vuelve, y siempre se sigue tocando.</p>
+    </div>
+  </div>
+</section>
+
+<section class="discografia" id="discografia">
+  <span class="section-label">02 — Música</span>
+  <h2 class="title">Cada disco, cada tema, su propia historia.</h2>
+
+  <div class="featured-single reveal">
+    <div class="photo"><img src="assets/img/cover-te-necesito.jpg" alt="Portada de Te Necesito"></div>
+    <div>
+      <span class="eyebrow">Sencillo</span>
+      <h3>Te Necesito</h3>
+      <span class="sub">El single que abrió el camino.</span>
+      <div class="fs-actions">
+        <button class="icon-btn play-btn" data-src="assets/audio/te-necesito.mp3" data-name="Te Necesito" data-album="Sencillo" data-art="assets/img/cover-te-necesito.jpg" aria-label="Reproducir Te Necesito">▶</button>
+        <a class="icon-btn" href="assets/audio/te-necesito.mp3" download="Te Necesito.mp3" aria-label="Descargar Te Necesito">⬇</a>
+        <span style="font-family:var(--mono); font-size:.7rem; color:var(--fog); text-transform:uppercase; letter-spacing:.06em;">Reproducir / descargar</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="albums" style="margin-top:3.5rem;">
+
+    <div class="album" data-album="Ruido Interior">
+      <div class="album-head">
+        <div class="album-cover photo"><img src="assets/img/cover-ruido-interior.jpg" alt="Portada de Ruido Interior En Vivo"></div>
+        <div class="album-meta">
+          <span class="eyebrow">EP en vivo</span>
+          <h3>Ruido Interior</h3>
+          <span class="sub">La energía del escenario, la fuerza de las canciones.</span>
+        </div>
+      </div>
+
+      <div class="album-concept">
+        <span class="concept-label">Por qué se llama así</span>
+        <div class="placeholder-note small">
+          ✎ Contame el sentido del nombre "Ruido Interior" y por qué decidieron armarlo como disco en vivo — qué querían capturar de tocar frente al público, y por qué eligieron justo estos tres temas para esa placa.
+        </div>
+      </div>
+
+      <div class="tracklist">
+        <div class="track">
+          <div class="track-row" data-story-toggle>
+            <span class="track-num">01</span><span class="track-name">Te Necesito (En Vivo)</span>
+            <div class="track-actions">
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <button class="icon-btn play-btn" data-src="assets/audio/te-necesito.mp3" data-name="Te Necesito (En Vivo)" data-album="Ruido Interior" data-art="assets/img/cover-ruido-interior.jpg" aria-label="Reproducir Te Necesito En Vivo">▶</button>
+              <a class="icon-btn" href="assets/audio/te-necesito.mp3" download="Te Necesito (En Vivo).mp3" aria-label="Descargar">⬇</a>
+            </div>
+          </div>
+          <div class="track-story">
+            <div class="track-story-inner">
+              <p>✎ ¿Qué inspiró "Te Necesito"? Contame de qué habla, cuándo la escribieron y qué la hace especial en vivo.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="track">
+          <div class="track-row" data-story-toggle>
+            <span class="track-num">02</span><span class="track-name">Kernel (En Vivo)</span>
+            <div class="track-actions">
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <button class="icon-btn play-btn" data-src="assets/audio/kernel-en-vivo.mp3" data-name="Kernel (En Vivo)" data-album="Ruido Interior" data-art="assets/img/cover-ruido-interior.jpg" aria-label="Reproducir Kernel">▶</button>
+              <a class="icon-btn" href="assets/audio/kernel-en-vivo.mp3" download="Kernel (En Vivo).mp3" aria-label="Descargar">⬇</a>
+            </div>
+          </div>
+          <div class="track-story">
+            <div class="track-story-inner">
+              <p>✎ ¿De dónde sale el nombre "Kernel"? Cuál es la historia detrás de esta canción.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="track">
+          <div class="track-row" data-story-toggle>
+            <span class="track-num">03</span><span class="track-name">La Apuesta (En Vivo)</span>
+            <div class="track-actions">
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <button class="icon-btn play-btn" data-src="assets/audio/la-apuesta-en-vivo.mp3" data-name="La Apuesta (En Vivo)" data-album="Ruido Interior" data-art="assets/img/cover-ruido-interior.jpg" aria-label="Reproducir La Apuesta">▶</button>
+              <a class="icon-btn" href="assets/audio/la-apuesta-en-vivo.mp3" download="La Apuesta (En Vivo).mp3" aria-label="Descargar">⬇</a>
+            </div>
+          </div>
+          <div class="track-story">
+            <div class="track-story-inner">
+              <p>✎ ¿Qué apuesta cuenta esta canción? Contame la inspiración detrás de la letra.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="album" data-album="Musilencio">
+      <div class="album-head">
+        <div class="album-cover photo"><img src="assets/img/cover-musilencio.jpg" alt="Portada de Musilencio Acústico"></div>
+        <div class="album-meta">
+          <span class="eyebrow">EP acústico</span>
+          <h3>Musilencio</h3>
+          <span class="sub">Misma esencia. Distinto camino.</span>
+        </div>
+      </div>
+
+      <div class="album-concept">
+        <span class="concept-label">Por qué se llama así</span>
+        <div class="placeholder-note small">
+          ✎ "Musilencio" mezcla música y silencio — contame la idea detrás de ese nombre y por qué decidieron llevar estos tres temas a formato acústico en vez de dejarlos como estaban.
+        </div>
+      </div>
+
+      <div class="tracklist">
+        <div class="track">
+          <div class="track-row" data-story-toggle>
+            <span class="track-num">01</span><span class="track-name">Infidelidad (Acústico)</span>
+            <div class="track-actions">
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <button class="icon-btn play-btn" data-src="assets/audio/infidelidad-acustico.mp3" data-name="Infidelidad (Acústico)" data-album="Musilencio" data-art="assets/img/cover-musilencio.jpg" aria-label="Reproducir Infidelidad">▶</button>
+              <a class="icon-btn" href="assets/audio/infidelidad-acustico.mp3" download="Infidelidad (Acústico).mp3" aria-label="Descargar">⬇</a>
+            </div>
+          </div>
+          <div class="track-story">
+            <div class="track-story-inner">
+              <p>✎ ¿Qué historia hay detrás de "Infidelidad"? Contame la inspiración de esta letra.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="track">
+          <div class="track-row" data-story-toggle>
+            <span class="track-num">02</span><span class="track-name">Ella es para Mí (Acústico)</span>
+            <div class="track-actions">
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <button class="icon-btn play-btn" data-src="assets/audio/ella-es-para-mi-acustico.mp3" data-name="Ella es para Mí (Acústico)" data-album="Musilencio" data-art="assets/img/cover-musilencio.jpg" aria-label="Reproducir Ella es para Mí">▶</button>
+              <a class="icon-btn" href="assets/audio/ella-es-para-mi-acustico.mp3" download="Ella es para Mí (Acústico).mp3" aria-label="Descargar">⬇</a>
+            </div>
+          </div>
+          <div class="track-story">
+            <div class="track-story-inner">
+              <p>✎ ¿Para quién es "Ella es para Mí"? Contame de dónde salió esta canción.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="track">
+          <div class="track-row" data-story-toggle>
+            <span class="track-num">03</span><span class="track-name">Recuerdos de Mar (Acústico)</span>
+            <div class="track-actions">
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <button class="icon-btn play-btn" data-src="assets/audio/recuerdos-de-mar-acustico.mp3" data-name="Recuerdos de Mar (Acústico)" data-album="Musilencio" data-art="assets/img/cover-musilencio.jpg" aria-label="Reproducir Recuerdos de Mar">▶</button>
+              <a class="icon-btn" href="assets/audio/recuerdos-de-mar-acustico.mp3" download="Recuerdos de Mar (Acústico).mp3" aria-label="Descargar">⬇</a>
+            </div>
+          </div>
+          <div class="track-story">
+            <div class="track-story-inner">
+              <p>✎ ¿Qué recuerdo de mar inspiró esta canción? Contame la historia.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="album" data-album="Máquina del Tiempo">
+      <div class="album-head">
+        <div class="album-cover photo"><img src="assets/img/cover-maquina-del-tiempo.jpg" alt="Portada de Máquina del Tiempo"></div>
+        <div class="album-meta">
+          <span class="eyebrow">Álbum</span>
+          <h3>Máquina del Tiempo</h3>
+          <span class="sub">Tres canciones, dos tiempos cada una.</span>
+        </div>
+      </div>
+
+      <div class="album-concept">
+        <span class="concept-label">Por qué se llama así</span>
+        <div class="placeholder-note small">
+          ✎ Contame el sentido del nombre "Máquina del Tiempo" y por qué armaron el disco así — con cada tema en dos versiones distintas.
+        </div>
+      </div>
+
+      <div class="placeholder-note small" style="margin-top:1.4rem; max-width:62ch;">
+        ✎ Grabado, mezclado y masterizado en Estudio Palmera, 2024. Todos los temas compuestos y producidos por Más y Atrás.
+      </div>
+
+      <div class="tracklist">
+        <div class="track track-multi">
+          <div class="track-multi-head">
+            <span class="track-num">01</span><span class="track-name">Máquina del Tiempo</span>
+          </div>
+          <div class="track-multi-body">
+            <div class="version-row">
+              <span class="v-label">Estudio</span>
+              <div class="v-actions">
+                <button class="icon-btn small play-btn" data-src="assets/audio/maquina-del-tiempo-estudio.mp3" data-name="Máquina del Tiempo (Estudio)" data-album="Máquina del Tiempo" data-art="assets/img/cover-maquina-del-tiempo.jpg" aria-label="Reproducir estudio">▶</button>
+                <a class="icon-btn small" href="assets/audio/maquina-del-tiempo-estudio.mp3" download="Máquina del Tiempo (Estudio).mp3" aria-label="Descargar">⬇</a>
+              </div>
+            </div>
+            <div class="version-row">
+              <span class="v-label">En vivo</span>
+              <div class="v-actions">
+                <button class="icon-btn small play-btn" data-src="assets/audio/maquina-del-tiempo-en-vivo.mp3" data-name="Máquina del Tiempo (En Vivo)" data-album="Máquina del Tiempo" data-art="assets/img/cover-maquina-del-tiempo.jpg" aria-label="Reproducir en vivo">▶</button>
+                <a class="icon-btn small" href="assets/audio/maquina-del-tiempo-en-vivo.mp3" download="Máquina del Tiempo (En Vivo).mp3" aria-label="Descargar">⬇</a>
+              </div>
+            </div>
+            <div class="story-toggle" data-story-toggle><span class="plus">+</span><span>Historia</span></div>
+          </div>
+          <div class="track-story">
+            <div class="track-story-inner">
+              <p>✎ ¿Qué inspiró "Máquina del Tiempo"? Contame la historia de esta canción.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="track track-multi">
+          <div class="track-multi-head">
+            <span class="track-num">02</span><span class="track-name">Tierna de Ojos Tristes</span>
+          </div>
+          <div class="track-multi-body">
+            <div class="version-row">
+              <span class="v-label">Estudio</span>
+              <div class="v-actions">
+                <button class="icon-btn small play-btn" data-src="assets/audio/tierna-de-ojos-tristes.mp3" data-name="Tierna de Ojos Tristes (Estudio)" data-album="Máquina del Tiempo" data-art="assets/img/cover-maquina-del-tiempo.jpg" aria-label="Reproducir estudio">▶</button>
+                <a class="icon-btn small" href="assets/audio/tierna-de-ojos-tristes.mp3" download="Tierna de Ojos Tristes (Estudio).mp3" aria-label="Descargar">⬇</a>
+              </div>
+            </div>
+            <div class="version-row">
+              <span class="v-label">Paradise Chill</span>
+              <div class="v-actions">
+                <button class="icon-btn small play-btn" data-src="assets/audio/tierna-de-ojos-tristes-paradise-chill.mp3" data-name="Tierna de Ojos Tristes (Paradise Chill)" data-album="Máquina del Tiempo" data-art="assets/img/cover-maquina-del-tiempo.jpg" aria-label="Reproducir paradise chill">▶</button>
+                <a class="icon-btn small" href="assets/audio/tierna-de-ojos-tristes-paradise-chill.mp3" download="Tierna de Ojos Tristes (Paradise Chill).mp3" aria-label="Descargar">⬇</a>
+              </div>
+            </div>
+            <div class="story-toggle" data-story-toggle><span class="plus">+</span><span>Historia</span></div>
+          </div>
+          <div class="track-story">
+            <div class="track-story-inner">
+              <p>✎ ¿Quién es la "Tierna de Ojos Tristes"? Contame de dónde salió esta canción.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="track track-multi">
+          <div class="track-multi-head">
+            <span class="track-num">03</span><span class="track-name">Categoría Bañero</span>
+          </div>
+          <div class="track-multi-body">
+            <div class="version-row">
+              <span class="v-label">Estudio</span>
+              <div class="v-actions">
+                <button class="icon-btn small play-btn" data-src="assets/audio/categoria-bandolero.mp3" data-name="Categoría Bañero (Estudio)" data-album="Máquina del Tiempo" data-art="assets/img/cover-maquina-del-tiempo.jpg" aria-label="Reproducir estudio">▶</button>
+                <a class="icon-btn small" href="assets/audio/categoria-bandolero.mp3" download="Categoría Bañero (Estudio).mp3" aria-label="Descargar">⬇</a>
+              </div>
+            </div>
+            <div class="version-row">
+              <span class="v-label">Paradise Chill</span>
+              <div class="v-actions">
+                <button class="icon-btn small play-btn" data-src="assets/audio/categoria-bandolero-paradise-chill.mp3" data-name="Categoría Bañero (Paradise Chill)" data-album="Máquina del Tiempo" data-art="assets/img/cover-maquina-del-tiempo.jpg" aria-label="Reproducir paradise chill">▶</button>
+                <a class="icon-btn small" href="assets/audio/categoria-bandolero-paradise-chill.mp3" download="Categoría Bañero (Paradise Chill).mp3" aria-label="Descargar">⬇</a>
+              </div>
+            </div>
+            <div class="story-toggle" data-story-toggle><span class="plus">+</span><span>Historia</span></div>
+          </div>
+          <div class="track-story">
+            <div class="track-story-inner">
+              <p>✎ ¿Qué significa "Categoría Bañero"? Contame la historia detrás del tema.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="gallery" id="galeria">
+  <span class="section-label">03 — Fotos</span>
+  <h2 class="title">Registro en vivo.</h2>
+  <div class="gallery-grid">
+    <div class="photo reveal"><img src="assets/img/duo-singing.jpg" alt="Más y Atrás cantando juntos en vivo"></div>
+    <div class="photo reveal"><img src="assets/img/guitarist-crowd.jpg" alt="Guitarrista de Más y Atrás con el público"></div>
+    <div class="photo reveal"><img src="assets/img/singer-front.jpg" alt="Cantante de Más y Atrás en escena"></div>
+    <div class="photo reveal"><img src="assets/img/singer-profile.jpg" alt="Cantante de Más y Atrás de perfil"></div>
+    <div class="photo reveal"><img src="assets/img/duo-bw-sign.jpg" alt="Más y Atrás en formato acústico"></div>
+  </div>
+</section>
+
+<footer id="contacto">
+  <span class="section-label">04 — Contacto</span>
+  <div class="contact-row">
+    <h2 class="title">Fechas, prensa y shows: escribinos directamente.</h2>
+    <div class="social">
+      <a href="https://www.instagram.com/masyatras.ok/" target="_blank" rel="noopener">Instagram</a>
+      <a href="#">Facebook</a>
+      <a href="#">YouTube</a>
+      <a href="#">Spotify</a>
+      <a href="#">Apple Music</a>
+    </div>
+  </div>
+  <div class="fine">
+    <span>© 2026 Más y Atrás. Todas las canciones disponibles para escuchar y descargar libremente.</span>
+    <span>@masyatras.ok</span>
+  </div>
+</footer>
+
+<div class="player" id="player">
+  <div class="player-art photo flat"><img id="p-art" src="" alt=""></div>
+  <div class="player-info">
+    <div class="p-track" id="p-track">—</div>
+    <div class="p-album" id="p-album">—</div>
+  </div>
+  <div class="player-controls"><button class="icon-btn" id="p-toggle" aria-label="Pausar / reproducir">▶</button></div>
+  <div class="player-scrub">
+    <span class="p-time" id="p-current">0:00</span>
+    <div class="scrub-track" id="p-scrub"><div class="scrub-fill" id="p-fill"></div></div>
+    <span class="p-time end" id="p-duration">0:00</span>
+  </div>
+  <a class="player-dl" id="p-download" href="#" download>Descargar</a>
+</div>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold:.15 });
+  revealEls.forEach(el=>io.observe(el));
+
+  document.querySelectorAll('[data-story-toggle]').forEach(trigger=>{
+    trigger.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const holder = trigger.closest('.track, .session-card');
+      if(holder) holder.classList.toggle('open');
+    });
+  });
+
+  const audio = document.getElementById('audio');
+  const player = document.getElementById('player');
+  const pArt = document.getElementById('p-art');
+  const pTrack = document.getElementById('p-track');
+  const pAlbum = document.getElementById('p-album');
+  const pToggle = document.getElementById('p-toggle');
+  const pFill = document.getElementById('p-fill');
+  const pCurrent = document.getElementById('p-current');
+  const pDuration = document.getElementById('p-duration');
+  const pScrub = document.getElementById('p-scrub');
+  const pDownload = document.getElementById('p-download');
+
+  let activeBtn = null;
+
+  function fmt(t){
+    if(!isFinite(t)) return '0:00';
+    const m = Math.floor(t/60), s = Math.floor(t%60);
+    return m+':'+String(s).padStart(2,'0');
+  }
+
+  function playFromBtn(btn){
+    const src = btn.dataset.src;
+    const isSame = audio.currentSrc && audio.currentSrc.endsWith(src.split('/').pop());
+
+    if(isSame && !audio.paused){ audio.pause(); return; }
+    if(isSame && audio.paused){ audio.play(); return; }
+
+    if(activeBtn) activeBtn.classList.remove('playing');
+    activeBtn = btn;
+    btn.classList.add('playing');
+
+    audio.src = src;
+    audio.play();
+
+    pArt.src = btn.dataset.art;
+    pTrack.textContent = btn.dataset.name;
+    pAlbum.textContent = btn.dataset.album;
+    pDownload.href = src;
+    pDownload.download = btn.dataset.name + '.mp3';
+    player.classList.add('active');
+    pToggle.textContent = '❚❚';
+  }
+
+  document.querySelectorAll('.play-btn').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{ e.stopPropagation(); playFromBtn(btn); });
+  });
+  document.querySelectorAll('.track-actions a, .v-actions a, .fs-actions a').forEach(a=>{
+    a.addEventListener('click', e=> e.stopPropagation());
+  });
+
+  pToggle.addEventListener('click', ()=>{
+    if(!audio.src) return;
+    if(audio.paused){ audio.play(); } else { audio.pause(); }
+  });
+
+  audio.addEventListener('play', ()=>{ pToggle.textContent = '❚❚'; if(activeBtn) activeBtn.classList.add('playing'); });
+  audio.addEventListener('pause', ()=>{ pToggle.textContent = '▶'; if(activeBtn) activeBtn.classList.remove('playing'); });
+  audio.addEventListener('timeupdate', ()=>{
+    if(audio.duration){ pFill.style.width = (audio.currentTime/audio.duration*100)+'%'; pCurrent.textContent = fmt(audio.currentTime); }
+  });
+  audio.addEventListener('loadedmetadata', ()=>{ pDuration.textContent = fmt(audio.duration); });
+  audio.addEventListener('ended', ()=>{ if(activeBtn) activeBtn.classList.remove('playing'); pFill.style.width = '0%'; });
+
+  pScrub.addEventListener('click', (e)=>{
+    if(!audio.duration) return;
+    const rect = pScrub.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = ratio * audio.duration;
+  });
+</script>
+
+</body>
+</html>
