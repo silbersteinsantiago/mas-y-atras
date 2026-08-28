@@ -280,7 +280,14 @@
   .player-wf{ position:absolute; inset:0; }
   .player-dl{ font-size:.74rem; font-weight:700; opacity:.75; flex-shrink:0; }
   .player-dl:hover{ opacity:1; color:var(--orange); }
-  @media (max-width:720px){ .player-info{ display:none; } .player-dl{ display:none; } }
+  @media (max-width:720px){
+    .player{ gap:.75rem; padding:.65rem var(--edge); flex-wrap:wrap; }
+    .player-art{ width:2.4rem; height:2.4rem; }
+    .player-info{ width:calc(100% - 6rem); flex:1 1 auto; }
+    .player-controls{ margin-left:auto; }
+    .player-scrub{ order:5; flex-basis:100%; gap:.55rem; }
+    .player-dl{ display:none; }
+  }
 
 </style>
 </head>
