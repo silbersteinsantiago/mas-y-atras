@@ -109,7 +109,7 @@
   .waveform::before{ content:''; position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(255,255,255,.12); z-index:0; }
   .wf-bars{ position:absolute; inset:0; display:flex; align-items:center; gap:2px; }
   .wf-bars .bar{ flex:1; min-width:1px; border-radius:1px; background:rgba(255,255,255,.28); }
-  .wf-fg{ position:absolute; inset:0; width:0%; overflow:hidden; }
+  .wf-fg{ clip-path: inset(0 100% 0 0); }
   .wf-fg .bar{ background:var(--grad); }
   .waveform.mini{ height:34px; margin:0; flex:1; }
   .waveform.mini::before{ display:none; }
@@ -288,7 +288,7 @@
     </div>
     <div class="waveform" data-src="te-necesito.mp3" data-bars="140">
       <div class="wf-bars wf-bg"></div>
-      <div class="wf-fg"><div class="wf-bars"></div></div>
+      <div class="wf-bars wf-fg"></div>
     </div>
     <div class="featured-bottom">
       <span class="featured-time"><span class="wf-current">0:00</span> / <span class="wf-duration">0:00</span></span>
@@ -350,7 +350,7 @@
             <span class="track-num">01</span>
             <button class="icon-btn play-btn" data-src="te-necesito.mp3" data-name="Te Necesito" data-album="Ruido Interior" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Te Necesito">▶</button>
             <span class="track-name">Te Necesito</span>
-            <div class="waveform mini" data-src="te-necesito.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+            <div class="waveform mini" data-src="te-necesito.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
               <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="te-necesito.mp3" download="Te Necesito.mp3" aria-label="Descargar">⬇</a>
@@ -368,7 +368,7 @@
             <span class="track-num">02</span>
             <button class="icon-btn play-btn" data-src="kernel-en-vivo.mp3" data-name="Kernel" data-album="Ruido Interior" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Kernel">▶</button>
             <span class="track-name">Kernel</span>
-            <div class="waveform mini" data-src="kernel-en-vivo.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+            <div class="waveform mini" data-src="kernel-en-vivo.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
               <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="kernel-en-vivo.mp3" download="Kernel.mp3" aria-label="Descargar">⬇</a>
@@ -386,7 +386,7 @@
             <span class="track-num">03</span>
             <button class="icon-btn play-btn" data-src="la-apuesta-en-vivo.mp3" data-name="La Apuesta" data-album="Ruido Interior" data-art="cover-ruido-interior.jpg" aria-label="Reproducir La Apuesta">▶</button>
             <span class="track-name">La Apuesta</span>
-            <div class="waveform mini" data-src="la-apuesta-en-vivo.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+            <div class="waveform mini" data-src="la-apuesta-en-vivo.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
               <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="la-apuesta-en-vivo.mp3" download="La Apuesta.mp3" aria-label="Descargar">⬇</a>
@@ -424,7 +424,7 @@
             <span class="track-num">01</span>
             <button class="icon-btn play-btn" data-src="infidelidad-acustico.mp3" data-name="Infidelidad" data-album="Musilencio" data-art="cover-musilencio.jpg" aria-label="Reproducir Infidelidad">▶</button>
             <span class="track-name">Infidelidad</span>
-            <div class="waveform mini" data-src="infidelidad-acustico.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+            <div class="waveform mini" data-src="infidelidad-acustico.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
               <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="infidelidad-acustico.mp3" download="Infidelidad.mp3" aria-label="Descargar">⬇</a>
@@ -442,7 +442,7 @@
             <span class="track-num">02</span>
             <button class="icon-btn play-btn" data-src="ella-es-para-mi-acustico.mp3" data-name="Ella es para Mí" data-album="Musilencio" data-art="cover-musilencio.jpg" aria-label="Reproducir Ella es para Mí">▶</button>
             <span class="track-name">Ella es para Mí</span>
-            <div class="waveform mini" data-src="ella-es-para-mi-acustico.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+            <div class="waveform mini" data-src="ella-es-para-mi-acustico.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
               <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="ella-es-para-mi-acustico.mp3" download="Ella es para Mí.mp3" aria-label="Descargar">⬇</a>
@@ -460,7 +460,7 @@
             <span class="track-num">03</span>
             <button class="icon-btn play-btn" data-src="recuerdos-de-mar-acustico.mp3" data-name="Recuerdos de Mar" data-album="Musilencio" data-art="cover-musilencio.jpg" aria-label="Reproducir Recuerdos de Mar">▶</button>
             <span class="track-name">Recuerdos de Mar</span>
-            <div class="waveform mini" data-src="recuerdos-de-mar-acustico.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+            <div class="waveform mini" data-src="recuerdos-de-mar-acustico.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
               <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="recuerdos-de-mar-acustico.mp3" download="Recuerdos de Mar.mp3" aria-label="Descargar">⬇</a>
@@ -504,7 +504,7 @@
           <div class="track-multi-body">
             <div class="version-row">
               <span class="v-label">Radio Edit</span>
-              <div class="waveform mini" data-src="maquina-del-tiempo-estudio.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+              <div class="waveform mini" data-src="maquina-del-tiempo-estudio.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
               <div class="v-actions">
                 <button class="icon-btn small play-btn" data-src="maquina-del-tiempo-estudio.mp3" data-name="Máquina del Tiempo (Radio Edit)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir estudio">▶</button>
                 <a class="icon-btn small" href="maquina-del-tiempo-estudio.mp3" download="Máquina del Tiempo (Radio Edit).mp3" aria-label="Descargar">⬇</a>
@@ -512,7 +512,7 @@
             </div>
             <div class="version-row">
               <span class="v-label">En vivo</span>
-              <div class="waveform mini" data-src="maquina-del-tiempo-en-vivo.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+              <div class="waveform mini" data-src="maquina-del-tiempo-en-vivo.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
               <div class="v-actions">
                 <button class="icon-btn small play-btn" data-src="maquina-del-tiempo-en-vivo.mp3" data-name="Máquina del Tiempo (En Vivo)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir en vivo">▶</button>
                 <a class="icon-btn small" href="maquina-del-tiempo-en-vivo.mp3" download="Máquina del Tiempo (En Vivo).mp3" aria-label="Descargar">⬇</a>
@@ -534,7 +534,7 @@
           <div class="track-multi-body">
             <div class="version-row">
               <span class="v-label">Estudio</span>
-              <div class="waveform mini" data-src="tierna-de-ojos-tristes.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+              <div class="waveform mini" data-src="tierna-de-ojos-tristes.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
               <div class="v-actions">
                 <button class="icon-btn small play-btn" data-src="tierna-de-ojos-tristes.mp3" data-name="Tierna de Ojos Tristes (Estudio)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir estudio">▶</button>
                 <a class="icon-btn small" href="tierna-de-ojos-tristes.mp3" download="Tierna de Ojos Tristes (Estudio).mp3" aria-label="Descargar">⬇</a>
@@ -542,7 +542,7 @@
             </div>
             <div class="version-row">
               <span class="v-label">En Vivo</span>
-              <div class="waveform mini" data-src="tierna-de-ojos-tristes-paradise-chill.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+              <div class="waveform mini" data-src="tierna-de-ojos-tristes-paradise-chill.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
               <div class="v-actions">
                 <button class="icon-btn small play-btn" data-src="tierna-de-ojos-tristes-paradise-chill.mp3" data-name="Tierna de Ojos Tristes (En Vivo)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir en vivo">▶</button>
                 <a class="icon-btn small" href="tierna-de-ojos-tristes-paradise-chill.mp3" download="Tierna de Ojos Tristes (En Vivo).mp3" aria-label="Descargar">⬇</a>
@@ -564,7 +564,7 @@
           <div class="track-multi-body">
             <div class="version-row">
               <span class="v-label">Estudio</span>
-              <div class="waveform mini" data-src="categoria-bandolero.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+              <div class="waveform mini" data-src="categoria-bandolero.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
               <div class="v-actions">
                 <button class="icon-btn small play-btn" data-src="categoria-bandolero.mp3" data-name="Categoría Bañero (Estudio)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir estudio">▶</button>
                 <a class="icon-btn small" href="categoria-bandolero.mp3" download="Categoría Bañero (Estudio).mp3" aria-label="Descargar">⬇</a>
@@ -572,7 +572,7 @@
             </div>
             <div class="version-row">
               <span class="v-label">En Vivo</span>
-              <div class="waveform mini" data-src="categoria-bandolero-paradise-chill.mp3"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div>
+              <div class="waveform mini" data-src="categoria-bandolero-paradise-chill.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
               <div class="v-actions">
                 <button class="icon-btn small play-btn" data-src="categoria-bandolero-paradise-chill.mp3" data-name="Categoría Bañero (En Vivo)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir en vivo">▶</button>
                 <a class="icon-btn small" href="categoria-bandolero-paradise-chill.mp3" download="Categoría Bañero (En Vivo).mp3" aria-label="Descargar">⬇</a>
@@ -631,7 +631,7 @@
   <div class="player-controls"><button class="icon-btn" id="p-toggle" aria-label="Pausar / reproducir">▶</button></div>
   <div class="player-scrub">
     <span class="p-time" id="p-current">0:00</span>
-    <div class="scrub-track" id="p-scrub"><div class="player-wf" id="p-wf"><div class="wf-bars wf-bg"></div><div class="wf-fg"><div class="wf-bars"></div></div></div></div>
+    <div class="scrub-track" id="p-scrub"><div class="player-wf" id="p-wf"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div></div>
     <span class="p-time end" id="p-duration">0:00</span>
   </div>
   <a class="player-dl" id="p-download" href="#" download>Descargar</a>
@@ -683,23 +683,22 @@
     return smooth;
   }
 
-  const waveformRegistry = {}; // src -> [{el, fgBars}]
+  const waveformRegistry = {}; // src -> [{el, fgEl}]
 
   document.querySelectorAll('.waveform').forEach(wf=>{
     const src = wf.dataset.src;
     const count = wf.classList.contains('mini') ? 40 : (parseInt(wf.dataset.bars)||100);
     const bars = buildBars(src, count);
     const bg = wf.querySelector('.wf-bg');
-    const fgWrap = wf.querySelector('.wf-fg');
-    const fgBars = fgWrap.querySelector('.wf-bars') ? fgWrap.querySelector('.wf-bars') : fgWrap;
+    const fgEl = wf.querySelector('.wf-fg');
     bars.forEach(h=>{
       const s1 = document.createElement('span'); s1.className='bar'; s1.style.height=(h*100)+'%';
       bg.appendChild(s1);
       const s2 = document.createElement('span'); s2.className='bar'; s2.style.height=(h*100)+'%';
-      fgBars.appendChild(s2);
+      fgEl.appendChild(s2);
     });
     if(!waveformRegistry[src]) waveformRegistry[src] = [];
-    waveformRegistry[src].push({ el: wf, fgWrap });
+    waveformRegistry[src].push({ el: wf, fgEl });
 
     wf.addEventListener('click', (e)=>{
       e.stopPropagation();
@@ -721,10 +720,10 @@
   const pWf = document.getElementById('p-wf');
   const pWfBars = buildBars('player-scrub', 60);
   const pBg = pWf.querySelector('.wf-bg');
-  const pFgBars = pWf.querySelector('.wf-fg .wf-bars');
+  const pFgEl = pWf.querySelector('.wf-fg');
   pWfBars.forEach(h=>{
     const s1=document.createElement('span'); s1.className='bar'; s1.style.height=(h*100)+'%'; pBg.appendChild(s1);
-    const s2=document.createElement('span'); s2.className='bar'; s2.style.height=(h*100)+'%'; pFgBars.appendChild(s2);
+    const s2=document.createElement('span'); s2.className='bar'; s2.style.height=(h*100)+'%'; pFgEl.appendChild(s2);
   });
 
   function fmt(t){
@@ -807,12 +806,12 @@
     const ratio = audio.currentTime/audio.duration;
     pCurrent.textContent = fmt(audio.currentTime);
     if(featuredCur) featuredCur.textContent = fmt(audio.currentTime);
-    pFgBars.parentElement.style.width = (ratio*100)+'%';
+    pFgEl.style.clipPath = 'inset(0 '+((1-ratio)*100)+'% 0 0)';
 
     const curFile = audio.currentSrc.split('/').pop();
     Object.keys(waveformRegistry).forEach(src=>{
       if(src.split('/').pop() === curFile){
-        waveformRegistry[src].forEach(w=> w.fgWrap.style.width = (ratio*100)+'%');
+        waveformRegistry[src].forEach(w=> w.fgEl.style.clipPath = 'inset(0 '+((1-ratio)*100)+'% 0 0)');
       }
     });
   });
@@ -822,8 +821,8 @@
   });
   audio.addEventListener('ended', ()=>{
     clearActive();
-    pFgBars.parentElement.style.width = '0%';
-    Object.values(waveformRegistry).forEach(list=> list.forEach(w=> w.fgWrap.style.width='0%'));
+    pFgEl.style.clipPath = 'inset(0 100% 0 0)';
+    Object.values(waveformRegistry).forEach(list=> list.forEach(w=> w.fgEl.style.clipPath='inset(0 100% 0 0)'));
   });
 
   pScrub.addEventListener('click', (e)=>{
