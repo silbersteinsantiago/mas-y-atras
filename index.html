@@ -107,7 +107,7 @@
     position:absolute; inset:0; backface-visibility:hidden; border-radius:14px; overflow:hidden;
     display:flex; flex-direction:column; background:var(--surface);
   }
-  .feat-play-zone{ flex:1; min-height:0; position:relative; z-index:3; display:flex; align-items:center; justify-content:center; }
+  .feat-play-zone{ flex:1; min-height:0; z-index:3; }
   .feat-face .photo{ position:absolute; inset:0; z-index:0; }
   .feat-face .photo::after{
     content:''; position:absolute; inset:0; z-index:1;
@@ -127,7 +127,7 @@
 
   .featured-top{ position:relative; z-index:2; display:flex; align-items:center; gap:1.1rem; padding:1.6rem 1.8rem 0; }
   .featured-play{
-    z-index:4;
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:4;
     width:5rem; height:5rem; border-radius:50%; background:rgba(0,0,0,.68); border:1px solid rgba(255,255,255,.30);
     backdrop-filter:blur(4px); box-shadow:0 10px 30px rgba(0,0,0,.38);
     display:flex; align-items:center; justify-content:center; font-size:1.45rem; flex-shrink:0; cursor:pointer;
@@ -1210,15 +1210,6 @@
     featAlbumTabsWrap.querySelectorAll('.tab').forEach((tabEl, ai)=> tabEl.classList.toggle('active', featAlbumOrder[ai].album === activeAlbum));
   }
 
-  function alignFeatArrows(){
-    const zone = currentFace.querySelector('.feat-play-zone');
-    if(!zone) return;
-    const cardRect = featCardEl.getBoundingClientRect();
-    const zoneRect = zone.getBoundingClientRect();
-    const centerY = (zoneRect.top - cardRect.top) + (zoneRect.height/2);
-    featPrevBtn.style.top = centerY + 'px';
-    featNextBtn.style.top = centerY + 'px';
-  }
 
   function goToFeatured(targetIndex){
     if(featAnimating) return;
@@ -1267,7 +1258,6 @@
 
       const tmp = currentFace; currentFace = standbyFace; standbyFace = tmp;
       updateFeatDots(featIndex);
-      alignFeatArrows();
       featAnimating = false;
     };
     standbyFace.addEventListener('transitionend', onEnd);
@@ -1283,16 +1273,12 @@
     populateFace(standbyFace, featuredTracks[1]);
     standbyFace.style.transform = 'translateX(100%)';
     updateFeatDots(0);
-    alignFeatArrows();
     // fonts/images can shift layout slightly after load; realign once more shortly after
-    setTimeout(alignFeatArrows, 300);
-    window.addEventListener('load', alignFeatArrows);
   })();
 
   window.addEventListener('resize', ()=>{
     if(featAnimating) return;
     currentFace.style.transform = 'translateX(0)';
-    alignFeatArrows();
   });
 </script>
 
