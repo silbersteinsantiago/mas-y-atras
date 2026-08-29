@@ -670,6 +670,24 @@
         <div class="track">
           <div class="track-row" data-story-toggle>
             <span class="track-num">02</span>
+            <button class="icon-btn play-btn" data-src="Te necesito (Radio Edit).mp3?v=1" data-name="Te Necesito (Radio Edit)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Te Necesito Radio Edit">▶</button>
+            <span class="track-name">Te Necesito (Radio Edit)</span>
+            <div class="waveform mini" data-src="Te necesito (Radio Edit).mp3?v=1"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
+            <div class="track-actions">
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <a class="icon-btn" href="Te necesito (Radio Edit).mp3?v=1" download="Te Necesito (Radio Edit).mp3" aria-label="Descargar">⬇</a>
+            </div>
+          </div>
+          <div class="track-story">
+            <div class="track-story-inner">
+              <p>✎ Contame la historia detrás de "Te Necesito" y qué cambia en esta versión Radio Edit.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="track">
+          <div class="track-row" data-story-toggle>
+            <span class="track-num">03</span>
             <button class="icon-btn play-btn" data-src="Tierna de ojos tristes (Radio Edit).mp3" data-name="Tierna de Ojos Tristes (Estudio)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Tierna de Ojos Tristes">▶</button>
             <span class="track-name">Tierna de Ojos Tristes</span>
             <div class="waveform mini" data-src="Tierna de ojos tristes (Radio Edit).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
@@ -687,7 +705,7 @@
 
         <div class="track">
           <div class="track-row" data-story-toggle>
-            <span class="track-num">03</span>
+            <span class="track-num">04</span>
             <button class="icon-btn play-btn" data-src="Categoria Bañero (Radio Edit).mp3" data-name="Categoría Bañero (Estudio)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Categoría Bañero">▶</button>
             <span class="track-name">Categoría Bañero</span>
             <div class="waveform mini" data-src="Categoria Bañero (Radio Edit).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
@@ -1079,6 +1097,7 @@
     { src:'Ella es para mí (Acústico).mp3', name:'Ella es para Mí', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'cover-musilencio.jpg', photo:'duo-singing.jpg' },
     { src:'Recuerdos De Mar (Acústico).mp3', name:'Recuerdos de Mar', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'cover-musilencio.jpg', photo:'singer-profile.jpg' },
     { src:'Máquina del tiempo (Radio Edit).mp3', name:'Máquina del Tiempo (Radio Edit)', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'hero-crowd-back.jpg' },
+    { src:'Te necesito (Radio Edit).mp3?v=1', name:'Te Necesito (Radio Edit)', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'duo-singing.jpg' },
     { src:'Tierna de ojos tristes (Radio Edit).mp3', name:'Tierna de Ojos Tristes', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'guitarist-crowd.jpg' },
     { src:'Categoria Bañero (Radio Edit).mp3', name:'Categoría Bañero', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'singer-front.jpg' },
   ];
@@ -1123,7 +1142,7 @@
     dl.setAttribute('aria-label', 'Descargar '+t.name);
 
     const curFile = getCurrentAudioFile() || null;
-    const isPlaying = !!(curFile && t.fileNameFromPath(src) === curFile && !audio.paused);
+    const isPlaying = !!(curFile && fileNameFromPath(t.src) === curFile && !audio.paused);
     activeEls = activeEls.filter(el=> el !== playBtn);
     if(isPlaying){
       activeEls.push(playBtn);
@@ -1136,7 +1155,7 @@
 
     const curSpan = face.querySelector('.wf-current');
     const durSpan = face.querySelector('.wf-duration');
-    if(curFile && t.fileNameFromPath(src) === curFile && audio.duration){
+    if(curFile && fileNameFromPath(t.src) === curFile && audio.duration){
       curSpan.textContent = fmt(audio.currentTime);
       durSpan.textContent = fmt(audio.duration);
     } else {
