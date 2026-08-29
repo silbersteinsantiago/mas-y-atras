@@ -1556,7 +1556,16 @@ y no ha de morir...</p>
     const onReady = ()=>{
       audio.currentTime = state.currentTime || 0;
       if(state.isPlaying){
-        audio.play().catch(()=>{ /* autoplay blocked until user interacts */ });
+        audio.play().then(()=>{
+          const curFile = getCurrentAudioFile();
+          document.querySelectorAll('.play-btn, .featured-play').forEach(node=>{
+            if(fileNameFromPath(node.dataset.src) === curFile){
+              node.classList.add('playing');
+              node.textContent = '❚❚';
+              activeEls.push(node);
+            }
+          });
+        }).catch(()=>{ /* autoplay blocked until user interacts */ });
       }
       audio.removeEventListener('loadedmetadata', onReady);
     };
