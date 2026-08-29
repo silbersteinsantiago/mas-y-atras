@@ -1633,18 +1633,6 @@ y no ha de morir...</p>
     });
   });
 
-  // ---------- "Ver fotos" toggles ----------
-  document.querySelectorAll('.ver-fotos-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const album = btn.closest('.photo-album');
-      if(!album) return;
-      const panel = album.querySelector('.photo-panel');
-      const isOpen = btn.classList.toggle('open');
-      if(panel) panel.classList.toggle('open', isOpen);
-      btn.childNodes[0].textContent = isOpen ? 'Ocultar fotos ' : 'Ver fotos ';
-    });
-  });
-
   // ---------- seeded waveform generator ----------
   const audio = document.getElementById('audio');
 
