@@ -1565,11 +1565,21 @@ y no ha de morir...</p>
               activeEls.push(node);
             }
           });
-        }).catch(()=>{ /* autoplay blocked until user interacts */ });
+        }).catch(()=>{ armResumeOnFirstTouch(); });
       }
       audio.removeEventListener('loadedmetadata', onReady);
     };
     audio.addEventListener('loadedmetadata', onReady);
+  }
+
+  function armResumeOnFirstTouch(){
+    const tryResume = ()=>{
+      audio.play().catch(()=>{});
+      document.removeEventListener('click', tryResume);
+      document.removeEventListener('touchstart', tryResume);
+    };
+    document.addEventListener('click', tryResume, { once:true });
+    document.addEventListener('touchstart', tryResume, { once:true });
   }
 
 

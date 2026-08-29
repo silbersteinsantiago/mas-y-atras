@@ -671,11 +671,21 @@
       audio.currentTime = state.currentTime || 0;
       pDuration.textContent = fmt(audio.duration);
       if(state.isPlaying){
-        audio.play().catch(()=>{ /* el navegador puede bloquear el autoplay hasta que el usuario interactúe */ });
+        audio.play().catch(()=>{ armResumeOnFirstTouch(); });
       }
       audio.removeEventListener('loadedmetadata', onReady);
     };
     audio.addEventListener('loadedmetadata', onReady);
+  }
+
+  function armResumeOnFirstTouch(){
+    const tryResume = ()=>{
+      audio.play().catch(()=>{});
+      document.removeEventListener('click', tryResume);
+      document.removeEventListener('touchstart', tryResume);
+    };
+    document.addEventListener('click', tryResume, { once:true });
+    document.addEventListener('touchstart', tryResume, { once:true });
   }
 
   pToggle.addEventListener('click', ()=>{
