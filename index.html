@@ -212,7 +212,7 @@
   .tracklist{ background:var(--surface); border-radius:12px; overflow:hidden; }
   .track{ border-top:1px solid var(--line); }
   .track:first-child{ border-top:none; }
-  .track-row{ display:flex; align-items:center; gap:1rem; padding: .85rem 1.1rem; cursor:pointer; }
+  .track-row{ display:flex; align-items:center; gap:1rem; padding: .85rem 1.1rem; }
   .track-num{ font-size:.78rem; color:var(--fog-dim); width:1.4rem; flex-shrink:0; font-variant-numeric:tabular-nums; }
   .track-name{ font-size:.95rem; font-weight:600; flex-shrink:0; width:clamp(120px,18vw,220px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .track-actions{ display:flex; align-items:center; gap:.55rem; flex-shrink:0; }
@@ -221,12 +221,16 @@
     display:flex; align-items:center; gap:.35rem; white-space:nowrap; transition:color .2s; cursor:pointer;
   }
   .story-toggle .plus{ display:inline-block; transition:transform .35s ease; color:var(--orange); }
-  .track.open .story-toggle .plus, .session-card.open .story-toggle .plus{ transform:rotate(45deg); }
-  .track.open .story-toggle, .session-card.open .story-toggle{ color:var(--orange); }
-  .track-story{ max-height:0; overflow:hidden; transition:max-height .5s ease; }
-  .track.open .track-story, .session-card.open .track-story{ max-height:400px; }
+  .story-toggle.open .plus{ transform:rotate(45deg); }
+  .story-toggle.open{ color:var(--orange); }
+  .track-story, .track-lyrics{ max-height:0; overflow:hidden; transition:max-height .5s ease; }
+  .track-story.open, .track-lyrics.open{ max-height:600px; }
   .track-story-inner{ padding:0 1.1rem 1.4rem 2.4rem; }
   .track-story-inner p{ font-size:.9rem; color:rgba(255,255,255,.7); max-width:56ch; font-style:italic; line-height:1.55; }
+  .track-lyrics-inner{ padding:0 1.1rem 1.4rem 2.4rem; }
+  .track-lyrics-inner p{ font-size:.88rem; color:rgba(255,255,255,.68); max-width:56ch; line-height:1.7; white-space:pre-line; }
+  .track-lyrics-inner .lyrics-dl{ display:inline-flex; align-items:center; gap:.4rem; margin-top:.9rem; font-size:.72rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--orange); }
+  .track-lyrics-inner .lyrics-dl:hover{ color:var(--cream); }
 
   .track-multi-head{ display:flex; align-items:center; gap:1rem; padding: .85rem 1.1rem .2rem; }
   .track-multi-body{ padding: 0 1.1rem .6rem 3.4rem; }
@@ -442,13 +446,14 @@
 
       <div class="tracklist">
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">01</span>
             <button class="icon-btn play-btn" data-src="Te Necesito (En Vivo).mp3?v=4" data-name="Te Necesito (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Te Necesito en vivo">▶</button>
             <span class="track-name">Te Necesito (En Vivo)</span>
             <div class="waveform mini" data-src="Te Necesito (En Vivo).mp3?v=4"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Te Necesito (En Vivo).mp3?v=4" download="Te Necesito (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
@@ -457,16 +462,45 @@
               <p>"Te Necesito" nació de una amistad: hace años, un amigo le compartió a Santiago la idea que sería el corazón de la letra, y entre los dos la convirtieron en canción. Quedó grabada y guardada por mucho tiempo, hasta que Santiago sintió que merecía volver a existir — no como una versión nueva, sino como esa misma canción de siempre, llevada por fin al lugar donde siempre quisieron que estuviera.</p>
             </div>
           </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Caía en tus redes y en tus garras,
+te perseguía, me poseías, me dominabas.
+Pero eso quedó atrás, hoy me dices que me extrañas
+y yo te digo, nena, que para mí estás muerta.
+
+¿Te necesito? ¡No!
+Te tengo en el olvido, amor,
+y estás ahí queriendo volver a entrar en mí.
+¿Te necesito? ¡No!
+Te tengo en el olvido, amor,
+y estás ahí queriendo volver a entrar en mí.
+
+Solías ser la dueña de esta calesita,
+yo te compraba dulces mientras robabas sortijas.
+El circo ha cerrado, se cayeron tus trapecistas,
+y ya no te queda otra que pagar todas tus vueltitas.
+
+¿Te necesito? ¡No!
+Te tengo en el olvido, amor,
+y estás ahí queriendo volver a entrar en mí.
+¿Te necesito? ¡No!
+Te tengo en el olvido, amor,
+y estás ahí queriendo volver a entrar en mí.</p>
+              <a class="lyrics-dl" href="Te Necesito - Letra.txt" download="Te Necesito - Letra.txt">⬇ Descargar letra completa</a>
+            </div>
+          </div>
         </div>
 
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">02</span>
             <button class="icon-btn play-btn" data-src="Kernel (En Vivo).mp3" data-name="Kernel (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Kernel en vivo">▶</button>
             <span class="track-name">Kernel (En Vivo)</span>
             <div class="waveform mini" data-src="Kernel (En Vivo).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Kernel (En Vivo).mp3" download="Kernel (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
@@ -475,16 +509,54 @@
               <p>"Kernel" nace de una época estudiando programación, allá por 2010 — el nombre técnico esconde algo bastante más personal: una compañera de esos años con la que Santiago tuvo un affair, y la atracción que ella le generaba terminó convertida en canción.</p>
             </div>
           </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>I can't start si vos no estás...
+No logro ver aquella luz en tu mirada.
+De nada sirve que te escondas,
+because I see you aquí.
+
+Te volvés a poner tu camisón,
+de animal print que no es de seda.
+Te queda... realmente bien.
+I try to understand...
+
+Ooh, Kernel, guíame...
+Hoy y ayer, ámame.
+Ooh, Kernel, guíame...
+Hoy y ayer, ámame.
+
+Porque without you, no sé quién soy...
+Quizás mañana... seré tu boy.
+Boy, boy... ¡Boy!
+
+Why es tan difícil entenderte...
+Quisiera que estuviésemos en el mismo channel,
+en el que pudiésemos ser amantes...
+There is another...
+
+Ooh, Kernel, guíame...
+Hoy y ayer, ámame.
+Ooh, Kernel, guíame...
+Hoy y ayer, ámame.
+
+Porque without you, no sé quién soy...
+Quizás mañana... seré tu boy.
+Boy, boy... ¡Boy!</p>
+              <a class="lyrics-dl" href="Kernel - Letra.txt" download="Kernel - Letra.txt">⬇ Descargar letra completa</a>
+            </div>
+          </div>
         </div>
 
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">03</span>
             <button class="icon-btn play-btn" data-src="La Apuesta( En Vivo).mp3" data-name="La Apuesta (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir La Apuesta en vivo">▶</button>
             <span class="track-name">La Apuesta (En Vivo)</span>
             <div class="waveform mini" data-src="La Apuesta( En Vivo).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="La Apuesta( En Vivo).mp3" download="La Apuesta (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
@@ -493,16 +565,47 @@
               <p>"La Apuesta" mezcla dos cosas de una misma época de Santiago: el gusto ocasional por el casino (nunca a nivel enfermizo) y la sensación de apostarlo todo en una relación — esa forma de irte perdiendo a vos mismo por querer que algo funcione.</p>
             </div>
           </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Dejo de pensar
+y entro en un soplo lento de ilógicas ideas.
+Vuelvo a anotar
+cada frase que me digas y esté mal,
+que no encuentres una salida.
+
+Me importa muy poco tu presencia,
+tu bipolaridad.
+No estoy hecho de secuelas que me inviten a recordar,
+esta historia llegó a su final.
+
+Lejos de este acá,
+cerca de tus besos me dejás,
+sin las ganas de esperar.
+No me extrañes si el hoy se fue,
+mañana volverás o no lo sé.
+
+Tengo la tranquilidad
+que en este juego no me quedan fichas por jugar.
+No me quedan fichas por jugar,
+no me quedan fichas por jugar,
+no me quedan fichas por jugar,
+no me quedan fichas por jugar.
+
+Esta historia llegó a su final.</p>
+              <a class="lyrics-dl" href="La Apuesta - Letra.txt" download="La Apuesta - Letra.txt">⬇ Descargar letra completa</a>
+            </div>
+          </div>
         </div>
 
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">04</span>
             <button class="icon-btn play-btn" data-src="Máquina del Tiempo (en Vivo).mp3" data-name="Máquina del Tiempo (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Máquina del Tiempo en vivo">▶</button>
             <span class="track-name">Máquina del Tiempo (En Vivo)</span>
             <div class="waveform mini" data-src="Máquina del Tiempo (en Vivo).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Máquina del Tiempo (en Vivo).mp3" download="Máquina del Tiempo (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
@@ -511,16 +614,63 @@
               <p>"Máquina del Tiempo" surge de un libro que Santiago leyó y le encantó: el clásico de H.G. Wells. A eso se suma esa fantasía que alimentan tantas películas, de imaginar qué habría cambiado, qué cambiarías hoy y qué no.</p>
             </div>
           </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Qué tal si te digo que he creado una ilusión...
+Que no sé... si quiero ver...
+Parece que a veces...
+el dinero vale más que el tiempo...
+
+Pero es cierto que... es lo único que no se recupera...
+Sin embargo yo seguiré...
+en la espera de mi...
+
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+
+Has inventado un mundo... donde el sufrimiento es goce...
+Y es triste saber... que al final...
+eso ya no sirve...
+
+Quizás no tengas claro... qué deseás...
+y apuntás... al objetivo equivocado...
+Será que la luz... me ha cegado...
+Será que la vida me ha dejado...
+sin mí...
+
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+
+Máquina del tiempo... hacia atrás...
+Máquina del tiempo... más allá...
+Hacia atrás... más allá...
+Máquina del tiempo...
+Hacia atrás... más allá...
+Máquina del tiempo... máquina del tiempo...
+Hacia atrás... más allá...</p>
+              <a class="lyrics-dl" href="Máquina del Tiempo - Letra.txt" download="Máquina del Tiempo - Letra.txt">⬇ Descargar letra completa</a>
+            </div>
+          </div>
         </div>
 
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">05</span>
             <button class="icon-btn play-btn" data-src="Tierna De Ojos Tristes (En Vivo).mp3" data-name="Tierna de Ojos Tristes (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Tierna de Ojos Tristes en vivo">▶</button>
             <span class="track-name">Tierna de Ojos Tristes (En Vivo)</span>
             <div class="waveform mini" data-src="Tierna De Ojos Tristes (En Vivo).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Tierna De Ojos Tristes (En Vivo).mp3" download="Tierna de Ojos Tristes (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
@@ -529,22 +679,98 @@
               <p>Nace de un amor no muy correspondido hacia una persona muy especial, tal como lo cuenta la letra. Con el tiempo, Santiago fue mutando esa idea hacia imaginar lo que esa persona vivía por dentro — sus cambios, su forma de pensar — a partir de conjeturas propias que, visto en perspectiva, resultaron bastante certeras.</p>
             </div>
           </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Tierna de ojos tristes... te mueves en secuencia y quieres cambiar...
+Marcas en matices... son aquellos moldes a los cuales pudiste dejar...
+
+Y no te bastó con romper esquemas...
+y con arte emerger...
+Poseés de esa fuerza que nadie pudo tener...
+
+Luchas contra ideas innatas... que forman figuras extrañas acerca de vos...
+Y no te das cuenta... que hay gente a tu alrededor...
+
+Y aunque no puedas ver... lo que otros pueden encontrar...
+seguís buscando respuestas donde no las hallarás...
+Tal vez sea tiempo... de dejar de preguntar...
+
+No dejes que el miedo te diga quién sos...
+Ni aquellas miradas apaguen tu voz...
+Si todo se rompe... volvelo a intentar...
+Que nadie decida hasta dónde llegar...
+
+Y aunque no puedas ver... lo que otros pueden encontrar...
+seguís buscando respuestas donde no las hallarás...
+Tal vez sea tiempo... de dejar de preguntar...
+
+No dejes que el miedo te diga quién sos...
+Ni aquellas miradas apaguen tu voz...
+Si todo se rompe... volvelo a intentar...
+Que nadie decida hasta dónde llegar...</p>
+              <a class="lyrics-dl" href="Tierna de Ojos Tristes - Letra.txt" download="Tierna de Ojos Tristes - Letra.txt">⬇ Descargar letra completa</a>
+            </div>
+          </div>
         </div>
 
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">06</span>
             <button class="icon-btn play-btn" data-src="Categoria Bañero (En Vivo).mp3" data-name="Categoría Bañero (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Categoría Bañero en vivo">▶</button>
             <span class="track-name">Categoría Bañero (En Vivo)</span>
             <div class="waveform mini" data-src="Categoria Bañero (En Vivo).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Categoria Bañero (En Vivo).mp3" download="Categoría Bañero (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
               <p>Nace de la época en la que Santiago trabajó como guardavidas en el Club Gimnasia y Esgrima de Buenos Aires. Fueron años gloriosos, con experiencias muy amenas junto a compañeros con los que trabajó durante siete años y a quienes todavía recuerda y aprecia.</p>
+            </div>
+          </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Llego, me siento y miro bajo una sombrilla.
+Escucho un buen día y contesto ya sin energía.
+El reflejo del mosaico me quema hasta el cuello
+y empiezan a llegar de a poquito todos los pendejos.
+
+Qué calor que hace, me dice una vieja y protesta
+por no tener reposera.
+Me agarro un huevo y la mando bien a la mierda
+y me gano una nota al pedo,
+y me gano una nota al pedo.
+
+No soy bañero, soy guardavidas.
+No soy bañero, no, soy guardavidas.
+No soy bañero, no, soy guardavidas.
+Pues yo no baño a nadie a menos que me lo pida.
+
+Aquélla pendeja se metió sin gorrito.
+Llamala a la pampita que vaya porque no encuentro a Dieguito.
+Se está yendo la colonia, le digo a Marcelito.
+Entonces tipo seis y media voy por mi cafecito.
+
+Mientras que unos corren y otros se cruzan por el andarivel,
+silbatos siguen sonando al ritmo de la música de Miguel.
+Y Pablo me cuenta historias sobre chapulines,
+Rulo avisando que hay agua allí, parece vendedor de pirulines.
+
+No soy bañero, soy guardavidas.
+No soy bañero, no, soy guardavidas.
+No soy bañero, no, soy guardavidas.
+Pues yo no baño a nadie a menos que me lo pida.
+
+De repente se larga a llover, ya no queda nada más que hacer.
+Nos refugiamos en el vestuario y cantamos con la guitarra de Fernando.
+
+No soy bañero, no, soy guardavidas.
+No soy bañero, no, soy guardavidas.
+No soy bañero, soy guardavidas.
+Pues yo no baño a nadie a menos que me lo pida.</p>
+              <a class="lyrics-dl" href="Categoría Bañero - Letra.txt" download="Categoría Bañero - Letra.txt">⬇ Descargar letra completa</a>
             </div>
           </div>
         </div>
@@ -568,13 +794,14 @@
 
       <div class="tracklist">
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">01</span>
             <button class="icon-btn play-btn" data-src="Infidelidad (Acústico).mp3" data-name="Infidelidad" data-album="Musilencio" data-art="cover-musilencio.jpg" aria-label="Reproducir Infidelidad">▶</button>
             <span class="track-name">Infidelidad</span>
             <div class="waveform mini" data-src="Infidelidad (Acústico).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Infidelidad (Acústico).mp3" download="Infidelidad.mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
@@ -583,16 +810,44 @@
               <p>Un tema especial, atravesado por la bronca: nace de una infidelidad que probablemente cometieron contra Santiago, aunque la canción también se mete en los grises del asunto — pese a que él está en contra de la infidelidad — y está pensada también para quienes la sufrieron.</p>
             </div>
           </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Solo respiro de tu ombligo para poder llegar... más lejos.
+Y sentirme vivo en tu cuerpo.
+La naturaleza es sabia, más cuando somos uno...
+y nos rozamos mutuamente, dejando nuestro rastro en el suelo...
+
+La fidelidad ya no existe más.
+Todos pecamos, decimos que amamos...
+y nada se puede remediar...
+
+Siempre la misma historia... hay que contar.
+Siempre la misma mierda... hay que aguantar.
+
+Cuando estás conmigo, sueles pensar...
+en tu mejor amigo, y eso ya no es amistad.
+Solo un sueño sigo, la lujuria es mi guía...
+de pensar en un trío, una fantasía más...
+
+Siempre la misma historia... hay que contar.
+Siempre la misma mierda... hay que aguantar.
+
+Siempre la misma historia... hay que contar.
+Siempre la misma mierda... hay que aguantar.</p>
+              <a class="lyrics-dl" href="Infidelidad - Letra.txt" download="Infidelidad - Letra.txt">⬇ Descargar letra completa</a>
+            </div>
+          </div>
         </div>
 
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">02</span>
             <button class="icon-btn play-btn" data-src="Ella es para mí (Acústico).mp3" data-name="Ella es para Mí" data-album="Musilencio" data-art="cover-musilencio.jpg" aria-label="Reproducir Ella es para Mí">▶</button>
             <span class="track-name">Ella es para Mí</span>
             <div class="waveform mini" data-src="Ella es para mí (Acústico).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Ella es para mí (Acústico).mp3" download="Ella es para Mí.mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
@@ -601,22 +856,110 @@
               <p>Habla de una relación tóxica, de esa obsesión que te hace perder la cabeza por alguien — y de la sospecha de que, en el fondo, tal vez eso no sea amor.</p>
             </div>
           </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Ella es para mí,
+todo lo que quiero en esta vida.
+Ella es para mí,
+una noche sin salida.
+Ella es para mí,
+una linda sensación.
+Ella es para mí,
+una tortura, una confusión.
+
+Y cómo puedo hacer
+para poder estar con ella.
+Y cómo detener
+las maromas en mi cabeza.
+No, no puedo olvidarme
+de ese sabor de tus besos,
+de pasar mi lengua por tu cuello
+y sentir que somos dos locos de amor.
+Que nada está prohibido, por favor,
+quédate conmigo.
+
+Ella es para mí,
+una gran bienvenida.
+Ella es para mí,
+una noble despedida.
+Ella es para mí,
+una droga que me inspira.
+Ella es para mí,
+una enfermedad divina.
+
+Y cómo puedo hacer
+para poder estar con ella.
+Y cómo detener
+las maromas en mi cabeza.
+No, no puedo olvidarme
+de ese sabor de tus besos,
+de pasar mi lengua por tu cuello
+y sentir que somos dos locos de amor.
+Que nada está prohibido, por favor,
+quédate conmigo.
+Que nada está prohibido, por favor,
+quédate conmigo.</p>
+              <a class="lyrics-dl" href="Ella es para Mí - Letra.txt" download="Ella es para Mí - Letra.txt">⬇ Descargar letra completa</a>
+            </div>
+          </div>
         </div>
 
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">03</span>
             <button class="icon-btn play-btn" data-src="Recuerdos De Mar (Acústico).mp3" data-name="Recuerdos de Mar" data-album="Musilencio" data-art="cover-musilencio.jpg" aria-label="Reproducir Recuerdos de Mar">▶</button>
             <span class="track-name">Recuerdos de Mar</span>
             <div class="waveform mini" data-src="Recuerdos De Mar (Acústico).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Recuerdos De Mar (Acústico).mp3" download="Recuerdos de Mar.mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
               <p>Resume los veranos que Santiago pasó en Mar del Plata durante su niñez y adolescencia: recuerdos muy emotivos junto a amigos y un montón de anécdotas compartidas en esos viajes.</p>
+            </div>
+          </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Era una de esas noches de verano.
+Con Gairol, Goro y Chelo, en Sacoa nos juntamos.
+La paliza daba risa, y un sobrador humorista
+se burlaba del perdedor que iba acumulando ira...
+
+Un gol para Yugoslavia era un festejo que irritaba,
+y los chistes que agitaban a la masa que escuchaba.
+Pero el mejor de los hechos, ahora se los voy a contar.
+Chelito jugando a sus jueguitos, una mina ha de rechazar...
+La pobre, ilusionada, su nombre quería averiguar,
+y este gil le contestó Marcelo por y la dejaba atontada...
+
+Y así fueron los días pasando poco a poco.
+Personajes aparecían en las carpas vecinas.
+Cómo olvidar a Rape, cara de pez, cara de don.
+A Julius, Orach y Miriam, a Piget en el mostrador.
+Al Tanque, a Orne y a Walter, a Yiyo y a la modelito.
+A Toto y su bigote porno, y a los panchos amigos de Nacho.
+
+Más allá de estas figuras, recordemos el inicio del libro,
+que fue en dedicación de esa noche con Gasti y el Chino.
+Después de ingerir veinte litros entre cinco de alcohol,
+la víctima llamada Sofía del piso emergió.
+La teoría era simple, no sé cómo no funcionó.
+La pobre se pensó que era un insulto para ella...
+y lloró...
+
+Las mejores vacaciones de mi vida las pasamos en MDQ.
+Con la máscara de arena de Lara y de fuego sobre María Luz.
+Chip and Deil me están faltando y la canción estoy terminando.
+Un saludo para mis fieles soldados,
+que en aventuras me han acompañado...
+
+Oh, oh, oh...
+Oh, oh, oh...
+Oh, oh, oh...</p>
+              <a class="lyrics-dl" href="Recuerdos de Mar - Letra.txt" download="Recuerdos de Mar - Letra.txt">⬇ Descargar letra completa</a>
             </div>
           </div>
         </div>
@@ -640,13 +983,14 @@
 
       <div class="tracklist" style="margin-top:1.4rem;">
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">01</span>
             <button class="icon-btn play-btn" data-src="Máquina del tiempo (Radio Edit).mp3" data-name="Máquina del Tiempo (Radio Edit)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Máquina del Tiempo">▶</button>
             <span class="track-name">Máquina del Tiempo (Radio Edit)</span>
             <div class="waveform mini" data-src="Máquina del tiempo (Radio Edit).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Máquina del tiempo (Radio Edit).mp3" download="Máquina del Tiempo (Radio Edit).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
@@ -655,16 +999,63 @@
               <p>"Máquina del Tiempo" surge de un libro que Santiago leyó y le encantó: el clásico de H.G. Wells. A eso se suma esa fantasía que alimentan tantas películas, de imaginar qué habría cambiado, qué cambiarías hoy y qué no.</p>
             </div>
           </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Qué tal si te digo que he creado una ilusión...
+Que no sé... si quiero ver...
+Parece que a veces...
+el dinero vale más que el tiempo...
+
+Pero es cierto que... es lo único que no se recupera...
+Sin embargo yo seguiré...
+en la espera de mi...
+
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+
+Has inventado un mundo... donde el sufrimiento es goce...
+Y es triste saber... que al final...
+eso ya no sirve...
+
+Quizás no tengas claro... qué deseás...
+y apuntás... al objetivo equivocado...
+Será que la luz... me ha cegado...
+Será que la vida me ha dejado...
+sin mí...
+
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+Máquina del tiempo... llévame... hacia atrás...
+Máquina del tiempo... llévame... más allá...
+
+Máquina del tiempo... hacia atrás...
+Máquina del tiempo... más allá...
+Hacia atrás... más allá...
+Máquina del tiempo...
+Hacia atrás... más allá...
+Máquina del tiempo... máquina del tiempo...
+Hacia atrás... más allá...</p>
+              <a class="lyrics-dl" href="Máquina del Tiempo - Letra.txt" download="Máquina del Tiempo - Letra.txt">⬇ Descargar letra completa</a>
+            </div>
+          </div>
         </div>
 
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">02</span>
             <button class="icon-btn play-btn" data-src="Te necesito (Radio Edit).mp3?v=1" data-name="Te Necesito (Radio Edit)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Te Necesito Radio Edit">▶</button>
             <span class="track-name">Te Necesito (Radio Edit)</span>
             <div class="waveform mini" data-src="Te necesito (Radio Edit).mp3?v=1"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Te necesito (Radio Edit).mp3?v=1" download="Te Necesito (Radio Edit).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
@@ -673,16 +1064,45 @@
               <p>La misma historia de siempre: una canción nacida de una amistad, con una idea que un amigo le acercó a Santiago y que terminó siendo el corazón de la letra. Esta versión Radio Edit no la reinventa — es esa canción original, respetada tal cual nació, llevada a un formato pensado para sonar en cualquier lado.</p>
             </div>
           </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Caía en tus redes y en tus garras,
+te perseguía, me poseías, me dominabas.
+Pero eso quedó atrás, hoy me dices que me extrañas
+y yo te digo, nena, que para mí estás muerta.
+
+¿Te necesito? ¡No!
+Te tengo en el olvido, amor,
+y estás ahí queriendo volver a entrar en mí.
+¿Te necesito? ¡No!
+Te tengo en el olvido, amor,
+y estás ahí queriendo volver a entrar en mí.
+
+Solías ser la dueña de esta calesita,
+yo te compraba dulces mientras robabas sortijas.
+El circo ha cerrado, se cayeron tus trapecistas,
+y ya no te queda otra que pagar todas tus vueltitas.
+
+¿Te necesito? ¡No!
+Te tengo en el olvido, amor,
+y estás ahí queriendo volver a entrar en mí.
+¿Te necesito? ¡No!
+Te tengo en el olvido, amor,
+y estás ahí queriendo volver a entrar en mí.</p>
+              <a class="lyrics-dl" href="Te Necesito - Letra.txt" download="Te Necesito - Letra.txt">⬇ Descargar letra completa</a>
+            </div>
+          </div>
         </div>
 
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">03</span>
             <button class="icon-btn play-btn" data-src="Tierna de ojos tristes (Radio Edit).mp3" data-name="Tierna de Ojos Tristes (Estudio)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Tierna de Ojos Tristes">▶</button>
             <span class="track-name">Tierna de Ojos Tristes</span>
             <div class="waveform mini" data-src="Tierna de ojos tristes (Radio Edit).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Tierna de ojos tristes (Radio Edit).mp3" download="Tierna de Ojos Tristes (Estudio).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
@@ -691,16 +1111,49 @@
               <p>Nace de un amor no muy correspondido hacia una persona muy especial, tal como lo cuenta la letra. Con el tiempo, Santiago fue mutando esa idea hacia imaginar lo que esa persona vivía por dentro — sus cambios, su forma de pensar — a partir de conjeturas propias que, visto en perspectiva, resultaron bastante certeras.</p>
             </div>
           </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Tierna de ojos tristes... te mueves en secuencia y quieres cambiar...
+Marcas en matices... son aquellos moldes a los cuales pudiste dejar...
+
+Y no te bastó con romper esquemas...
+y con arte emerger...
+Poseés de esa fuerza que nadie pudo tener...
+
+Luchas contra ideas innatas... que forman figuras extrañas acerca de vos...
+Y no te das cuenta... que hay gente a tu alrededor...
+
+Y aunque no puedas ver... lo que otros pueden encontrar...
+seguís buscando respuestas donde no las hallarás...
+Tal vez sea tiempo... de dejar de preguntar...
+
+No dejes que el miedo te diga quién sos...
+Ni aquellas miradas apaguen tu voz...
+Si todo se rompe... volvelo a intentar...
+Que nadie decida hasta dónde llegar...
+
+Y aunque no puedas ver... lo que otros pueden encontrar...
+seguís buscando respuestas donde no las hallarás...
+Tal vez sea tiempo... de dejar de preguntar...
+
+No dejes que el miedo te diga quién sos...
+Ni aquellas miradas apaguen tu voz...
+Si todo se rompe... volvelo a intentar...
+Que nadie decida hasta dónde llegar...</p>
+              <a class="lyrics-dl" href="Tierna de Ojos Tristes - Letra.txt" download="Tierna de Ojos Tristes - Letra.txt">⬇ Descargar letra completa</a>
+            </div>
+          </div>
         </div>
 
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">04</span>
             <button class="icon-btn play-btn" data-src="Categoria Bañero (Radio Edit).mp3" data-name="Categoría Bañero (Estudio)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Categoría Bañero">▶</button>
             <span class="track-name">Categoría Bañero</span>
             <div class="waveform mini" data-src="Categoria Bañero (Radio Edit).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Categoria Bañero (Radio Edit).mp3" download="Categoría Bañero (Estudio).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
@@ -709,22 +1162,103 @@
               <p>Nace de la época en la que Santiago trabajó como guardavidas en el Club Gimnasia y Esgrima de Buenos Aires. Fueron años gloriosos, con experiencias muy amenas junto a compañeros con los que trabajó durante siete años y a quienes todavía recuerda y aprecia.</p>
             </div>
           </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>Llego, me siento y miro bajo una sombrilla.
+Escucho un buen día y contesto ya sin energía.
+El reflejo del mosaico me quema hasta el cuello
+y empiezan a llegar de a poquito todos los pendejos.
+
+Qué calor que hace, me dice una vieja y protesta
+por no tener reposera.
+Me agarro un huevo y la mando bien a la mierda
+y me gano una nota al pedo,
+y me gano una nota al pedo.
+
+No soy bañero, soy guardavidas.
+No soy bañero, no, soy guardavidas.
+No soy bañero, no, soy guardavidas.
+Pues yo no baño a nadie a menos que me lo pida.
+
+Aquélla pendeja se metió sin gorrito.
+Llamala a la pampita que vaya porque no encuentro a Dieguito.
+Se está yendo la colonia, le digo a Marcelito.
+Entonces tipo seis y media voy por mi cafecito.
+
+Mientras que unos corren y otros se cruzan por el andarivel,
+silbatos siguen sonando al ritmo de la música de Miguel.
+Y Pablo me cuenta historias sobre chapulines,
+Rulo avisando que hay agua allí, parece vendedor de pirulines.
+
+No soy bañero, soy guardavidas.
+No soy bañero, no, soy guardavidas.
+No soy bañero, no, soy guardavidas.
+Pues yo no baño a nadie a menos que me lo pida.
+
+De repente se larga a llover, ya no queda nada más que hacer.
+Nos refugiamos en el vestuario y cantamos con la guitarra de Fernando.
+
+No soy bañero, no, soy guardavidas.
+No soy bañero, no, soy guardavidas.
+No soy bañero, soy guardavidas.
+Pues yo no baño a nadie a menos que me lo pida.</p>
+              <a class="lyrics-dl" href="Categoría Bañero - Letra.txt" download="Categoría Bañero - Letra.txt">⬇ Descargar letra completa</a>
+            </div>
+          </div>
         </div>
 
         <div class="track">
-          <div class="track-row" data-story-toggle>
+          <div class="track-row">
             <span class="track-num">05</span>
             <button class="icon-btn play-btn" data-src="Kernel (Radio Edit).mp3" data-name="Kernel (Radio Edit)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Kernel Radio Edit">▶</button>
             <span class="track-name">Kernel (Radio Edit)</span>
             <div class="waveform mini" data-src="Kernel (Radio Edit).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
+              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
               <a class="icon-btn" href="Kernel (Radio Edit).mp3" download="Kernel (Radio Edit).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
               <p>La misma historia de siempre: "Kernel" nace de la época en que Santiago estudiaba programación, allá por 2010, inspirada en una compañera de esos años con la que tuvo un affair y la atracción que ella le generaba.</p>
+            </div>
+          </div>
+          <div class="track-lyrics">
+            <div class="track-lyrics-inner">
+              <p>I can't start si vos no estás...
+No logro ver aquella luz en tu mirada.
+De nada sirve que te escondas,
+because I see you aquí.
+
+Te volvés a poner tu camisón,
+de animal print que no es de seda.
+Te queda... realmente bien.
+I try to understand...
+
+Ooh, Kernel, guíame...
+Hoy y ayer, ámame.
+Ooh, Kernel, guíame...
+Hoy y ayer, ámame.
+
+Porque without you, no sé quién soy...
+Quizás mañana... seré tu boy.
+Boy, boy... ¡Boy!
+
+Why es tan difícil entenderte...
+Quisiera que estuviésemos en el mismo channel,
+en el que pudiésemos ser amantes...
+There is another...
+
+Ooh, Kernel, guíame...
+Hoy y ayer, ámame.
+Ooh, Kernel, guíame...
+Hoy y ayer, ámame.
+
+Porque without you, no sé quién soy...
+Quizás mañana... seré tu boy.
+Boy, boy... ¡Boy!</p>
+              <a class="lyrics-dl" href="Kernel - Letra.txt" download="Kernel - Letra.txt">⬇ Descargar letra completa</a>
             </div>
           </div>
         </div>
@@ -790,11 +1324,14 @@
   revealEls.forEach(el=>io.observe(el));
 
   // ---------- story toggles ----------
-  document.querySelectorAll('[data-story-toggle]').forEach(trigger=>{
+  document.querySelectorAll('[data-toggle]').forEach(trigger=>{
     trigger.addEventListener('click', (e)=>{
       e.stopPropagation();
-      const holder = trigger.closest('.track, .session-card');
-      if(holder) holder.classList.toggle('open');
+      const holder = trigger.closest('.track, .track-multi, .session-card');
+      if(!holder) return;
+      const panel = holder.querySelector(trigger.dataset.toggle === 'lyrics' ? '.track-lyrics' : '.track-story');
+      trigger.classList.toggle('open');
+      if(panel) panel.classList.toggle('open');
     });
   });
 
