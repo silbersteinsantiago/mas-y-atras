@@ -422,6 +422,8 @@
   .player-info .p-album{ font-size:.7rem; color:var(--fog); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .player-controls{ display:flex; align-items:center; gap:.7rem; flex-shrink:0; }
   .player-scrub{ flex:1; display:flex; align-items:center; gap:.8rem; min-width:0; }
+  .scrub-track-simple{ flex:1; height:5px; background:rgba(255,255,255,.14); border-radius:3px; position:relative; cursor:pointer; overflow:hidden; }
+  .scrub-fill{ position:absolute; left:0; top:0; bottom:0; width:0%; background:var(--grad); }
   .p-time{ font-size:.7rem; color:var(--fog); width:2.5rem; flex-shrink:0; font-variant-numeric:tabular-nums; }
   .p-time.end{ text-align:right; }
   .scrub-track{ flex:1; height:26px; position:relative; cursor:pointer; }
@@ -551,6 +553,25 @@
   </div>
 </footer>
 
+<div class="player" id="player">
+  <div class="player-art photo"><img id="p-art" src="" alt=""></div>
+  <div class="player-info">
+    <div class="p-track" id="p-track">—</div>
+    <div class="p-album" id="p-album">—</div>
+  </div>
+  <div class="player-controls">
+    <button class="icon-btn" id="p-toggle" aria-label="Pausar / reproducir">▶</button>
+  </div>
+  <div class="player-scrub">
+    <span class="p-time" id="p-current">0:00</span>
+    <div class="scrub-track-simple" id="p-scrub"><div class="scrub-fill" id="p-fill"></div></div>
+    <span class="p-time end" id="p-duration">0:00</span>
+  </div>
+  <a class="player-dl" id="p-download" href="#" download>Descargar</a>
+</div>
+
+<audio id="audio" preload="none"></audio>
+
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightbox-close" aria-label="Cerrar">✕</button>
   <img id="lightbox-img" src="" alt="">
@@ -591,6 +612,96 @@
   lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
+
+  // ---------- mini reproductor (retoma lo que sonaba en la página principal) ----------
+  const audio = document.getElementById('audio');
+  const player = document.getElementById('player');
+  const pArt = document.getElementById('p-art');
+  const pTrack = document.getElementById('p-track');
+  const pAlbum = document.getElementById('p-album');
+  const pToggle = document.getElementById('p-toggle');
+  const pCurrent = document.getElementById('p-current');
+  const pDuration = document.getElementById('p-duration');
+  const pDownload = document.getElementById('p-download');
+  const pScrub = document.getElementById('p-scrub');
+  const pFill = document.getElementById('p-fill');
+
+  function fmt(s){
+    if(!isFinite(s)) return '0:00';
+    const m = Math.floor(s/60), sec = Math.floor(s%60);
+    return m+':'+String(sec).padStart(2,'0');
+  }
+
+  const NOW_PLAYING_KEY = 'masyatras_now_playing';
+
+  function saveNowPlaying(isPlaying){
+    if(!audio.src) return;
+    try{
+      localStorage.setItem(NOW_PLAYING_KEY, JSON.stringify({
+        src: audio.currentSrc || audio.src,
+        currentTime: audio.currentTime,
+        volume: audio.volume,
+        isPlaying: isPlaying,
+        name: pTrack.textContent,
+        album: pAlbum.textContent,
+        art: pArt.src,
+        downloadHref: pDownload.href,
+        downloadName: pDownload.download,
+        ts: Date.now()
+      }));
+    }catch(e){}
+  }
+
+  function resumeNowPlaying(){
+    let state;
+    try{ state = JSON.parse(localStorage.getItem(NOW_PLAYING_KEY)); }catch(e){ return; }
+    if(!state || !state.src) return;
+    if(Date.now() - (state.ts||0) > 1000*60*60*6) return;
+
+    audio.src = state.src;
+    audio.volume = (typeof state.volume === 'number') ? state.volume : 1;
+    pTrack.textContent = state.name || '—';
+    pAlbum.textContent = state.album || '—';
+    if(state.art) pArt.src = state.art;
+    if(state.downloadHref) pDownload.href = state.downloadHref;
+    if(state.downloadName) pDownload.download = state.downloadName;
+    player.classList.add('active');
+
+    const onReady = ()=>{
+      audio.currentTime = state.currentTime || 0;
+      pDuration.textContent = fmt(audio.duration);
+      if(state.isPlaying){
+        audio.play().catch(()=>{ /* el navegador puede bloquear el autoplay hasta que el usuario interactúe */ });
+      }
+      audio.removeEventListener('loadedmetadata', onReady);
+    };
+    audio.addEventListener('loadedmetadata', onReady);
+  }
+
+  pToggle.addEventListener('click', ()=>{
+    if(!audio.src) return;
+    if(audio.paused) audio.play(); else audio.pause();
+  });
+
+  audio.addEventListener('play', ()=>{ pToggle.textContent = '❚❚'; saveNowPlaying(true); });
+  audio.addEventListener('pause', ()=>{ pToggle.textContent = '▶'; saveNowPlaying(false); });
+  audio.addEventListener('timeupdate', ()=>{
+    if(!audio.duration) return;
+    pCurrent.textContent = fmt(audio.currentTime);
+    pFill.style.width = (audio.currentTime/audio.duration*100)+'%';
+    saveNowPlaying(!audio.paused);
+  });
+  audio.addEventListener('loadedmetadata', ()=>{ pDuration.textContent = fmt(audio.duration); });
+
+  pScrub.addEventListener('click', (e)=>{
+    if(!audio.duration) return;
+    const rect = pScrub.getBoundingClientRect();
+    const ratio = Math.min(1, Math.max(0, (e.clientX-rect.left)/rect.width));
+    audio.currentTime = ratio*audio.duration;
+  });
+
+  resumeNowPlaying();
+  window.addEventListener('beforeunload', ()=>{ if(audio.src) saveNowPlaying(!audio.paused); });
 </script>
 
 </body>

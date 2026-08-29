@@ -1515,6 +1515,55 @@ y no ha de morir...</p>
   // ---------- seeded waveform generator ----------
   const audio = document.getElementById('audio');
 
+  // ---------- estado compartido del reproductor entre páginas ----------
+  const NOW_PLAYING_KEY = 'masyatras_now_playing';
+
+  function saveNowPlaying(isPlaying){
+    if(!audio.src) return;
+    try{
+      localStorage.setItem(NOW_PLAYING_KEY, JSON.stringify({
+        src: audio.currentSrc || audio.src,
+        currentTime: audio.currentTime,
+        volume: audio.volume,
+        isPlaying: isPlaying,
+        name: pTrack.textContent,
+        album: pAlbum.textContent,
+        art: pArt.src,
+        downloadHref: pDownload.href,
+        downloadName: pDownload.download,
+        ts: Date.now()
+      }));
+    }catch(e){}
+  }
+
+  function resumeNowPlaying(){
+    let state;
+    try{ state = JSON.parse(localStorage.getItem(NOW_PLAYING_KEY)); }catch(e){ return; }
+    if(!state || !state.src) return;
+    // ignore stale state older than a few hours
+    if(Date.now() - (state.ts||0) > 1000*60*60*6) return;
+
+    audio.src = state.src;
+    audio.volume = (typeof state.volume === 'number') ? state.volume : 1;
+    pTrack.textContent = state.name || '—';
+    pAlbum.textContent = state.album || '—';
+    if(state.art) pArt.src = state.art;
+    if(state.downloadHref) pDownload.href = state.downloadHref;
+    if(state.downloadName) pDownload.download = state.downloadName;
+    player.classList.add('active');
+    if(typeof loadKaraokeFor === 'function') loadKaraokeFor(fileNameFromPath(state.src));
+
+    const onReady = ()=>{
+      audio.currentTime = state.currentTime || 0;
+      if(state.isPlaying){
+        audio.play().catch(()=>{ /* autoplay blocked until user interacts */ });
+      }
+      audio.removeEventListener('loadedmetadata', onReady);
+    };
+    audio.addEventListener('loadedmetadata', onReady);
+  }
+
+
   // ---------- karaoke lyrics (modo aproximado: reparte las líneas parejo a lo largo de la duración real) ----------
   const karaokeLyrics = {
     "Te Necesito": [
@@ -2100,17 +2149,20 @@ y no ha de morir...</p>
     pToggle.textContent = '❚❚';
     activeEls.forEach(el=> el.textContent = '❚❚');
     if(pendingSeekFn){ pendingSeekFn(); pendingSeekFn=null; }
+    saveNowPlaying(true);
   });
   audio.addEventListener('pause', ()=>{
     stopFade();
     pToggle.textContent = '▶';
     activeEls.forEach(el=> el.textContent = '▶');
+    saveNowPlaying(false);
   });
   audio.addEventListener('timeupdate', ()=>{
     if(!audio.duration) return;
     const ratio = audio.currentTime/audio.duration;
     pCurrent.textContent = fmt(audio.currentTime);
     pFgEl.style.clipPath = 'inset(0 '+((1-ratio)*100)+'% 0 0)';
+    saveNowPlaying(!audio.paused);
 
     // start a short fade-out right before the track ends
     if(!fadeOutTriggered && (audio.duration - audio.currentTime) <= FADE_OUT_SECONDS && (audio.duration - audio.currentTime) > 0){
@@ -2345,6 +2397,9 @@ y no ha de morir...</p>
     updateFeatDots(0);
     // fonts/images can shift layout slightly after load; realign once more shortly after
   })();
+
+  resumeNowPlaying();
+  window.addEventListener('beforeunload', ()=>{ if(audio.src) saveNowPlaying(!audio.paused); });
 
   window.addEventListener('resize', ()=>{
     if(featAnimating) return;
