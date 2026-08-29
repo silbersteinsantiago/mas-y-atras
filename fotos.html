@@ -330,6 +330,9 @@
   .photo-carousel .photo:hover img{ transform:scale(1.1); }
   .photo-carousel .photo:hover{ transform:translateY(-3px); }
 
+  .photo-subheading{ display:block; font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--orange); margin:1.2rem 0 .6rem; }
+  .photo-carousel-small .photo{ width:110px; height:110px; }
+
   .photo-featured-large{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-top:1.1rem; }
   .photo-featured-large .photo{
     border-radius:12px; cursor:zoom-in; aspect-ratio:16/9; overflow:hidden;
@@ -341,6 +344,7 @@
 
   @media (max-width:640px){
     .photo-carousel .photo{ width:120px; height:120px; }
+    .photo-carousel-small .photo{ width:90px; height:90px; }
     .photo-featured-large{ grid-template-columns:1fr; }
   }
 
@@ -506,12 +510,17 @@
         <div class="photo reveal"><img src="maquina-galeria-santiago-1.jpg" alt="Santiago cantando en estudio con la banda"></div>
         <div class="photo reveal"><img src="maquina-galeria-german.jpg" alt="Germán en estudio con la banda"></div>
         <div class="photo reveal"><img src="maquina-galeria-banda-completa.jpg" alt="Más y Atrás en estudio con vientos y coros"></div>
+        <div class="photo reveal"><img src="maquina-galeria-estudio-vacio-1.jpg" alt="Sala de control del estudio de grabación"></div>
+        <div class="photo reveal"><img src="maquina-galeria-estudio-vacio-2.jpg" alt="Instrumentos en la sala de grabación"></div>
+      </div>
+
+      <span class="photo-subheading">Músicos invitados</span>
+      <div class="photo-carousel photo-carousel-small">
         <div class="photo reveal"><img src="maquina-galeria-guitarrista.jpg" alt="Guitarrista invitado de Más y Atrás en vivo"></div>
         <div class="photo reveal"><img src="maquina-galeria-guitarrista-2.jpg" alt="Guitarrista invitado de Más y Atrás sonriendo en vivo"></div>
       </div>
+
       <div class="photo-featured-large">
-        <div class="photo reveal"><img src="maquina-galeria-estudio-vacio-1.jpg" alt="Sala de control del estudio de grabación"></div>
-        <div class="photo reveal"><img src="maquina-galeria-estudio-vacio-2.jpg" alt="Instrumentos en la sala de grabación"></div>
         <div class="photo reveal"><img src="categoria-radio-edit-photo.jpg" alt="Más y Atrás en la pileta, tema Categoría Bañero"></div>
         <div class="photo reveal"><img src="te-necesito-radio-edit-photo.jpg" alt="Calesita, tema Te Necesito"></div>
       </div>
