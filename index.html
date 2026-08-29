@@ -325,9 +325,7 @@
   }
   .karaoke-panel.open{ max-height:46vh; padding:1.6rem var(--edge); }
   .karaoke-inner{ max-width:56rem; margin:0 auto; max-height:calc(46vh - 3.2rem); overflow-y:auto; scroll-behavior:smooth; }
-  .karaoke-line{ font-family:var(--display); font-size:clamp(1.1rem,2.6vw,1.7rem); line-height:1.6; color:rgba(255,255,255,.28); transition:color .3s ease, transform .3s ease; padding:.15rem 0; }
-  .karaoke-line.active{ color:var(--cream); }
-  .karaoke-line.past{ color:rgba(255,255,255,.4); }
+  .karaoke-line{ font-family:var(--display); font-size:clamp(1.1rem,2.6vw,1.7rem); line-height:1.6; color:rgba(255,255,255,.85); padding:.15rem 0; }
   #p-lyrics-toggle{ font-family:var(--body); font-weight:800; font-size:.85rem; }
   #p-lyrics-toggle.active{ background:var(--grad); border-color:transparent; color:#fff; }
   @media (max-width:600px){ .karaoke-panel.open{ max-height:56vh; padding:1.1rem 5vw; } .karaoke-inner{ max-height:calc(56vh - 2.2rem); } }
@@ -1694,13 +1692,10 @@ Boy, boy... ¡Boy!</p>
     }
     pLyricsToggle.style.display = '';
     karaokeInner.innerHTML = '';
-    lines.forEach((text, i)=>{
+    lines.forEach(text=>{
       const div = document.createElement('div');
       div.className = 'karaoke-line';
       div.textContent = text;
-      div.addEventListener('click', ()=>{
-        if(audio.duration) audio.currentTime = (i/lines.length) * audio.duration;
-      });
       karaokeInner.appendChild(div);
     });
   }
@@ -1710,24 +1705,6 @@ Boy, boy... ¡Boy!</p>
     karaokePanel.classList.toggle('open', karaokeOpen);
     pLyricsToggle.classList.toggle('active', karaokeOpen);
   });
-
-  function updateKaraokeHighlight(){
-    const song = srcToSong[currentKaraokeSrc];
-    const lines = song && karaokeLyrics[song];
-    if(!lines || !lines.length || !audio.duration) return;
-    const ratio = audio.currentTime / audio.duration;
-    const activeIdx = Math.min(lines.length-1, Math.floor(ratio * lines.length));
-    const lineEls = karaokeInner.querySelectorAll('.karaoke-line');
-    lineEls.forEach((el,i)=>{
-      el.classList.toggle('active', i === activeIdx);
-      el.classList.toggle('past', i < activeIdx);
-    });
-    if(karaokeOpen){
-      const activeEl = lineEls[activeIdx];
-      const targetScroll = activeEl.offsetTop - (karaokeInner.clientHeight/2) + (activeEl.clientHeight/2);
-      karaokeInner.scrollTo({ top: targetScroll, behavior:'smooth' });
-    }
-  }
 
 
   function fileNameFromPath(path){
@@ -1969,7 +1946,6 @@ Boy, boy... ¡Boy!</p>
     const ratio = audio.currentTime/audio.duration;
     pCurrent.textContent = fmt(audio.currentTime);
     pFgEl.style.clipPath = 'inset(0 '+((1-ratio)*100)+'% 0 0)';
-    updateKaraokeHighlight();
 
     // start a short fade-out right before the track ends
     if(!fadeOutTriggered && (audio.duration - audio.currentTime) <= FADE_OUT_SECONDS && (audio.duration - audio.currentTime) > 0){
