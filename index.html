@@ -56,19 +56,18 @@
   /* ---------- nav ---------- */
   header.nav{
     position:sticky; top:0; left:0; right:0; z-index:100;
-    display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
-    padding: .75rem var(--edge);
+    display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:1.5rem;
+    padding: .6rem var(--edge);
     background:rgba(10,10,10,.92); backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);
   }
   .nav .mark{ display:flex; align-items:center; gap:.7rem; flex-shrink:0; }
-  .nav .mark img{ width:3.8rem; height:3.8rem; object-fit:contain; }
-  .nav .mark span{ font-family:var(--display); font-size:1.6rem; font-weight:400; letter-spacing:0; }
-  .nav ul{ list-style:none; display:flex; gap:1.8rem; font-family:var(--display); font-size:1.25rem; font-weight:400; letter-spacing:0; }
+  .nav .mark img{ width:4.6rem; height:4.6rem; object-fit:contain; }
+  .nav ul{ list-style:none; display:flex; justify-content:center; gap:2.6rem; font-family:var(--display); font-size:1.5rem; font-weight:400; letter-spacing:0; }
   .nav ul li a{ color:var(--fog); transition:color .2s; }
   .nav ul li a:hover{ color:var(--cream); }
-  .nav-cta{ flex-shrink:0; }
-  @media (max-width:760px){ .nav ul{ display:none; } .nav .mark span{ display:none; } }
+  .nav-cta{ flex-shrink:0; justify-self:end; }
+  @media (max-width:760px){ .nav ul{ display:none; } }
 
   .btn{
     font-family:var(--body); font-size:.82rem; font-weight:700;
@@ -318,7 +317,7 @@
 </svg>
 
 <header class="nav">
-  <a href="#top" class="mark"><img src="logo-cutout.png" alt="Más y Atrás"><span>Más y Atrás</span></a>
+  <a href="#top" class="mark"><img src="logo-cutout.png" alt="Más y Atrás"></a>
   <ul>
     <li><a href="#historia">Historia</a></li>
     <li><a href="#discografia">Música</a></li>
