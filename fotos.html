@@ -318,7 +318,7 @@
   .ver-fotos-btn .plus{ display:inline-block; transition:transform .35s ease; }
   .ver-fotos-btn.open .plus{ transform:rotate(45deg); }
   .photo-panel{ max-height:0; overflow:hidden; transition:max-height .5s ease, margin-top .5s ease; margin-top:0; }
-  .photo-panel.open{ max-height:1400px; margin-top:1.6rem; }
+  .photo-panel.open{ max-height:6000px; margin-top:1.6rem; }
   .gallery-grid{ display:grid; grid-template-columns: repeat(6,1fr); gap:.9rem; }
   .gallery-grid .photo{
     border-radius:10px; grid-column:span 2; aspect-ratio:3/4; cursor:zoom-in;
@@ -535,7 +535,10 @@
       if(!album) return;
       const panel = album.querySelector('.photo-panel');
       const isOpen = btn.classList.toggle('open');
-      if(panel) panel.classList.toggle('open', isOpen);
+      if(panel){
+        panel.classList.toggle('open', isOpen);
+        panel.style.maxHeight = isOpen ? (panel.scrollHeight + 40) + 'px' : '';
+      }
       btn.childNodes[0].textContent = isOpen ? 'Ocultar fotos ' : 'Ver fotos ';
     });
   });
