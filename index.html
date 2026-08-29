@@ -2130,9 +2130,10 @@ Boy, boy... ¡Boy!</p>
     featDotsWrap.appendChild(dot);
   });
 
-  // one tab per album, jumping to that album's first track in the carousel
+  // one tab per album, jumping to that album's first track in the carousel (el sencillo suelto no tiene pestaña propia)
   const featAlbumOrder = [];
   featuredTracks.forEach((t,i)=>{
+    if(t.album === 'Sencillo') return;
     if(!featAlbumOrder.some(a=> a.album === t.album)) featAlbumOrder.push({ album: t.album, firstIndex: i });
   });
   featAlbumOrder.forEach((a, ai)=>{
@@ -2147,7 +2148,7 @@ Boy, boy... ¡Boy!</p>
   function updateFeatDots(index){
     featDotsWrap.querySelectorAll('.dot').forEach((d,i)=> d.classList.toggle('active', i===index));
     const activeAlbum = featuredTracks[index].album;
-    featAlbumTabsWrap.querySelectorAll('.tab').forEach((tabEl, ai)=> tabEl.classList.toggle('active', featAlbumOrder[ai].album === activeAlbum));
+    featAlbumTabsWrap.querySelectorAll('.tab').forEach(tabEl=> tabEl.classList.toggle('active', tabEl.textContent === activeAlbum));
   }
 
 
@@ -2169,6 +2170,7 @@ Boy, boy... ¡Boy!</p>
     featAnimating = true;
     featIndex = targetIndex;
     const t = featuredTracks[featIndex];
+    updateFeatDots(featIndex);
 
     populateFace(standbyFace, t);
 
@@ -2197,7 +2199,6 @@ Boy, boy... ¡Boy!</p>
       standbyFace.style.transition = '';
 
       const tmp = currentFace; currentFace = standbyFace; standbyFace = tmp;
-      updateFeatDots(featIndex);
       featAnimating = false;
     };
     standbyFace.addEventListener('transitionend', onEnd);
