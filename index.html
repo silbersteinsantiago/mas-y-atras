@@ -315,6 +315,23 @@
   .social a:hover{ color:var(--orange); }
   .fine{ margin-top:3.4rem; display:flex; justify-content:space-between; font-size:.76rem; color:var(--fog-dim); flex-wrap:wrap; gap:1rem; }
 
+  /* ---------- karaoke lyrics panel ---------- */
+  .karaoke-panel{
+    position:fixed; left:0; right:0; bottom:0; z-index:149;
+    background:rgba(8,8,8,.97); backdrop-filter:blur(14px);
+    border-top:1px solid var(--line);
+    max-height:0; overflow:hidden; transition:max-height .4s ease, padding .4s ease;
+    padding:0 var(--edge);
+  }
+  .karaoke-panel.open{ max-height:46vh; padding:1.6rem var(--edge); }
+  .karaoke-inner{ max-width:56rem; margin:0 auto; max-height:calc(46vh - 3.2rem); overflow-y:auto; scroll-behavior:smooth; }
+  .karaoke-line{ font-family:var(--display); font-size:clamp(1.1rem,2.6vw,1.7rem); line-height:1.6; color:rgba(255,255,255,.28); transition:color .3s ease, transform .3s ease; padding:.15rem 0; }
+  .karaoke-line.active{ color:var(--cream); }
+  .karaoke-line.past{ color:rgba(255,255,255,.4); }
+  #p-lyrics-toggle{ font-family:var(--body); font-weight:800; font-size:.85rem; }
+  #p-lyrics-toggle.active{ background:var(--grad); border-color:transparent; color:#fff; }
+  @media (max-width:600px){ .karaoke-panel.open{ max-height:56vh; padding:1.1rem 5vw; } .karaoke-inner{ max-height:calc(56vh - 2.2rem); } }
+
   /* ---------- fixed bottom player ---------- */
   .player{
     position:fixed; left:0; right:0; bottom:0; z-index:150;
@@ -1333,13 +1350,20 @@ Boy, boy... ¡Boy!</p>
   </div>
 </footer>
 
+<div class="karaoke-panel" id="karaoke-panel">
+  <div class="karaoke-inner" id="karaoke-inner"></div>
+</div>
+
 <div class="player" id="player">
   <div class="player-art photo"><img id="p-art" src="" alt=""></div>
   <div class="player-info">
     <div class="p-track" id="p-track">—</div>
     <div class="p-album" id="p-album">—</div>
   </div>
-  <div class="player-controls"><button class="icon-btn" id="p-toggle" aria-label="Pausar / reproducir">▶</button></div>
+  <div class="player-controls">
+    <button class="icon-btn" id="p-toggle" aria-label="Pausar / reproducir">▶</button>
+    <button class="icon-btn" id="p-lyrics-toggle" aria-label="Ver letra" style="display:none;">Aa</button>
+  </div>
   <div class="player-scrub">
     <span class="p-time" id="p-current">0:00</span>
     <div class="scrub-track" id="p-scrub"><div class="player-wf" id="p-wf"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div></div>
@@ -1372,6 +1396,339 @@ Boy, boy... ¡Boy!</p>
 
   // ---------- seeded waveform generator ----------
   const audio = document.getElementById('audio');
+
+  // ---------- karaoke lyrics (modo aproximado: reparte las líneas parejo a lo largo de la duración real) ----------
+  const karaokeLyrics = {
+    "Te Necesito": [
+      "Caía en tus redes y en tus garras,",
+      "te perseguía, me poseías, me dominabas.",
+      "Pero eso quedó atrás, hoy me dices que me extrañas",
+      "y yo te digo, nena, que para mí estás muerta.",
+      "¿Te necesito? ¡No!",
+      "Te tengo en el olvido, amor,",
+      "y estás ahí queriendo volver a entrar en mí.",
+      "¿Te necesito? ¡No!",
+      "Te tengo en el olvido, amor,",
+      "y estás ahí queriendo volver a entrar en mí.",
+      "Solías ser la dueña de esta calesita,",
+      "yo te compraba dulces mientras robabas sortijas.",
+      "El circo ha cerrado, se cayeron tus trapecistas,",
+      "y ya no te queda otra que pagar todas tus vueltitas.",
+      "¿Te necesito? ¡No!",
+      "Te tengo en el olvido, amor,",
+      "y estás ahí queriendo volver a entrar en mí.",
+      "¿Te necesito? ¡No!",
+      "Te tengo en el olvido, amor,",
+      "y estás ahí queriendo volver a entrar en mí.",
+    ],
+    "Kernel": [
+      "I can't start si vos no estás...",
+      "No logro ver aquella luz en tu mirada.",
+      "De nada sirve que te escondas,",
+      "because I see you aquí.",
+      "Te volvés a poner tu camisón,",
+      "de animal print que no es de seda.",
+      "Te queda... realmente bien.",
+      "I try to understand...",
+      "Ooh, Kernel, guíame...",
+      "Hoy y ayer, ámame.",
+      "Ooh, Kernel, guíame...",
+      "Hoy y ayer, ámame.",
+      "Porque without you, no sé quién soy...",
+      "Quizás mañana... seré tu boy.",
+      "Boy, boy... ¡Boy!",
+      "Why es tan difícil entenderte...",
+      "Quisiera que estuviésemos en el mismo channel,",
+      "en el que pudiésemos ser amantes...",
+      "There is another...",
+      "Ooh, Kernel, guíame...",
+      "Hoy y ayer, ámame.",
+      "Ooh, Kernel, guíame...",
+      "Hoy y ayer, ámame.",
+      "Porque without you, no sé quién soy...",
+      "Quizás mañana... seré tu boy.",
+      "Boy, boy... ¡Boy!",
+    ],
+    "La Apuesta": [
+      "Dejo de pensar",
+      "y entro en un soplo lento de ilógicas ideas.",
+      "Vuelvo a anotar",
+      "cada frase que me digas y esté mal,",
+      "que no encuentres una salida.",
+      "Me importa muy poco tu presencia,",
+      "tu bipolaridad.",
+      "No estoy hecho de secuelas que me inviten a recordar,",
+      "esta historia llegó a su final.",
+      "Lejos de este acá,",
+      "cerca de tus besos me dejás,",
+      "sin las ganas de esperar.",
+      "No me extrañes si el hoy se fue,",
+      "mañana volverás o no lo sé.",
+      "Tengo la tranquilidad",
+      "que en este juego no me quedan fichas por jugar.",
+      "No me quedan fichas por jugar,",
+      "no me quedan fichas por jugar,",
+      "no me quedan fichas por jugar,",
+      "no me quedan fichas por jugar.",
+      "Esta historia llegó a su final.",
+    ],
+    "Infidelidad": [
+      "Solo respiro de tu ombligo para poder llegar... más lejos.",
+      "Y sentirme vivo en tu cuerpo.",
+      "La naturaleza es sabia, más cuando somos uno...",
+      "y nos rozamos mutuamente, dejando nuestro rastro en el suelo...",
+      "La fidelidad ya no existe más.",
+      "Todos pecamos, decimos que amamos...",
+      "y nada se puede remediar...",
+      "Siempre la misma historia... hay que contar.",
+      "Siempre la misma mierda... hay que aguantar.",
+      "Cuando estás conmigo, sueles pensar...",
+      "en tu mejor amigo, y eso ya no es amistad.",
+      "Solo un sueño sigo, la lujuria es mi guía...",
+      "de pensar en un trío, una fantasía más...",
+      "Siempre la misma historia... hay que contar.",
+      "Siempre la misma mierda... hay que aguantar.",
+      "Siempre la misma historia... hay que contar.",
+      "Siempre la misma mierda... hay que aguantar.",
+    ],
+    "Ella es para Mí": [
+      "Ella es para mí,",
+      "todo lo que quiero en esta vida.",
+      "Ella es para mí,",
+      "una noche sin salida.",
+      "Ella es para mí,",
+      "una linda sensación.",
+      "Ella es para mí,",
+      "una tortura, una confusión.",
+      "Y cómo puedo hacer",
+      "para poder estar con ella.",
+      "Y cómo detener",
+      "las maromas en mi cabeza.",
+      "No, no puedo olvidarme",
+      "de ese sabor de tus besos,",
+      "de pasar mi lengua por tu cuello",
+      "y sentir que somos dos locos de amor.",
+      "Que nada está prohibido, por favor,",
+      "quédate conmigo.",
+      "Ella es para mí,",
+      "una gran bienvenida.",
+      "Ella es para mí,",
+      "una noble despedida.",
+      "Ella es para mí,",
+      "una droga que me inspira.",
+      "Ella es para mí,",
+      "una enfermedad divina.",
+      "Y cómo puedo hacer",
+      "para poder estar con ella.",
+      "Y cómo detener",
+      "las maromas en mi cabeza.",
+      "No, no puedo olvidarme",
+      "de ese sabor de tus besos,",
+      "de pasar mi lengua por tu cuello",
+      "y sentir que somos dos locos de amor.",
+      "Que nada está prohibido, por favor,",
+      "quédate conmigo.",
+      "Que nada está prohibido, por favor,",
+      "quédate conmigo.",
+    ],
+    "Recuerdos de Mar": [
+      "Era una de esas noches de verano.",
+      "Con Gairol, Goro y Chelo, en Sacoa nos juntamos.",
+      "La paliza daba risa, y un sobrador humorista",
+      "se burlaba del perdedor que iba acumulando ira...",
+      "Un gol para Yugoslavia era un festejo que irritaba,",
+      "y los chistes que agitaban a la masa que escuchaba.",
+      "Pero el mejor de los hechos, ahora se los voy a contar.",
+      "Chelito jugando a sus jueguitos, una mina ha de rechazar...",
+      "La pobre, ilusionada, su nombre quería averiguar,",
+      "y este gil le contestó Marcelo por y la dejaba atontada...",
+      "Y así fueron los días pasando poco a poco.",
+      "Personajes aparecían en las carpas vecinas.",
+      "Cómo olvidar a Rape, cara de pez, cara de don.",
+      "A Julius, Orach y Miriam, a Piget en el mostrador.",
+      "Al Tanque, a Orne y a Walter, a Yiyo y a la modelito.",
+      "A Toto y su bigote porno, y a los panchos amigos de Nacho.",
+      "Más allá de estas figuras, recordemos el inicio del libro,",
+      "que fue en dedicación de esa noche con Gasti y el Chino.",
+      "Después de ingerir veinte litros entre cinco de alcohol,",
+      "la víctima llamada Sofía del piso emergió.",
+      "La teoría era simple, no sé cómo no funcionó.",
+      "La pobre se pensó que era un insulto para ella...",
+      "y lloró...",
+      "Las mejores vacaciones de mi vida las pasamos en MDQ.",
+      "Con la máscara de arena de Lara y de fuego sobre María Luz.",
+      "Chip and Deil me están faltando y la canción estoy terminando.",
+      "Un saludo para mis fieles soldados,",
+      "que en aventuras me han acompañado...",
+      "Oh, oh, oh...",
+      "Oh, oh, oh...",
+      "Oh, oh, oh...",
+    ],
+    "Máquina del Tiempo": [
+      "Qué tal si te digo que he creado una ilusión...",
+      "Que no sé... si quiero ver...",
+      "Parece que a veces...",
+      "el dinero vale más que el tiempo...",
+      "Pero es cierto que... es lo único que no se recupera...",
+      "Sin embargo yo seguiré...",
+      "en la espera de mi...",
+      "Máquina del tiempo... llévame... hacia atrás...",
+      "Máquina del tiempo... llévame... más allá...",
+      "Máquina del tiempo... llévame... hacia atrás...",
+      "Máquina del tiempo... llévame... más allá...",
+      "Has inventado un mundo... donde el sufrimiento es goce...",
+      "Y es triste saber... que al final...",
+      "eso ya no sirve...",
+      "Quizás no tengas claro... qué deseás...",
+      "y apuntás... al objetivo equivocado...",
+      "Será que la luz... me ha cegado...",
+      "Será que la vida me ha dejado...",
+      "sin mí...",
+      "Máquina del tiempo... llévame... hacia atrás...",
+      "Máquina del tiempo... llévame... más allá...",
+      "Máquina del tiempo... llévame... hacia atrás...",
+      "Máquina del tiempo... llévame... más allá...",
+      "Máquina del tiempo... llévame... hacia atrás...",
+      "Máquina del tiempo... llévame... más allá...",
+      "Máquina del tiempo... llévame... hacia atrás...",
+      "Máquina del tiempo... llévame... más allá...",
+      "Máquina del tiempo... hacia atrás...",
+      "Máquina del tiempo... más allá...",
+      "Hacia atrás... más allá...",
+      "Máquina del tiempo...",
+      "Hacia atrás... más allá...",
+      "Máquina del tiempo... máquina del tiempo...",
+      "Hacia atrás... más allá...",
+    ],
+    "Tierna de Ojos Tristes": [
+      "Tierna de ojos tristes... te mueves en secuencia y quieres cambiar...",
+      "Marcas en matices... son aquellos moldes a los cuales pudiste dejar...",
+      "Y no te bastó con romper esquemas...",
+      "y con arte emerger...",
+      "Poseés de esa fuerza que nadie pudo tener...",
+      "Luchas contra ideas innatas... que forman figuras extrañas acerca de vos...",
+      "Y no te das cuenta... que hay gente a tu alrededor...",
+      "Y aunque no puedas ver... lo que otros pueden encontrar...",
+      "seguís buscando respuestas donde no las hallarás...",
+      "Tal vez sea tiempo... de dejar de preguntar...",
+      "No dejes que el miedo te diga quién sos...",
+      "Ni aquellas miradas apaguen tu voz...",
+      "Si todo se rompe... volvelo a intentar...",
+      "Que nadie decida hasta dónde llegar...",
+      "Y aunque no puedas ver... lo que otros pueden encontrar...",
+      "seguís buscando respuestas donde no las hallarás...",
+      "Tal vez sea tiempo... de dejar de preguntar...",
+      "No dejes que el miedo te diga quién sos...",
+      "Ni aquellas miradas apaguen tu voz...",
+      "Si todo se rompe... volvelo a intentar...",
+      "Que nadie decida hasta dónde llegar...",
+    ],
+    "Categoría Bañero": [
+      "Llego, me siento y miro bajo una sombrilla.",
+      "Escucho un buen día y contesto ya sin energía.",
+      "El reflejo del mosaico me quema hasta el cuello",
+      "y empiezan a llegar de a poquito todos los pendejos.",
+      "Qué calor que hace, me dice una vieja y protesta",
+      "por no tener reposera.",
+      "Me agarro un huevo y la mando bien a la mierda",
+      "y me gano una nota al pedo,",
+      "y me gano una nota al pedo.",
+      "No soy bañero, soy guardavidas.",
+      "No soy bañero, no, soy guardavidas.",
+      "No soy bañero, no, soy guardavidas.",
+      "Pues yo no baño a nadie a menos que me lo pida.",
+      "Aquélla pendeja se metió sin gorrito.",
+      "Llamala a la pampita que vaya porque no encuentro a Dieguito.",
+      "Se está yendo la colonia, le digo a Marcelito.",
+      "Entonces tipo seis y media voy por mi cafecito.",
+      "Mientras que unos corren y otros se cruzan por el andarivel,",
+      "silbatos siguen sonando al ritmo de la música de Miguel.",
+      "Y Pablo me cuenta historias sobre chapulines,",
+      "Rulo avisando que hay agua allí, parece vendedor de pirulines.",
+      "No soy bañero, soy guardavidas.",
+      "No soy bañero, no, soy guardavidas.",
+      "No soy bañero, no, soy guardavidas.",
+      "Pues yo no baño a nadie a menos que me lo pida.",
+      "De repente se larga a llover, ya no queda nada más que hacer.",
+      "Nos refugiamos en el vestuario y cantamos con la guitarra de Fernando.",
+      "No soy bañero, no, soy guardavidas.",
+      "No soy bañero, no, soy guardavidas.",
+      "No soy bañero, soy guardavidas.",
+      "Pues yo no baño a nadie a menos que me lo pida.",
+    ],
+  };
+
+  const srcToSong = {
+    "Te Necesito (En Vivo).mp3?v=4": "Te Necesito",
+    "Te necesito (Radio Edit).mp3?v=1": "Te Necesito",
+    "Kernel (En Vivo).mp3": "Kernel",
+    "Kernel (Radio Edit).mp3": "Kernel",
+    "La Apuesta( En Vivo).mp3": "La Apuesta",
+    "Infidelidad (Acústico).mp3": "Infidelidad",
+    "Ella es para mí (Acústico).mp3": "Ella es para Mí",
+    "Recuerdos De Mar (Acústico).mp3": "Recuerdos de Mar",
+    "Máquina del Tiempo (en Vivo).mp3": "Máquina del Tiempo",
+    "Máquina del tiempo (Radio Edit).mp3": "Máquina del Tiempo",
+    "Tierna De Ojos Tristes (En Vivo).mp3": "Tierna de Ojos Tristes",
+    "Tierna de ojos tristes (Radio Edit).mp3": "Tierna de Ojos Tristes",
+    "Categoria Bañero (En Vivo).mp3": "Categoría Bañero",
+    "Categoria Bañero (Radio Edit).mp3": "Categoría Bañero",
+  };
+
+  const karaokePanel = document.getElementById('karaoke-panel');
+  const karaokeInner = document.getElementById('karaoke-inner');
+  const pLyricsToggle = document.getElementById('p-lyrics-toggle');
+  let currentKaraokeSrc = null;
+  let karaokeOpen = false;
+
+  function loadKaraokeFor(src){
+    currentKaraokeSrc = src;
+    const song = srcToSong[src];
+    const lines = song && karaokeLyrics[song];
+    if(!lines || !lines.length){
+      pLyricsToggle.style.display = 'none';
+      karaokePanel.classList.remove('open');
+      karaokeOpen = false;
+      pLyricsToggle.classList.remove('active');
+      return;
+    }
+    pLyricsToggle.style.display = '';
+    karaokeInner.innerHTML = '';
+    lines.forEach((text, i)=>{
+      const div = document.createElement('div');
+      div.className = 'karaoke-line';
+      div.textContent = text;
+      div.addEventListener('click', ()=>{
+        if(audio.duration) audio.currentTime = (i/lines.length) * audio.duration;
+      });
+      karaokeInner.appendChild(div);
+    });
+  }
+
+  pLyricsToggle.addEventListener('click', ()=>{
+    karaokeOpen = !karaokeOpen;
+    karaokePanel.classList.toggle('open', karaokeOpen);
+    pLyricsToggle.classList.toggle('active', karaokeOpen);
+  });
+
+  function updateKaraokeHighlight(){
+    const song = srcToSong[currentKaraokeSrc];
+    const lines = song && karaokeLyrics[song];
+    if(!lines || !lines.length || !audio.duration) return;
+    const ratio = audio.currentTime / audio.duration;
+    const activeIdx = Math.min(lines.length-1, Math.floor(ratio * lines.length));
+    const lineEls = karaokeInner.querySelectorAll('.karaoke-line');
+    lineEls.forEach((el,i)=>{
+      el.classList.toggle('active', i === activeIdx);
+      el.classList.toggle('past', i < activeIdx);
+    });
+    if(karaokeOpen){
+      const activeEl = lineEls[activeIdx];
+      const targetScroll = activeEl.offsetTop - (karaokeInner.clientHeight/2) + (activeEl.clientHeight/2);
+      karaokeInner.scrollTo({ top: targetScroll, behavior:'smooth' });
+    }
+  }
+
 
   function fileNameFromPath(path){
     return (path || '').split('/').pop();
@@ -1537,6 +1894,7 @@ Boy, boy... ¡Boy!</p>
     audio.volume = 1;
     audio.src = src;
     audio.play();
+    loadKaraokeFor(fileNameFromPath(src));
     if(afterPlayCb) pendingSeekFn = afterPlayCb;
 
     // mark every control tied to this src as playing (button, featured play)
@@ -1568,6 +1926,7 @@ Boy, boy... ¡Boy!</p>
       audio.volume = 1;
       audio.src = t.src;
       audio.play();
+      loadKaraokeFor(fileNameFromPath(t.src));
       pArt.src = t.art;
       pTrack.textContent = t.name;
       pAlbum.textContent = t.album;
@@ -1610,6 +1969,7 @@ Boy, boy... ¡Boy!</p>
     const ratio = audio.currentTime/audio.duration;
     pCurrent.textContent = fmt(audio.currentTime);
     pFgEl.style.clipPath = 'inset(0 '+((1-ratio)*100)+'% 0 0)';
+    updateKaraokeHighlight();
 
     // start a short fade-out right before the track ends
     if(!fadeOutTriggered && (audio.duration - audio.currentTime) <= FADE_OUT_SECONDS && (audio.duration - audio.currentTime) > 0){
