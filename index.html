@@ -322,13 +322,31 @@
     border-top:1px solid var(--line);
     max-height:0; overflow:hidden; transition:max-height .4s ease, padding .4s ease;
     padding:0 var(--edge);
+    border-radius:16px 16px 0 0;
+    box-shadow:0 -10px 40px rgba(0,0,0,.5);
   }
-  .karaoke-panel.open{ max-height:46vh; padding:1.6rem var(--edge); }
-  .karaoke-inner{ max-width:56rem; margin:0 auto; max-height:calc(46vh - 3.2rem); overflow-y:auto; scroll-behavior:smooth; }
-  .karaoke-line{ font-family:var(--display); font-size:clamp(1.1rem,2.6vw,1.7rem); line-height:1.6; color:rgba(255,255,255,.85); padding:.15rem 0; }
+  .karaoke-panel.open{ max-height:32vh; padding:1.1rem var(--edge) 1.3rem; }
+  .karaoke-head{ display:flex; align-items:center; justify-content:space-between; max-width:56rem; margin:0 auto .7rem; }
+  .karaoke-title{ font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--orange); }
+  .karaoke-close{
+    width:1.9rem; height:1.9rem; border-radius:50%; border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.05); color:var(--fog); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:.85rem; transition:background .2s, color .2s;
+  }
+  .karaoke-close:hover{ background:rgba(255,255,255,.12); color:#fff; }
+  .karaoke-inner{
+    max-width:56rem; margin:0 auto; max-height:calc(32vh - 3rem); overflow-y:auto; scroll-behavior:smooth;
+    -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 1.4rem, #000 calc(100% - 1rem), transparent 100%);
+    mask-image:linear-gradient(180deg, transparent 0, #000 1.4rem, #000 calc(100% - 1rem), transparent 100%);
+    scrollbar-width:thin; scrollbar-color:var(--orange) transparent;
+  }
+  .karaoke-inner::-webkit-scrollbar{ width:5px; }
+  .karaoke-inner::-webkit-scrollbar-track{ background:transparent; }
+  .karaoke-inner::-webkit-scrollbar-thumb{ background:rgba(201,151,90,.5); border-radius:10px; }
+  .karaoke-line{ font-family:var(--display); font-size:clamp(1rem,2.2vw,1.35rem); line-height:1.55; color:rgba(255,255,255,.8); padding:.1rem 0; }
   #p-lyrics-toggle{ font-family:var(--body); font-weight:800; font-size:.85rem; }
   #p-lyrics-toggle.active{ background:var(--grad); border-color:transparent; color:#fff; }
-  @media (max-width:600px){ .karaoke-panel.open{ max-height:56vh; padding:1.1rem 5vw; } .karaoke-inner{ max-height:calc(56vh - 2.2rem); } }
+  @media (max-width:600px){ .karaoke-panel.open{ max-height:40vh; padding:1rem 5vw 1.2rem; } .karaoke-inner{ max-height:calc(40vh - 2.8rem); } }
 
   /* ---------- fixed bottom player ---------- */
   .player{
@@ -1349,6 +1367,10 @@ Boy, boy... ¡Boy!</p>
 </footer>
 
 <div class="karaoke-panel" id="karaoke-panel">
+  <div class="karaoke-head">
+    <span class="karaoke-title" id="karaoke-title">Letra</span>
+    <button class="karaoke-close" id="karaoke-close" aria-label="Cerrar letra">✕</button>
+  </div>
   <div class="karaoke-inner" id="karaoke-inner"></div>
 </div>
 
@@ -1676,6 +1698,8 @@ Boy, boy... ¡Boy!</p>
   const karaokePanel = document.getElementById('karaoke-panel');
   const karaokeInner = document.getElementById('karaoke-inner');
   const pLyricsToggle = document.getElementById('p-lyrics-toggle');
+  const karaokeTitle = document.getElementById('karaoke-title');
+  const karaokeClose = document.getElementById('karaoke-close');
   let currentKaraokeSrc = null;
   let karaokeOpen = false;
 
@@ -1691,6 +1715,7 @@ Boy, boy... ¡Boy!</p>
       return;
     }
     pLyricsToggle.style.display = '';
+    karaokeTitle.textContent = 'Letra — ' + song;
     karaokeInner.innerHTML = '';
     lines.forEach(text=>{
       const div = document.createElement('div');
@@ -1700,11 +1725,18 @@ Boy, boy... ¡Boy!</p>
     });
   }
 
+  function closeKaraoke(){
+    karaokeOpen = false;
+    karaokePanel.classList.remove('open');
+    pLyricsToggle.classList.remove('active');
+  }
+
   pLyricsToggle.addEventListener('click', ()=>{
     karaokeOpen = !karaokeOpen;
     karaokePanel.classList.toggle('open', karaokeOpen);
     pLyricsToggle.classList.toggle('active', karaokeOpen);
   });
+  karaokeClose.addEventListener('click', closeKaraoke);
 
 
   function fileNameFromPath(path){
