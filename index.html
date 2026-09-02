@@ -451,6 +451,38 @@
     .player-dl{ display:none; }
   }
 
+  /* ---------- estadísticas de escucha + encuesta de salida ---------- */
+  .play-count{
+    margin-left:.55rem; color:var(--fog-dim); font-size:.72rem; font-weight:600;
+    white-space:nowrap; letter-spacing:.01em;
+  }
+  .track-row .track-name{ display:inline-flex; align-items:center; flex-wrap:wrap; }
+  .listener-poll{
+    position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center;
+    padding:1.25rem; background:rgba(5,5,5,.84); backdrop-filter:blur(10px);
+  }
+  .listener-poll.open{ display:flex; }
+  .listener-poll-card{
+    width:min(620px,100%); max-height:min(760px,88vh); overflow:auto;
+    background:#171411; border:1px solid rgba(217,174,116,.28); border-radius:18px;
+    padding:1.5rem; box-shadow:0 24px 80px rgba(0,0,0,.58);
+  }
+  .listener-poll-kicker{ color:var(--orange); text-transform:uppercase; letter-spacing:.14em; font-size:.67rem; font-weight:800; }
+  .listener-poll h3{ font-family:var(--display); font-size:clamp(1.8rem,5vw,2.55rem); font-weight:400; margin:.35rem 0 .35rem; }
+  .listener-poll p{ color:var(--fog); font-size:.9rem; margin-bottom:1rem; }
+  .poll-options{ display:grid; gap:.55rem; }
+  .poll-track{
+    width:100%; text-align:left; border:1px solid var(--line); color:var(--cream); background:rgba(255,255,255,.035);
+    border-radius:12px; padding:.8rem .9rem; cursor:pointer; font-family:var(--body); transition:.2s ease;
+  }
+  .poll-track:hover{ border-color:var(--orange); background:rgba(201,151,90,.09); transform:translateY(-1px); }
+  .poll-track strong{ display:block; font-size:.9rem; }
+  .poll-track span{ display:block; color:var(--fog-dim); font-size:.72rem; margin-top:.08rem; }
+  .poll-footer{ display:flex; justify-content:flex-end; margin-top:1rem; }
+  .poll-skip{ border:0; background:transparent; color:var(--fog-dim); cursor:pointer; font:600 .75rem var(--body); padding:.35rem; }
+  .poll-skip:hover{ color:var(--cream); }
+  .stats-status{ display:none; }
+
 </style>
 </head>
 <body>
@@ -1747,6 +1779,18 @@ por amar...</p>
 
 <audio id="audio" preload="none"></audio>
 
+<div class="listener-poll" id="listener-poll" aria-hidden="true">
+  <div class="listener-poll-card" role="dialog" aria-modal="true" aria-labelledby="poll-title">
+    <div class="listener-poll-kicker">Antes de irte</div>
+    <h3 id="poll-title">¿Qué tema te gustó más?</h3>
+    <p>Elegí uno. Nos ayuda a saber qué canciones conectan más con quienes nos escuchan.</p>
+    <div class="poll-options" id="poll-options"></div>
+    <div class="poll-footer"><button class="poll-skip" id="poll-skip" type="button">Ahora no</button></div>
+  </div>
+</div>
+
+
+
 <script>
   // ---------- reveal on scroll ----------
   const revealEls = document.querySelectorAll('.reveal');
@@ -2789,5 +2833,222 @@ por amar...</p>
   });
 </script>
 
+
+<script>
+/* =========================================================
+   ESTADÍSTICAS DE MÁS Y ATRÁS
+   Requiere Supabase. Completá las 3 constantes de CONFIG.
+   ========================================================= */
+(() => {
+  const CONFIG = {
+    SUPABASE_URL: 'https://vrqgetxfixjmfitgowtu.supabase.co',
+    SUPABASE_ANON_KEY: 'sb_publishable_fdEAuqY_-SFl8H_pXcVWwA_YLtCNute',
+    // Para excluir por IP sin publicar tu IP real: pegá aquí su SHA-256.
+    // El archivo owner-ip-hash.html incluido te genera ese hash localmente.
+    OWNER_IP_HASH: 'PEGA_AQUI_EL_HASH_SHA256_DE_TU_IP',
+    VALID_PLAY_SECONDS: 10,
+    VOTE_VERSION: '2026-09-v1'
+  };
+
+  const audioEl = document.getElementById('audio');
+  const poll = document.getElementById('listener-poll');
+  const pollOptions = document.getElementById('poll-options');
+  const pollSkip = document.getElementById('poll-skip');
+  const countedThisSession = new Set(JSON.parse(sessionStorage.getItem('mya-counted-tracks') || '[]'));
+  const listenedThisSession = new Set(JSON.parse(sessionStorage.getItem('mya-listened-tracks') || '[]'));
+  const secondsByTrack = new Map();
+  let currentTrackId = '';
+  let isOwner = false;
+  let ownerReady = false;
+  let pollShownThisPage = false;
+
+  const cleanSrc = (src='') => {
+    try { return decodeURIComponent(src.split('?')[0].split('/').pop() || ''); } catch { return src.split('?')[0].split('/').pop() || ''; }
+  };
+  const trackIdFromSrc = (src='') => cleanSrc(src).toLowerCase().replace(/\.mp3$/i,'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+
+  const trackCatalog = (() => {
+    const map = new Map();
+    document.querySelectorAll('.play-btn[data-src]').forEach(btn => {
+      const id = trackIdFromSrc(btn.dataset.src);
+      if(!id || map.has(id)) return;
+      map.set(id,{ id, src:btn.dataset.src, name:btn.dataset.name || cleanSrc(btn.dataset.src), album:btn.dataset.album || '' });
+    });
+    return map;
+  })();
+
+  const configured = () => CONFIG.SUPABASE_URL.includes('.supabase.co') && !CONFIG.SUPABASE_URL.includes('TU-PROYECTO') && !CONFIG.SUPABASE_ANON_KEY.includes('PEGA_AQUI');
+
+  async function sha256(text){
+    const bytes = new TextEncoder().encode(text);
+    const hash = await crypto.subtle.digest('SHA-256', bytes);
+    return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+
+  async function detectOwner(){
+    const qs = new URLSearchParams(location.search);
+    if(qs.get('owner') === '1'){ localStorage.setItem('mya-owner-device','1'); }
+    if(qs.get('owner') === '0'){ localStorage.removeItem('mya-owner-device'); }
+    if(localStorage.getItem('mya-owner-device') === '1'){ isOwner=true; ownerReady=true; return; }
+    const expected = CONFIG.OWNER_IP_HASH.trim();
+    if(!expected || expected.includes('PEGA_AQUI')){ ownerReady=true; return; }
+    try{
+      const r = await fetch('https://api.ipify.org?format=json',{cache:'no-store'});
+      if(!r.ok) throw new Error('ip lookup');
+      const {ip} = await r.json();
+      isOwner = (await sha256(ip)) === expected.toLowerCase();
+    }catch(e){ console.warn('No se pudo validar IP del propietario:',e); }
+    ownerReady=true;
+  }
+
+  async function api(path, options={}){
+    if(!configured()) return null;
+    const r = await fetch(CONFIG.SUPABASE_URL + path,{
+      ...options,
+      headers:{
+        'apikey':CONFIG.SUPABASE_ANON_KEY,
+        'Authorization':'Bearer '+CONFIG.SUPABASE_ANON_KEY,
+        'Content-Type':'application/json',
+        ...(options.headers||{})
+      }
+    });
+    if(!r.ok) throw new Error('Supabase '+r.status);
+    if(r.status===204) return null;
+    const txt=await r.text();
+    return txt ? JSON.parse(txt) : null;
+  }
+
+  function attachCountNodes(){
+    document.querySelectorAll('.track-row').forEach(row => {
+      const btn=row.querySelector('.play-btn[data-src]');
+      const name=row.querySelector('.track-name');
+      if(!btn || !name || name.querySelector('.play-count')) return;
+      const span=document.createElement('span');
+      span.className='play-count';
+      span.dataset.trackId=trackIdFromSrc(btn.dataset.src);
+      span.textContent='— reproducciones';
+      name.appendChild(span);
+    });
+  }
+
+  function formatPlays(n){
+    const value=Number(n)||0;
+    return new Intl.NumberFormat('es-AR').format(value)+' '+(value===1?'reproducción':'reproducciones');
+  }
+
+  async function refreshCounts(){
+    attachCountNodes();
+    if(!configured()) return;
+    try{
+      const rows=await api('/rest/v1/track_stats?select=track_id,plays');
+      const counts=new Map((rows||[]).map(r=>[r.track_id,Number(r.plays)||0]));
+      document.querySelectorAll('.play-count[data-track-id]').forEach(el=>{ el.textContent=formatPlays(counts.get(el.dataset.trackId)||0); });
+    }catch(e){ console.warn('No se pudieron cargar reproducciones:',e); }
+  }
+
+  async function registerPlay(id){
+    if(!id || isOwner || countedThisSession.has(id) || !configured()) return;
+    const t=trackCatalog.get(id); if(!t) return;
+    countedThisSession.add(id);
+    sessionStorage.setItem('mya-counted-tracks',JSON.stringify([...countedThisSession]));
+    try{
+      await api('/rest/v1/rpc/increment_play',{method:'POST',body:JSON.stringify({p_track_id:id,p_track_name:t.name})});
+      await refreshCounts();
+    }catch(e){
+      countedThisSession.delete(id);
+      sessionStorage.setItem('mya-counted-tracks',JSON.stringify([...countedThisSession]));
+      console.warn('No se pudo registrar reproducción:',e);
+    }
+  }
+
+  function markListened(id){
+    if(!id) return;
+    listenedThisSession.add(id);
+    sessionStorage.setItem('mya-listened-tracks',JSON.stringify([...listenedThisSession]));
+  }
+
+  function votedAlready(){ return localStorage.getItem('mya-favorite-vote')===CONFIG.VOTE_VERSION; }
+
+  function buildPoll(){
+    pollOptions.innerHTML='';
+    const options=[...trackCatalog.values()];
+    options.forEach(t=>{
+      const b=document.createElement('button');
+      b.className='poll-track'; b.type='button';
+      b.innerHTML='<strong></strong><span></span>';
+      b.querySelector('strong').textContent=t.name;
+      b.querySelector('span').textContent=t.album;
+      b.addEventListener('click',()=>submitFavorite(t));
+      pollOptions.appendChild(b);
+    });
+  }
+
+  function canShowPoll(){
+    return ownerReady && !isOwner && !votedAlready() && listenedThisSession.size>0 && !pollShownThisPage;
+  }
+
+  function showPoll(){
+    if(!canShowPoll()) return false;
+    pollShownThisPage=true; buildPoll();
+    poll.classList.add('open'); poll.setAttribute('aria-hidden','false');
+    return true;
+  }
+  function hidePoll(){ poll.classList.remove('open'); poll.setAttribute('aria-hidden','true'); }
+
+  async function submitFavorite(t){
+    localStorage.setItem('mya-favorite-vote',CONFIG.VOTE_VERSION);
+    hidePoll();
+    if(!configured()) return;
+    try{ await api('/rest/v1/rpc/increment_favorite',{method:'POST',body:JSON.stringify({p_track_id:t.id,p_track_name:t.name})}); }
+    catch(e){ console.warn('No se pudo registrar favorito:',e); }
+  }
+
+  pollSkip.addEventListener('click',hidePoll);
+  poll.addEventListener('click',e=>{ if(e.target===poll) hidePoll(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hidePoll(); });
+
+  // Exit intent realista: los navegadores no permiten mostrar un modal personalizado
+  // después de que la pestaña ya empezó a cerrarse. Lo mostramos al salir con el mouse
+  // por la parte superior, antes de que el cierre ocurra.
+  document.addEventListener('mouseout',e=>{
+    if(e.clientY<=0 && !e.relatedTarget) showPoll();
+  });
+
+  // En móvil, si el usuario vuelve después de ocultar la página, mostramos la encuesta.
+  let wasHidden=false;
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden) wasHidden=true;
+    else if(wasHidden){ wasHidden=false; showPoll(); }
+  });
+
+  // Al intentar abandonar por un link externo, primero mostramos la elección.
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href]');
+    if(!a || a.hasAttribute('download') || a.href.startsWith(location.origin+'#') || a.getAttribute('href')==='#') return;
+    if(canShowPoll()) {
+      e.preventDefault();
+      const href=a.href, target=a.target;
+      showPoll();
+      const resume=()=>{ if(target==='_blank') window.open(href,'_blank','noopener'); else location.href=href; };
+      const observer=new MutationObserver(()=>{ if(!poll.classList.contains('open')){ observer.disconnect(); resume(); } });
+      observer.observe(poll,{attributes:true,attributeFilter:['class']});
+    }
+  },true);
+
+  // Acumula segundos de escucha reales. Una reproducción válida cuenta después de 10 s.
+  setInterval(()=>{
+    if(!ownerReady || !audioEl || audioEl.paused || !audioEl.currentSrc) return;
+    const id=trackIdFromSrc(audioEl.currentSrc);
+    if(!id) return;
+    if(currentTrackId!==id) currentTrackId=id;
+    markListened(id);
+    const sec=(secondsByTrack.get(id)||0)+1; secondsByTrack.set(id,sec);
+    if(sec>=CONFIG.VALID_PLAY_SECONDS) registerPlay(id);
+  },1000);
+
+  detectOwner().then(refreshCounts);
+  attachCountNodes();
+})();
+</script>
 </body>
 </html>
