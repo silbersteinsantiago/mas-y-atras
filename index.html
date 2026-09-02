@@ -4,15 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MÁS Y ATRÁS — Escuchá y descargá</title>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="manifest" href="site.webmanifest">
-<meta name="theme-color" content="#0a0908">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Más y Atrás">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&display=swap" rel="stylesheet">
@@ -41,8 +32,7 @@
   html{ scroll-behavior:smooth; }
 
   body{
-    background: var(--ink) url('site-texture.jpg') repeat;
-    background-size: 1100px auto;
+    background:var(--ink);
     color:var(--cream);
     font-family:var(--body);
     font-weight:400;
@@ -54,7 +44,6 @@
   ::selection{ background:var(--orange); color:#fff; }
   a{ color:inherit; text-decoration:none; }
   img{ display:block; width:100%; height:100%; object-fit:cover; }
-  .feat-face-photo{ object-position: center center; }
 
   .photo{ position:relative; overflow:hidden; background:var(--surface); }
 
@@ -65,23 +54,19 @@
   /* ---------- nav ---------- */
   header.nav{
     position:sticky; top:0; left:0; right:0; z-index:100;
-    display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap:1.5rem;
-    padding: .6rem var(--edge);
+    display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
+    padding: .75rem var(--edge);
     background:rgba(10,10,10,.92); backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);
   }
   .nav .mark{ display:flex; align-items:center; gap:.7rem; flex-shrink:0; }
-  .nav .mark img{ width:4.6rem; height:4.6rem; object-fit:contain; }
-  .nav ul{ list-style:none; display:flex; justify-content:center; gap:2.6rem; font-family:var(--display); font-size:1.5rem; font-weight:400; letter-spacing:0; }
+  .nav .mark img{ width:3.8rem; height:3.8rem; object-fit:contain; }
+  .nav .mark span{ font-family:var(--display); font-size:1.6rem; font-weight:400; letter-spacing:0; }
+  .nav ul{ list-style:none; display:flex; gap:1.8rem; font-family:var(--display); font-size:1.25rem; font-weight:400; letter-spacing:0; }
   .nav ul li a{ color:var(--fog); transition:color .2s; }
   .nav ul li a:hover{ color:var(--cream); }
-  .nav-cta{ flex-shrink:0; justify-self:end; }
-  @media (max-width:760px){ .nav ul{ display:none; } }
-  @media (max-width:480px){
-    header.nav{ padding:.5rem 4vw; gap:.8rem; }
-    .nav .mark img{ width:3.4rem; height:3.4rem; }
-    .nav-cta{ font-size:.72rem; padding:.55rem .9rem; }
-  }
+  .nav-cta{ flex-shrink:0; }
+  @media (max-width:760px){ .nav ul{ display:none; } .nav .mark span{ display:none; } }
 
   .btn{
     font-family:var(--body); font-size:.82rem; font-weight:700;
@@ -95,41 +80,29 @@
   /* ---------- hero / featured player (SoundCloud-style big waveform card) ---------- */
   .hero{ padding: .45rem var(--edge) 1rem; }
   .hero-banner{
-    display:flex;
-    justify-content:center;
-    margin-bottom:.7rem;
+    position:relative;
+    margin-bottom:.55rem;
+    overflow:hidden;
+    background:var(--ink);
+    border:none;
+    border-radius:0;
+    box-shadow:none;
+    padding:0;
   }
+  .hero-banner::after{ display:none; }
   .hero-banner img{
     display:block;
     width:100%;
-    max-width:920px;
     height:auto;
-    max-height:24vh;
+    max-height:200px;
+    object-fit:contain;
+    object-position:center center;
+    background:var(--ink);
   }
   @media (max-width:760px){
     .hero{ padding-top:.25rem; }
-    .hero-banner{ margin-bottom:.5rem; }
-    .hero-banner img{ max-height:16vh; }
-  }
-
-  @media (max-width:600px){
-    .featured-card{ min-height:300px; border-radius:10px; }
-    .featured-top{ padding:1.1rem 1.1rem 0; gap:.7rem; }
-    .featured-meta h2{ font-size:1.4rem; }
-    .featured-meta .sub{ font-size:.78rem; }
-    .waveform{ margin:1rem 1.1rem 0; height:56px; }
-    .featured-bottom{ padding:.8rem 1.1rem 1.2rem; gap:.5rem; }
-    .featured-time{ font-size:.7rem; }
-    .dl-btn .dl-label{ display:none; }
-    .dl-btn{ padding:0 !important; width:2.4rem !important; height:2.4rem !important; justify-content:center; }
-    .dl-btn span:first-child{ margin:0 !important; }
-    .feat-dots{ bottom:.6rem; }
-    .feat-album-tabs{
-      position:static; max-width:none; margin:.6rem 1.1rem 0; justify-content:flex-start;
-      overflow-x:auto; flex-wrap:nowrap; padding-bottom:.3rem; -webkit-overflow-scrolling:touch;
-    }
-    .feat-album-tabs::-webkit-scrollbar{ display:none; }
-    .feat-album-tabs .tab{ flex-shrink:0; }
+    .hero-banner{ margin-bottom:.4rem; }
+    .hero-banner img{ max-height:130px; }
   }
 
   .featured-card{
@@ -139,9 +112,8 @@
   .feat-cube{ position:absolute; inset:0; transform-style:preserve-3d; }
   .feat-face{
     position:absolute; inset:0; backface-visibility:hidden; border-radius:14px; overflow:hidden;
-    display:flex; flex-direction:column; background:var(--surface);
+    display:flex; flex-direction:column; justify-content:flex-end; background:var(--surface);
   }
-  .feat-play-zone{ flex:1; min-height:0; z-index:3; }
   .feat-face .photo{ position:absolute; inset:0; z-index:0; }
   .feat-face .photo::after{
     content:''; position:absolute; inset:0; z-index:1;
@@ -170,9 +142,9 @@
   .featured-play:hover{ background:rgba(0,0,0,.82); border-color:rgba(255,255,255,.5); }
   .featured-play.playing{ background:rgba(0,0,0,.88); border-color:rgba(255,255,255,.55); }
   @media (max-width:640px){ .featured-play{ width:4.2rem; height:4.2rem; font-size:1.2rem; } }
-  .featured-meta .eyebrow{ font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:#fff; font-weight:800; text-shadow:0 1px 6px rgba(0,0,0,.85), 0 1px 2px rgba(0,0,0,.9); opacity:.92; }
+  .featured-meta .eyebrow{ font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--fog); font-weight:700; }
   .featured-meta h2{ font-family:var(--display); font-weight:400; font-size:clamp(1.8rem,3.6vw,2.5rem); line-height:1.25; margin-top:.2rem; }
-  .featured-meta .sub{ color:#fff; opacity:.85; font-size:.86rem; margin-top:.15rem; text-shadow:0 1px 6px rgba(0,0,0,.85), 0 1px 2px rgba(0,0,0,.9); }
+  .featured-meta .sub{ color:var(--fog); font-size:.86rem; margin-top:.15rem; }
 
   .waveform{ position:relative; height:74px; margin:1.4rem 1.8rem 0; cursor:pointer; z-index:2; }
   .waveform::before{ content:''; position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(255,255,255,.12); z-index:0; }
@@ -213,7 +185,6 @@
   .featured-time{ font-size:.76rem; color:var(--fog); font-variant-numeric:tabular-nums; }
 
   section{ position:relative; padding: 4.4rem var(--edge); }
-  @media (max-width:600px){ section{ padding: 2.8rem var(--edge); } }
   .section-label{ font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--orange); font-weight:700; margin-bottom:.6rem; display:flex; align-items:center; gap:.8rem; }
   .section-label::after{ content:''; flex:1; height:1px; background:var(--line); }
   h2.title{ font-family:var(--display); font-weight:400; font-size:clamp(2rem,4vw,3.1rem); line-height:1.3; letter-spacing:0; max-width:20ch; }
@@ -234,12 +205,12 @@
 
   /* ---------- discografia: SoundCloud-style track rows ---------- */
   .album{ margin-bottom: 3.4rem; }
-  .album-head{ display:flex; align-items:center; gap:2rem; margin-bottom:1.5rem; flex-wrap:wrap; }
-  .album-cover{ width:13rem; height:13rem; border-radius:14px; flex-shrink:0; }
-  @media (max-width:600px){ .album-cover{ width:8.5rem; height:8.5rem; } }
-  .album-meta .eyebrow{ font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--fog-dim); font-weight:700; }
-  .album-meta h3{ font-family:var(--display); font-weight:400; font-size:clamp(2rem,4vw,2.7rem); line-height:1.25; margin-top:.3rem; }
-  .album-meta .sub{ color:var(--fog); font-size:1.02rem; margin-top:.2rem; }
+  .album-head{ display:flex; align-items:center; gap:1.6rem; margin-bottom:1.3rem; flex-wrap:wrap; }
+  .album-cover{ width:9.5rem; height:9.5rem; border-radius:12px; flex-shrink:0; }
+  @media (max-width:600px){ .album-cover{ width:7rem; height:7rem; } }
+  .album-meta .eyebrow{ font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--fog-dim); font-weight:700; }
+  .album-meta h3{ font-family:var(--display); font-weight:400; font-size:clamp(1.5rem,3vw,1.95rem); line-height:1.25; margin-top:.2rem; }
+  .album-meta .sub{ color:var(--fog); font-size:.85rem; margin-top:.1rem; }
 
   .album-concept{ margin:1rem 0 1.3rem; max-width:64ch; }
   .album-concept .concept-label{ font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--orange); font-weight:700; display:block; margin-bottom:.4rem; }
@@ -247,7 +218,7 @@
   .tracklist{ background:var(--surface); border-radius:12px; overflow:hidden; }
   .track{ border-top:1px solid var(--line); }
   .track:first-child{ border-top:none; }
-  .track-row{ display:flex; align-items:center; gap:1rem; padding: .85rem 1.1rem; }
+  .track-row{ display:flex; align-items:center; gap:1rem; padding: .85rem 1.1rem; cursor:pointer; }
   .track-num{ font-size:.78rem; color:var(--fog-dim); width:1.4rem; flex-shrink:0; font-variant-numeric:tabular-nums; }
   .track-name{ font-size:.95rem; font-weight:600; flex-shrink:0; width:clamp(120px,18vw,220px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .track-actions{ display:flex; align-items:center; gap:.55rem; flex-shrink:0; }
@@ -256,16 +227,12 @@
     display:flex; align-items:center; gap:.35rem; white-space:nowrap; transition:color .2s; cursor:pointer;
   }
   .story-toggle .plus{ display:inline-block; transition:transform .35s ease; color:var(--orange); }
-  .story-toggle.open .plus{ transform:rotate(45deg); }
-  .story-toggle.open{ color:var(--orange); }
-  .track-story, .track-lyrics{ max-height:0; overflow:hidden; transition:max-height .5s ease; }
-  .track-story.open, .track-lyrics.open{ max-height:600px; }
+  .track.open .story-toggle .plus, .session-card.open .story-toggle .plus{ transform:rotate(45deg); }
+  .track.open .story-toggle, .session-card.open .story-toggle{ color:var(--orange); }
+  .track-story{ max-height:0; overflow:hidden; transition:max-height .5s ease; }
+  .track.open .track-story, .session-card.open .track-story{ max-height:400px; }
   .track-story-inner{ padding:0 1.1rem 1.4rem 2.4rem; }
   .track-story-inner p{ font-size:.9rem; color:rgba(255,255,255,.7); max-width:56ch; font-style:italic; line-height:1.55; }
-  .track-lyrics-inner{ padding:0 1.1rem 1.4rem 2.4rem; }
-  .track-lyrics-inner p{ font-size:.88rem; color:rgba(255,255,255,.68); max-width:56ch; line-height:1.7; white-space:pre-line; }
-  .track-lyrics-inner .lyrics-dl{ display:inline-flex; align-items:center; gap:.4rem; margin-top:.9rem; font-size:.72rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--orange); }
-  .track-lyrics-inner .lyrics-dl:hover{ color:var(--cream); }
 
   .track-multi-head{ display:flex; align-items:center; gap:1rem; padding: .85rem 1.1rem .2rem; }
   .track-multi-body{ padding: 0 1.1rem .6rem 3.4rem; }
@@ -279,14 +246,6 @@
     .waveform.mini{ display:none; }
     .track-multi-body{ padding-left:1.1rem; }
     .track-multi .v-label{ width:4.4rem; }
-  }
-
-  @media (max-width:560px){
-    .track-row{ gap:.6rem; padding:.75rem .8rem; flex-wrap:wrap; }
-    .track-actions{ gap:.4rem; }
-    .story-toggle span:last-child{ display:none; }
-    .story-toggle{ gap:0; }
-    .track-story-inner, .track-lyrics-inner{ padding-left:.8rem; padding-right:.8rem; }
   }
 
   /* ---------- sesiones (bonus tracks) ---------- */
@@ -305,120 +264,23 @@
   .session-card .track-story-inner{ padding:.8rem 0 .2rem; }
 
   /* ---------- galeria ---------- */
-  .photo-albums{ display:flex; flex-direction:column; gap:2.2rem; margin-top:2rem; }
-  .photo-album-head{ display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid var(--line); padding-bottom:.9rem; }
-  .photo-album-head h3{ font-family:var(--display); font-weight:400; font-size:clamp(1.5rem,3vw,2rem); }
-  .ver-fotos-btn{
-    font-family:var(--body); font-size:.8rem; font-weight:700; letter-spacing:.03em;
-    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.2); border-radius:999px;
-    padding:.55rem 1.1rem; color:var(--cream); cursor:pointer; display:flex; align-items:center; gap:.5rem;
-    transition:background .2s, border-color .2s; flex-shrink:0;
-  }
-  .ver-fotos-btn:hover{ border-color:var(--orange); color:var(--orange); }
-  .ver-fotos-btn .plus{ display:inline-block; transition:transform .35s ease; }
-  .ver-fotos-btn.open .plus{ transform:rotate(45deg); }
-  .photo-panel{ max-height:0; overflow:hidden; transition:max-height .5s ease, margin-top .5s ease; margin-top:0; }
-  .photo-panel.open{ max-height:1400px; margin-top:1.6rem; }
-  .photo-albums{ display:flex; flex-direction:column; gap:2.2rem; margin-top:2rem; }
-  .photo-album-head{ display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid var(--line); padding-bottom:.9rem; }
-  .photo-album-head h3{ font-family:var(--display); font-weight:400; font-size:clamp(1.5rem,3vw,2rem); }
-  .ver-fotos-btn{
-    font-family:var(--body); font-size:.8rem; font-weight:700; letter-spacing:.03em;
-    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.2); border-radius:999px;
-    padding:.55rem 1.1rem; color:var(--cream); cursor:pointer; display:flex; align-items:center; gap:.5rem;
-    transition:background .2s, border-color .2s; flex-shrink:0;
-  }
-  .ver-fotos-btn:hover{ border-color:var(--orange); color:var(--orange); }
-  .ver-fotos-btn .plus{ display:inline-block; transition:transform .35s ease; }
-  .ver-fotos-btn.open .plus{ transform:rotate(45deg); }
-  .photo-panel{ display:none; margin-top:0; opacity:0; transition:opacity .4s ease; }
-  .photo-panel.open{ display:block; margin-top:1.6rem; opacity:1; }
-  .photo-carousel{ display:flex; gap:.8rem; overflow-x:auto; padding-bottom:.6rem; scrollbar-width:thin; scrollbar-color:var(--orange) transparent; }
-  .photo-carousel::-webkit-scrollbar{ height:6px; }
-  .photo-carousel::-webkit-scrollbar-thumb{ background:rgba(201,151,90,.5); border-radius:10px; }
-  .photo-carousel .photo{
-    flex:0 0 auto; width:150px; height:150px; border-radius:10px; cursor:zoom-in;
-    background:var(--surface-2); overflow:hidden; transition:transform .3s ease;
-  }
-  .photo-carousel .photo img{ width:100%; height:100%; object-fit:cover; transition:transform .4s ease; }
-  .photo-carousel .photo:hover img{ transform:scale(1.1); }
-  .photo-carousel .photo:hover{ transform:translateY(-3px); }
-
-  .photo-subheading{ display:block; font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--orange); margin:1.2rem 0 .6rem; }
-  .photo-carousel-small .photo{ width:110px; height:110px; }
-
-  .photo-featured-large{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-top:1.1rem; }
-  .photo-featured-large .photo{
-    border-radius:12px; cursor:zoom-in; aspect-ratio:16/9; overflow:hidden;
-    background:var(--surface-2); transition:transform .3s ease;
-  }
-  .photo-featured-large .photo img{ width:100%; height:100%; object-fit:cover; transition:transform .4s ease; }
-  .photo-featured-large .photo:hover img{ transform:scale(1.06); }
-  .photo-featured-large .photo:hover{ transform:translateY(-3px); }
-
-  @media (max-width:640px){
-    .photo-carousel .photo{ width:120px; height:120px; }
-    .photo-carousel-small .photo{ width:90px; height:90px; }
-    .photo-featured-large{ grid-template-columns:1fr; }
-  }
-
-  .lightbox{
-    position:fixed; inset:0; z-index:300; background:rgba(5,4,3,.95);
-    display:flex; align-items:center; justify-content:center; padding:4vw;
-    opacity:0; pointer-events:none; transition:opacity .3s ease;
-  }
-  .lightbox.open{ opacity:1; pointer-events:auto; }
-  .lightbox img{ max-width:100%; max-height:90vh; width:auto; height:auto; object-fit:contain; border-radius:8px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
-  .lightbox-close{
-    position:absolute; top:1.2rem; right:1.5rem; width:2.6rem; height:2.6rem; border-radius:50%;
-    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); color:#fff;
-    font-size:1.1rem; display:flex; align-items:center; justify-content:center; cursor:pointer;
-    transition:background .2s;
-  }
-  .lightbox-close:hover{ background:rgba(255,255,255,.18); }
+  .gallery-grid{ display:grid; grid-template-columns: repeat(6,1fr); gap:.9rem; margin-top:2rem; }
+  .gallery-grid .photo{ border-radius:10px; }
+  .gallery-grid .photo:nth-child(1){ grid-column:span 3; aspect-ratio:4/5; }
+  .gallery-grid .photo:nth-child(2){ grid-column:span 3; aspect-ratio:4/5; }
+  .gallery-grid .photo:nth-child(3){ grid-column:span 2; aspect-ratio:3/4; }
+  .gallery-grid .photo:nth-child(4){ grid-column:span 2; aspect-ratio:3/4; }
+  .gallery-grid .photo:nth-child(5){ grid-column:span 2; aspect-ratio:3/4; }
+  @media (max-width:820px){ .gallery-grid{ grid-template-columns: repeat(2,1fr); } .gallery-grid .photo{ grid-column:span 1 !important; aspect-ratio:4/5 !important; } }
 
   /* ---------- contacto / footer ---------- */
   footer{ padding: 4rem var(--edge) 6rem; border-top:1px solid var(--line); }
-  @media (max-width:600px){ footer{ padding: 2.6rem var(--edge) 8rem; } }
   .contact-row{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:2rem; }
   footer h2.title{ max-width:22ch; }
   .social{ display:flex; gap:1.3rem; font-size:.84rem; font-weight:600; flex-wrap:wrap; }
   .social a{ color:var(--fog); transition:color .2s; }
   .social a:hover{ color:var(--orange); }
   .fine{ margin-top:3.4rem; display:flex; justify-content:space-between; font-size:.76rem; color:var(--fog-dim); flex-wrap:wrap; gap:1rem; }
-
-  /* ---------- karaoke lyrics panel ---------- */
-  .karaoke-panel{
-    position:fixed; left:0; right:0; bottom:0; z-index:149;
-    background:rgba(8,8,8,.97); backdrop-filter:blur(14px);
-    border-top:1px solid var(--line);
-    max-height:0; overflow:hidden; transition:max-height .4s ease, padding .4s ease;
-    padding:0 var(--edge);
-    border-radius:16px 16px 0 0;
-    box-shadow:0 -10px 40px rgba(0,0,0,.5);
-  }
-  .karaoke-panel.open{ max-height:32vh; padding:1.1rem var(--edge) 1.3rem; }
-  .karaoke-head{ display:flex; align-items:center; justify-content:space-between; max-width:56rem; margin:0 auto .7rem; }
-  .karaoke-title{ font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--orange); }
-  .karaoke-close{
-    width:1.9rem; height:1.9rem; border-radius:50%; border:1px solid rgba(255,255,255,.2);
-    background:rgba(255,255,255,.05); color:var(--fog); display:flex; align-items:center; justify-content:center;
-    cursor:pointer; font-size:.85rem; transition:background .2s, color .2s;
-  }
-  .karaoke-close:hover{ background:rgba(255,255,255,.12); color:#fff; }
-  .karaoke-inner{
-    max-width:56rem; margin:0 auto; max-height:calc(32vh - 3rem); overflow-y:auto; scroll-behavior:smooth;
-    -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 1.4rem, #000 calc(100% - 1rem), transparent 100%);
-    mask-image:linear-gradient(180deg, transparent 0, #000 1.4rem, #000 calc(100% - 1rem), transparent 100%);
-    scrollbar-width:thin; scrollbar-color:var(--orange) transparent;
-  }
-  .karaoke-inner::-webkit-scrollbar{ width:5px; }
-  .karaoke-inner::-webkit-scrollbar-track{ background:transparent; }
-  .karaoke-inner::-webkit-scrollbar-thumb{ background:rgba(201,151,90,.5); border-radius:10px; }
-  .karaoke-line{ font-family:var(--display); font-size:clamp(1rem,2.2vw,1.35rem); line-height:1.55; color:rgba(255,255,255,.8); padding:.1rem 0; }
-  #p-lyrics-toggle{ font-family:var(--body); font-weight:800; font-size:.85rem; }
-  #p-lyrics-toggle.active{ background:var(--grad); border-color:transparent; color:#fff; }
-  @media (max-width:600px){ .karaoke-panel.open{ max-height:40vh; padding:1rem 5vw 1.2rem; } .karaoke-inner{ max-height:calc(40vh - 2.8rem); } }
 
   /* ---------- fixed bottom player ---------- */
   .player{
@@ -451,6 +313,40 @@
     .player-dl{ display:none; }
   }
 
+
+
+  /* ---------- estadísticas de escucha + encuesta de salida ---------- */
+  .play-count{
+    margin-left:.55rem; color:var(--fog-dim); font-size:.72rem; font-weight:600;
+    white-space:nowrap; letter-spacing:.01em;
+  }
+  .track-row .track-name{ display:inline-flex; align-items:center; flex-wrap:wrap; }
+  .listener-poll{
+    position:fixed; inset:0; z-index:9999; display:none; align-items:center; justify-content:center;
+    padding:1.25rem; background:rgba(5,5,5,.84); backdrop-filter:blur(10px);
+  }
+  .listener-poll.open{ display:flex; }
+  .listener-poll-card{
+    width:min(620px,100%); max-height:min(760px,88vh); overflow:auto;
+    background:#171411; border:1px solid rgba(217,174,116,.28); border-radius:18px;
+    padding:1.5rem; box-shadow:0 24px 80px rgba(0,0,0,.58);
+  }
+  .listener-poll-kicker{ color:var(--orange); text-transform:uppercase; letter-spacing:.14em; font-size:.67rem; font-weight:800; }
+  .listener-poll h3{ font-family:var(--display); font-size:clamp(1.8rem,5vw,2.55rem); font-weight:400; margin:.35rem 0 .35rem; }
+  .listener-poll p{ color:var(--fog); font-size:.9rem; margin-bottom:1rem; }
+  .poll-options{ display:grid; gap:.55rem; }
+  .poll-track{
+    width:100%; text-align:left; border:1px solid var(--line); color:var(--cream); background:rgba(255,255,255,.035);
+    border-radius:12px; padding:.8rem .9rem; cursor:pointer; font-family:var(--body); transition:.2s ease;
+  }
+  .poll-track:hover{ border-color:var(--orange); background:rgba(201,151,90,.09); transform:translateY(-1px); }
+  .poll-track strong{ display:block; font-size:.9rem; }
+  .poll-track span{ display:block; color:var(--fog-dim); font-size:.72rem; margin-top:.08rem; }
+  .poll-footer{ display:flex; justify-content:flex-end; margin-top:1rem; }
+  .poll-skip{ border:0; background:transparent; color:var(--fog-dim); cursor:pointer; font:600 .75rem var(--body); padding:.35rem; }
+  .poll-skip:hover{ color:var(--cream); }
+  .stats-status{ display:none; }
+
 </style>
 </head>
 <body>
@@ -480,9 +376,7 @@
 
       <div class="feat-face" data-face="a">
         <div class="photo"><img class="feat-face-photo" src="hero-crowd-back.jpg" alt="Más y Atrás tocando en vivo frente al público"></div>
-        <div class="feat-play-zone">
-          <div class="featured-play" data-src="Te Necesito (En Vivo).mp3?v=4" data-name="Te Necesito" data-album="Sencillo" data-art="cover-te-necesito.jpg" role="button" tabindex="0" aria-label="Reproducir Te Necesito">▶</div>
-        </div>
+        <div class="featured-play" data-src="Te Necesito (En Vivo).mp3?v=4" data-name="Te Necesito" data-album="Sencillo" data-art="cover-te-necesito.jpg" role="button" tabindex="0" aria-label="Reproducir Te Necesito">▶</div>
         <div class="featured-top">
           <div class="featured-meta">
             <span class="eyebrow">Sencillo</span>
@@ -507,9 +401,7 @@
 
       <div class="feat-face" data-face="b">
         <div class="photo"><img class="feat-face-photo" src="" alt=""></div>
-        <div class="feat-play-zone">
-          <div class="featured-play" data-src="" data-name="" data-album="" data-art="" role="button" tabindex="0" aria-label="Reproducir">▶</div>
-        </div>
+        <div class="featured-play" data-src="" data-name="" data-album="" data-art="" role="button" tabindex="0" aria-label="Reproducir">▶</div>
         <div class="featured-top">
           <div class="featured-meta">
             <span class="eyebrow"></span>
@@ -548,19 +440,17 @@
   <div class="historia-grid">
     <div class="historia-photo photo reveal"><img src="duo-bw-sign.jpg" alt="Más y Atrás en formato acústico"></div>
     <div class="historia-copy">
-      <p class="reveal">Todo empezó hace diez años, en 2016. Santiago Silberstein y Germán Farías se conocieron en el Club GEBA, pero no tocando la guitarra: él trabajaba como instructor de musculación y Santiago como guardavidas. Entre turno y turno, en esos ratos muertos que deja un club de día completo, empezó una charla que terminó siendo mucho más que la típica cortesía entre compañeros de trabajo: descubrieron que a los dos les gustaba la música, y de ahí a juntarse con las guitarras hubo un solo paso.</p>
+      <p class="reveal">Todo empezó hace diez años, en 2016. Santiago Silberstein y Germán Farías se conocieron en el Club GEBA, pero no tocando la guitarra: él trabajaba como instructor de musculación y Santiago como guardavidas. Entre turno y turno, en esos ratos muertos que deja un club de día completo, empezó una charla que terminó siendo mucho más que la típica cortesía entre compañeros de trabajo — descubrieron que a los dos les gustaba la música, y de ahí a juntarse con las guitarras hubo un solo paso.</p>
 
-      <p class="reveal">Santiago ya venía de un camino musical propio: había sido músico y estado en bandas, hasta que encontró su voz como solista y compositor bajo el nombre "Paradise Choll". En esa época escribió muchas canciones para sus amigos, y algunas de ellas, con los años, terminaron encontrando su lugar en el repertorio de Más y Atrás.</p>
+      <p class="reveal">Santiago ya venía de un camino musical propio: había sido músico y estado en bandas, hasta que encontró su voz como solista y compositor bajo el nombre "Paradise Chill". En esa época escribió muchas canciones para sus amigos, y algunas de ellas, con los años, terminaron encontrando su lugar en el repertorio de Más y Atrás.</p>
 
       <p class="reveal">Al principio no había plan ni nombre: se juntaban simplemente a tocar covers, dos guitarras y un cancionero prestado, sin pensar todavía en formar una banda. Pero la costumbre de encontrarse a tocar fue abriendo la puerta a algo propio, y en algún momento los covers empezaron a quedarse cortos. Entre ensayo y ensayo aparecieron las primeras canciones que eran solo de ellos.</p>
 
-      <p class="reveal">Ensayaron donde pudieron. Primero en una casa, después en una sala de ensayo compartida con otros colaboradores que fueron sumándose y restándose con los años. Hubo una época en la que ni siquiera eso alcanzaba: los vecinos se quejaban del volumen a cualquier hora, y la solución de emergencia terminó siendo meterse a practicar adentro de un baño, el único rincón con paredes lo bastante gruesas como para amortiguar un poco el ruido. De cada uno de esos lugares quedó algo: una canción, un arreglo, una anécdota para contar arriba del escenario.</p>
+      <p class="reveal">Ensayaron donde pudieron. Primero en una casa, después en una sala de ensayo compartida con otros colaboradores que fueron sumándose y restándose con los años. Hubo una época en la que ni siquiera eso alcanzaba: los vecinos se quejaban del volumen a cualquier hora, y la solución de emergencia terminó siendo meterse a practicar adentro de un baño — el único rincón con paredes lo bastante gruesas como para amortiguar un poco el ruido. De cada uno de esos lugares quedó algo: una canción, un arreglo, una anécdota para contar arriba del escenario.</p>
 
       <p class="pull reveal">"No importa si es enchufado o acústico: la esencia es la misma. Sólo cambia el camino."</p>
 
-      <p class="reveal">El nombre de la banda nació de un error. Cantando "Máquina del Tiempo", una canción que fue inspiración para muchas cosas, se confundían entre "hacia atrás" y "más allá", y a veces terminaban mezclando las dos frases en una sola. Para no pifiarla en el escenario, empezaron a decirse entre ellos "más y atrás" como código, y esa mezcla que nació de la risa se les quedó pegada en la cabeza hasta que entendieron que ya tenían nombre de banda.</p>
-
-      <p class="reveal">Esa frase, misma esencia y distinto camino, es la que persiguieron en <em>Musilencio (Acústico)</em>, la contracara íntima de <em>Ruido Interior (En Vivo)</em>, grabado con el público al frente y la sangre caliente. Diez años después de aquel primer cruce en el Club GEBA, Santiago y Germán siguen siendo los mismos dos de siempre, ahora con discos propios y un nombre que resume todo lo que aprendieron en el camino: se avanza, se vuelve, y siempre se sigue tocando.</p>
+      <p class="reveal">Esa frase — misma esencia, distinto camino — es la que persiguieron en <em>Musilencio (Acústico)</em>, la contracara íntima de <em>Ruido Interior (En Vivo)</em>, grabado con el público al frente y la sangre caliente. Diez años después de aquel primer cruce en el Club GEBA, Santiago y Germán siguen siendo los mismos dos de siempre, ahora con discos propios y un nombre que resume todo lo que aprendieron en el camino: se avanza, se vuelve, y siempre se sigue tocando.</p>
     </div>
   </div>
 </section>
@@ -583,341 +473,116 @@
 
       <div class="album-concept">
         <span class="concept-label">Por qué se llama así</span>
-        <p style="max-width:62ch; color:rgba(255,255,255,.82); font-size:.95rem;">"Ruido Interior" es lo que queda sonando después de un show, esa energía que se llevan puertas adentro cuando termina la noche. Por eso lo grabaron en vivo y no en estudio: querían que quedara el ruido real de la gente, no una versión prolija de las canciones.</p>
-      </div>
-
-      <div class="album-concept" style="margin-top:1rem;">
-        <span class="concept-label">Colaboraron en este disco</span>
-        <p style="max-width:62ch; color:rgba(255,255,255,.7); font-size:.88rem;">Santiago Insua (guitarra), Juan Treviso (batería) y Eliseo Manso Braña (bajo).</p>
+        <div class="placeholder-note small">
+          ✎ Contame el sentido del nombre "Ruido Interior" y por qué decidieron armarlo como disco en vivo — qué querían capturar de tocar frente al público, y por qué eligieron estos temas para esa placa.
+        </div>
       </div>
 
       <div class="tracklist">
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">01</span>
             <button class="icon-btn play-btn" data-src="Te Necesito (En Vivo).mp3?v=4" data-name="Te Necesito (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Te Necesito en vivo">▶</button>
             <span class="track-name">Te Necesito (En Vivo)</span>
             <div class="waveform mini" data-src="Te Necesito (En Vivo).mp3?v=4"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="Te Necesito (En Vivo).mp3?v=4" download="Te Necesito (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>"Te Necesito" nació de una amistad: hace años, un amigo le compartió a Santiago la idea que sería el corazón de la letra, y entre los dos la convirtieron en canción. Quedó grabada y guardada por mucho tiempo, hasta que Santiago sintió que merecía volver a existir: no como una versión nueva, sino como esa misma canción de siempre, llevada por fin al lugar donde siempre quisieron que estuviera.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Caía en tus redes y en tus garras,
-te perseguía, me poseías, me dominabas.
-Pero eso quedó atrás, hoy me dices que me extrañas
-y yo te digo, nena, que para mí estás muerta.
-
-¿Te necesito? ¡No!
-Te tengo en el olvido, amor,
-y estás ahí queriendo volver a entrar en mí.
-¿Te necesito? ¡No!
-Te tengo en el olvido, amor,
-y estás ahí queriendo volver a entrar en mí.
-
-Solías ser la dueña de esta calesita,
-yo te compraba dulces mientras robabas sortijas.
-El circo ha cerrado, se cayeron tus trapecistas,
-y ya no te queda otra que pagar todas tus vueltitas.
-
-¿Te necesito? ¡No!
-Te tengo en el olvido, amor,
-y estás ahí queriendo volver a entrar en mí.
-¿Te necesito? ¡No!
-Te tengo en el olvido, amor,
-y estás ahí queriendo volver a entrar en mí.</p>
-              <a class="lyrics-dl" href="Te Necesito - Letra.txt" download="Te Necesito - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿Qué inspiró "Te Necesito"? Contame de qué habla, cuándo la escribieron y qué la hace especial en vivo.</p>
             </div>
           </div>
         </div>
 
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">02</span>
             <button class="icon-btn play-btn" data-src="Kernel (En Vivo).mp3" data-name="Kernel (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Kernel en vivo">▶</button>
             <span class="track-name">Kernel (En Vivo)</span>
             <div class="waveform mini" data-src="Kernel (En Vivo).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="Kernel (En Vivo).mp3" download="Kernel (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>En programación, el "kernel" es el núcleo del sistema: el corazón del que depende todo lo demás, el foco alrededor del cual gira todo. Santiago tomó esa idea de la época en que estudiaba programación, allá por 2010, y la usó como metáfora: una compañera de esos años se había convertido en su foco, en el corazón de esa etapa, con la atracción que le generaba terminando convertida en canción.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>I can't start si vos no estás...
-No logro ver aquella luz en tu mirada.
-De nada sirve que te escondas,
-because I see you aquí.
-
-Te volvés a poner tu camisón,
-de animal print que no es de seda.
-Te queda... realmente bien.
-I try to understand...
-
-Ooh, Kernel, guíame...
-Hoy y ayer, ámame.
-Ooh, Kernel, guíame...
-Hoy y ayer, ámame.
-
-Porque without you, no sé quién soy...
-Quizás mañana... seré tu boy.
-Boy, boy... ¡Boy!
-
-Why es tan difícil entenderte...
-Quisiera que estuviésemos en el mismo channel,
-en el que pudiésemos ser amantes...
-There is another...
-
-Ooh, Kernel, guíame...
-Hoy y ayer, ámame.
-Ooh, Kernel, guíame...
-Hoy y ayer, ámame.
-
-Porque without you, no sé quién soy...
-Quizás mañana... seré tu boy.
-Boy, boy... ¡Boy!</p>
-              <a class="lyrics-dl" href="Kernel - Letra.txt" download="Kernel - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿De dónde sale el nombre "Kernel"? Cuál es la historia detrás de esta canción.</p>
             </div>
           </div>
         </div>
 
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">03</span>
             <button class="icon-btn play-btn" data-src="La Apuesta( En Vivo).mp3" data-name="La Apuesta (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir La Apuesta en vivo">▶</button>
             <span class="track-name">La Apuesta (En Vivo)</span>
             <div class="waveform mini" data-src="La Apuesta( En Vivo).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="La Apuesta( En Vivo).mp3" download="La Apuesta (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>"La Apuesta" mezcla dos cosas de una misma época de Santiago: el gusto ocasional por el casino (nunca a nivel enfermizo) y la sensación de apostarlo todo en una relación, esa forma de irte perdiendo a vos mismo por querer que algo funcione.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Dejo de pensar
-y entro en un soplo lento de ilógicas ideas.
-Vuelvo a anotar
-cada frase que me digas y esté mal,
-que no encuentres una salida.
-
-Me importa muy poco tu presencia,
-tu bipolaridad.
-No estoy hecho de secuelas que me inviten a recordar,
-esta historia llegó a su final.
-
-Lejos de este acá,
-cerca de tus besos me dejás,
-sin las ganas de esperar.
-No me extrañes si el hoy se fue,
-mañana volverás o no lo sé.
-
-Tengo la tranquilidad
-que en este juego no me quedan fichas por jugar.
-No me quedan fichas por jugar,
-no me quedan fichas por jugar,
-no me quedan fichas por jugar,
-no me quedan fichas por jugar.
-
-Esta historia llegó a su final.</p>
-              <a class="lyrics-dl" href="La Apuesta - Letra.txt" download="La Apuesta - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿Qué apuesta cuenta esta canción? Contame la inspiración detrás de la letra.</p>
             </div>
           </div>
         </div>
 
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">04</span>
             <button class="icon-btn play-btn" data-src="Máquina del Tiempo (en Vivo).mp3" data-name="Máquina del Tiempo (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Máquina del Tiempo en vivo">▶</button>
             <span class="track-name">Máquina del Tiempo (En Vivo)</span>
             <div class="waveform mini" data-src="Máquina del Tiempo (en Vivo).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="Máquina del Tiempo (en Vivo).mp3" download="Máquina del Tiempo (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>"Máquina del Tiempo" surge de un libro que Santiago leyó y le encantó: el clásico de H.G. Wells. A eso se suma esa fantasía que alimentan tantas películas, de imaginar qué habría cambiado, qué cambiarías hoy y qué no.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Qué tal si te digo que he creado una ilusión...
-Que no sé... si quiero ver...
-Parece que a veces...
-el dinero vale más que el tiempo...
-
-Pero es cierto que... es lo único que no se recupera...
-Sin embargo yo seguiré...
-en la espera de mi...
-
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-
-Has inventado un mundo... donde el sufrimiento es goce...
-Y es triste saber... que al final...
-eso ya no sirve...
-
-Quizás no tengas claro... qué deseás...
-y apuntás... al objetivo equivocado...
-Será que la luz... me ha cegado...
-Será que la vida me ha dejado...
-sin mí...
-
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-
-Máquina del tiempo... hacia atrás...
-Máquina del tiempo... más allá...
-Hacia atrás... más allá...
-Máquina del tiempo...
-Hacia atrás... más allá...
-Máquina del tiempo... máquina del tiempo...
-Hacia atrás... más allá...</p>
-              <a class="lyrics-dl" href="Máquina del Tiempo - Letra.txt" download="Máquina del Tiempo - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿Qué inspiró "Máquina del Tiempo"? Contame la historia de esta canción.</p>
             </div>
           </div>
         </div>
 
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">05</span>
             <button class="icon-btn play-btn" data-src="Tierna De Ojos Tristes (En Vivo).mp3" data-name="Tierna de Ojos Tristes (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Tierna de Ojos Tristes en vivo">▶</button>
             <span class="track-name">Tierna de Ojos Tristes (En Vivo)</span>
             <div class="waveform mini" data-src="Tierna De Ojos Tristes (En Vivo).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="Tierna De Ojos Tristes (En Vivo).mp3" download="Tierna de Ojos Tristes (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>Nace de un amor no muy correspondido hacia una persona muy especial, tal como lo cuenta la letra. Con el tiempo, Santiago fue mutando esa idea hacia imaginar lo que esa persona vivía por dentro, sus cambios y su forma de pensar, a partir de conjeturas propias que, visto en perspectiva, resultaron bastante certeras.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Tierna de ojos tristes... te mueves en secuencia y quieres cambiar...
-Marcas en matices... son aquellos moldes a los cuales pudiste dejar...
-
-Y no te bastó con romper esquemas...
-y con arte emerger...
-Poseés de esa fuerza que nadie pudo tener...
-
-Luchas contra ideas innatas... que forman figuras extrañas acerca de vos...
-Y no te das cuenta... que hay gente a tu alrededor...
-
-Y aunque no puedas ver... lo que otros pueden encontrar...
-seguís buscando respuestas donde no las hallarás...
-Tal vez sea tiempo... de dejar de preguntar...
-
-No dejes que el miedo te diga quién sos...
-Ni aquellas miradas apaguen tu voz...
-Si todo se rompe... volvelo a intentar...
-Que nadie decida hasta dónde llegar...
-
-Y aunque no puedas ver... lo que otros pueden encontrar...
-seguís buscando respuestas donde no las hallarás...
-Tal vez sea tiempo... de dejar de preguntar...
-
-No dejes que el miedo te diga quién sos...
-Ni aquellas miradas apaguen tu voz...
-Si todo se rompe... volvelo a intentar...
-Que nadie decida hasta dónde llegar...</p>
-              <a class="lyrics-dl" href="Tierna de Ojos Tristes - Letra.txt" download="Tierna de Ojos Tristes - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿Quién es la "Tierna de Ojos Tristes"? Contame de dónde salió esta canción.</p>
             </div>
           </div>
         </div>
 
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">06</span>
-            <button class="icon-btn play-btn" data-src="Categoria Bañero (En Vivo).mp3" data-name="Categoría Bañero (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Categoría Bañero en vivo">▶</button>
+            <button class="icon-btn play-btn" data-src="Categoria Bañero (En Vivo).mp3" data-name="Categoría Bañero (En Vivo)" data-album="Ruido Interior (En Vivo)" data-art="cover-ruido-interior.jpg" aria-label="Reproducir Categoría Bañero en vivo">▶</button>
             <span class="track-name">Categoría Bañero (En Vivo)</span>
-            <div class="waveform mini" data-src="Categoria Bañero (En Vivo).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
+            <div class="waveform mini" data-src="Categoria Bañero (En Vivo).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
-              <a class="icon-btn" href="Categoria Bañero (En Vivo).mp3" download="Categoría Bañero (En Vivo).mp3" aria-label="Descargar">⬇</a>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <a class="icon-btn" href="Categoria Bañero (En Vivo).mp3" download="Categoría Bañero (En Vivo).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>Nace de la época en la que Santiago trabajó como guardavidas en el Club Gimnasia y Esgrima de Buenos Aires. Fueron años gloriosos, con experiencias muy amenas junto a compañeros con los que trabajó durante siete años y a quienes todavía recuerda y aprecia.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Llego, me siento y miro bajo una sombrilla.
-Escucho un buen día y contesto ya sin energía.
-El reflejo del mosaico me quema hasta el cuello
-y empiezan a llegar de a poquito todos los pendejos.
-
-Qué calor que hace, me dice una vieja y protesta
-por no tener reposera.
-Me agarro un huevo y la mando bien a la mierda
-y me gano una nota al pedo,
-y me gano una nota al pedo.
-
-No soy bañero, soy guardavidas.
-No soy bañero, no, soy guardavidas.
-No soy bañero, no, soy guardavidas.
-Pues yo no baño a nadie a menos que me lo pida.
-
-Aquélla pendeja se metió sin gorrito.
-Llamala a la pampita que vaya porque no encuentro a Dieguito.
-Se está yendo la colonia, le digo a Marcelito.
-Entonces tipo seis y media voy por mi cafecito.
-
-Mientras que unos corren y otros se cruzan por el andarivel,
-silbatos siguen sonando al ritmo de la música de Miguel.
-Y Pablo me cuenta historias sobre chapulines,
-Rulo avisando que hay agua allí, parece vendedor de pirulines.
-
-No soy bañero, soy guardavidas.
-No soy bañero, no, soy guardavidas.
-No soy bañero, no, soy guardavidas.
-Pues yo no baño a nadie a menos que me lo pida.
-
-De repente se larga a llover, ya no queda nada más que hacer.
-Nos refugiamos en el vestuario y cantamos con la guitarra de Fernando.
-
-No soy bañero, no, soy guardavidas.
-No soy bañero, no, soy guardavidas.
-No soy bañero, soy guardavidas.
-Pues yo no baño a nadie a menos que me lo pida.</p>
-              <a class="lyrics-dl" href="Categoría Bañero - Letra.txt" download="Categoría Bañero - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿Qué significa "Categoría Bañero"? Contame la historia detrás del tema.</p>
             </div>
           </div>
         </div>
@@ -936,232 +601,62 @@ Pues yo no baño a nadie a menos que me lo pida.</p>
 
       <div class="album-concept">
         <span class="concept-label">Por qué se llama así</span>
-        <p style="max-width:62ch; color:rgba(255,255,255,.82); font-size:.95rem;">"Musilencio" nace de esa costumbre de tocar bajito, casi en secreto, en la casa donde ensayaban. Llevar estos tres temas a acústico fue volver a esa versión más callada de las canciones, la que existía antes de subirse a un escenario.</p>
+        <div class="placeholder-note small">
+          ✎ "Musilencio" mezcla música y silencio — contame la idea detrás de ese nombre y por qué decidieron llevar estos tres temas a formato acústico en vez de dejarlos como estaban.
+        </div>
       </div>
 
       <div class="tracklist">
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">01</span>
             <button class="icon-btn play-btn" data-src="Infidelidad (Acústico).mp3" data-name="Infidelidad" data-album="Musilencio" data-art="cover-musilencio.jpg" aria-label="Reproducir Infidelidad">▶</button>
             <span class="track-name">Infidelidad</span>
             <div class="waveform mini" data-src="Infidelidad (Acústico).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="Infidelidad (Acústico).mp3" download="Infidelidad.mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>Un tema especial, atravesado por la bronca: nace de una infidelidad que probablemente cometieron contra Santiago, aunque la canción también se mete en los grises del asunto (pese a que él está en contra de la infidelidad) y está pensada también para quienes la sufrieron.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Solo respiro de tu ombligo para poder llegar... más lejos.
-Y sentirme vivo en tu cuerpo.
-La naturaleza es sabia, más cuando somos uno...
-y nos rozamos mutuamente, dejando nuestro rastro en el suelo...
-
-La fidelidad ya no existe más.
-Todos pecamos, decimos que amamos...
-y nada se puede remediar...
-
-Siempre la misma historia... hay que contar.
-Siempre la misma mierda... hay que aguantar.
-
-Cuando estás conmigo, sueles pensar...
-en tu mejor amigo, y eso ya no es amistad.
-Solo un sueño sigo, la lujuria es mi guía...
-de pensar en un trío, una fantasía más...
-
-Siempre la misma historia... hay que contar.
-Siempre la misma mierda... hay que aguantar.
-
-Siempre la misma historia... hay que contar.
-Siempre la misma mierda... hay que aguantar.</p>
-              <a class="lyrics-dl" href="Infidelidad - Letra.txt" download="Infidelidad - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿Qué historia hay detrás de "Infidelidad"? Contame la inspiración de esta letra.</p>
             </div>
           </div>
         </div>
 
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">02</span>
             <button class="icon-btn play-btn" data-src="Ella es para mí (Acústico).mp3" data-name="Ella es para Mí" data-album="Musilencio" data-art="cover-musilencio.jpg" aria-label="Reproducir Ella es para Mí">▶</button>
             <span class="track-name">Ella es para Mí</span>
             <div class="waveform mini" data-src="Ella es para mí (Acústico).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="Ella es para mí (Acústico).mp3" download="Ella es para Mí.mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>Habla de una relación tóxica, de esa obsesión que te hace perder la cabeza por alguien, y de la sospecha de que, en el fondo, tal vez eso no sea amor.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Ella es para mí,
-todo lo que quiero en esta vida.
-Ella es para mí,
-una noche sin salida.
-Ella es para mí,
-una linda sensación.
-Ella es para mí,
-una tortura, una confusión.
-
-Y cómo puedo hacer
-para poder estar con ella.
-Y cómo detener
-las maromas en mi cabeza.
-No, no puedo olvidarme
-de ese sabor de tus besos,
-de pasar mi lengua por tu cuello
-y sentir que somos dos locos de amor.
-Que nada está prohibido, por favor,
-quédate conmigo.
-
-Ella es para mí,
-una gran bienvenida.
-Ella es para mí,
-una noble despedida.
-Ella es para mí,
-una droga que me inspira.
-Ella es para mí,
-una enfermedad divina.
-
-Y cómo puedo hacer
-para poder estar con ella.
-Y cómo detener
-las maromas en mi cabeza.
-No, no puedo olvidarme
-de ese sabor de tus besos,
-de pasar mi lengua por tu cuello
-y sentir que somos dos locos de amor.
-Que nada está prohibido, por favor,
-quédate conmigo.
-Que nada está prohibido, por favor,
-quédate conmigo.</p>
-              <a class="lyrics-dl" href="Ella es para Mí - Letra.txt" download="Ella es para Mí - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿Para quién es "Ella es para Mí"? Contame de dónde salió esta canción.</p>
             </div>
           </div>
         </div>
 
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">03</span>
             <button class="icon-btn play-btn" data-src="Recuerdos De Mar (Acústico).mp3" data-name="Recuerdos de Mar" data-album="Musilencio" data-art="cover-musilencio.jpg" aria-label="Reproducir Recuerdos de Mar">▶</button>
             <span class="track-name">Recuerdos de Mar</span>
             <div class="waveform mini" data-src="Recuerdos De Mar (Acústico).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="Recuerdos De Mar (Acústico).mp3" download="Recuerdos de Mar.mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>Resume los veranos que Santiago pasó en Mar del Plata durante su niñez y adolescencia: recuerdos muy emotivos junto a amigos y un montón de anécdotas compartidas en esos viajes.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Era una de esas noches de verano.
-Con Gairol, Goro y Chelo, en Sacoa nos juntamos.
-La paliza daba risa, y un sobrador humorista
-se burlaba del perdedor que iba acumulando ira...
-
-Un gol para Yugoslavia era un festejo que irritaba,
-y los chistes que agitaban a la masa que escuchaba.
-Pero el mejor de los hechos, ahora se los voy a contar.
-Chelito jugando a sus jueguitos, una mina ha de rechazar...
-La pobre, ilusionada, su nombre quería averiguar,
-y este gil le contestó Marcelo por y la dejaba atontada...
-
-Y así fueron los días pasando poco a poco.
-Personajes aparecían en las carpas vecinas.
-Cómo olvidar a Rape, cara de pez, cara de don.
-A Julius, Orach y Miriam, a Piget en el mostrador.
-Al Tanque, a Orne y a Walter, a Yiyo y a la modelito.
-A Toto y su bigote porno, y a los panchos amigos de Nacho.
-
-Más allá de estas figuras, recordemos el inicio del libro,
-que fue en dedicación de esa noche con Gasti y el Chino.
-Después de ingerir veinte litros entre cinco de alcohol,
-la víctima llamada Sofía del piso emergió.
-La teoría era simple, no sé cómo no funcionó.
-La pobre se pensó que era un insulto para ella...
-y lloró...
-
-Las mejores vacaciones de mi vida las pasamos en MDQ.
-Con la máscara de arena de Lara y de fuego sobre María Luz.
-Chip and Deil me están faltando y la canción estoy terminando.
-Un saludo para mis fieles soldados,
-que en aventuras me han acompañado...
-
-Oh, oh, oh...
-Oh, oh, oh...
-Oh, oh, oh...</p>
-              <a class="lyrics-dl" href="Recuerdos de Mar - Letra.txt" download="Recuerdos de Mar - Letra.txt">⬇ Descargar letra completa</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="track">
-          <div class="track-row">
-            <span class="track-num">04</span>
-            <button class="icon-btn play-btn" data-src="Mientes.mp3" data-name="Mientes" data-album="Musilencio" data-art="cover-musilencio.jpg" aria-label="Reproducir Mientes">▶</button>
-            <span class="track-name">Mientes</span>
-            <div class="waveform mini" data-src="Mientes.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
-            <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
-              <a class="icon-btn" href="Mientes.mp3" download="Mientes.mp3" aria-label="Descargar">⬇</a>
-            </div>
-          </div>
-          <div class="track-story">
-            <div class="track-story-inner">
-              <p>Surge de una época adolescente en la que el chamuyo era indispensable, sobre todo el "chamuyo de la luna", esa frase infalible para lograr que una chica cayera rendida.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Basta con un poco de alcoholemia
-y empiezo a decir pavadas...
-La locura es sana
-siempre y cuando la manejas es paciada...
-Y sin embargo todo...
-es del color de tu mirada...
-Y me dejas sentirme cómo...
-una especie jamás provista de ese aroma...
-Tan particular...
-No, no...
-y no, no...
-
-Con un toque de astucia
-puedes envolverte en mis palabras...
-Solo tengo que hacer de cuenta
-que del montón sos la privilegiada...
-Pero resulta extraño...
-que todo lo que diga, es un engaño...
-Pero me causa placer
-el pensar que estás cayendo sobre mí...
-No, no, no, no...
-
-No puedo dejar de mentir...
-Se ha vuelto una adicción,
-no puedo salir...
-Esta enfermedad
-se está propagando...
-Y me condena,
-me ata a las cadenas de la verdad...
-Y...
-no puedo escapar...</p>
-              <a class="lyrics-dl" href="Mientes - Letra.txt" download="Mientes - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿Qué recuerdo de mar inspiró esta canción? Contame la historia.</p>
             </div>
           </div>
         </div>
@@ -1180,435 +675,84 @@ no puedo escapar...</p>
 
       <div class="album-concept">
         <span class="concept-label">Por qué se llama así</span>
-        <p style="max-width:62ch; color:rgba(255,255,255,.82); font-size:.95rem;">"Máquina del Tiempo" habla de mirar para atrás sin quedarse ahí, de cómo una canción vieja puede transportarte a otro momento, incluso tocada de nuevo y distinta. Por eso cada tema tiene más de una versión: dos formas de viajar a la misma canción.</p>
+        <div class="placeholder-note small">
+          ✎ Contame el sentido del nombre "Máquina del Tiempo" y por qué armaron el disco así.
+        </div>
       </div>
 
-      <div class="album-concept" style="margin-top:1rem;">
-        <span class="concept-label">Colaboraron en este disco</span>
-        <p style="max-width:62ch; color:rgba(255,255,255,.7); font-size:.88rem;">Santiago Insua y Daniel Molinari (guitarra), Juan Treviso (batería) y Eliseo Manso Braña (bajo).</p>
+      <div class="placeholder-note small" style="margin-top:1rem; max-width:62ch;">
+        ✎ Grabado, mezclado y masterizado en Estudio Palmera, 2024. Todos los temas compuestos y producidos por Más y Atrás.
       </div>
 
       <div class="tracklist" style="margin-top:1.4rem;">
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">01</span>
             <button class="icon-btn play-btn" data-src="Máquina del tiempo (Radio Edit).mp3" data-name="Máquina del Tiempo (Radio Edit)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Máquina del Tiempo">▶</button>
             <span class="track-name">Máquina del Tiempo (Radio Edit)</span>
             <div class="waveform mini" data-src="Máquina del tiempo (Radio Edit).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="Máquina del tiempo (Radio Edit).mp3" download="Máquina del Tiempo (Radio Edit).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>"Máquina del Tiempo" surge de un libro que Santiago leyó y le encantó: el clásico de H.G. Wells. A eso se suma esa fantasía que alimentan tantas películas, de imaginar qué habría cambiado, qué cambiarías hoy y qué no.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Qué tal si te digo que he creado una ilusión...
-Que no sé... si quiero ver...
-Parece que a veces...
-el dinero vale más que el tiempo...
-
-Pero es cierto que... es lo único que no se recupera...
-Sin embargo yo seguiré...
-en la espera de mi...
-
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-
-Has inventado un mundo... donde el sufrimiento es goce...
-Y es triste saber... que al final...
-eso ya no sirve...
-
-Quizás no tengas claro... qué deseás...
-y apuntás... al objetivo equivocado...
-Será que la luz... me ha cegado...
-Será que la vida me ha dejado...
-sin mí...
-
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-Máquina del tiempo... llévame... hacia atrás...
-Máquina del tiempo... llévame... más allá...
-
-Máquina del tiempo... hacia atrás...
-Máquina del tiempo... más allá...
-Hacia atrás... más allá...
-Máquina del tiempo...
-Hacia atrás... más allá...
-Máquina del tiempo... máquina del tiempo...
-Hacia atrás... más allá...</p>
-              <a class="lyrics-dl" href="Máquina del Tiempo - Letra.txt" download="Máquina del Tiempo - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿Qué inspiró "Máquina del Tiempo"? Contame la historia de esta canción.</p>
             </div>
           </div>
         </div>
 
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">02</span>
             <button class="icon-btn play-btn" data-src="Te necesito (Radio Edit).mp3?v=1" data-name="Te Necesito (Radio Edit)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Te Necesito Radio Edit">▶</button>
             <span class="track-name">Te Necesito (Radio Edit)</span>
             <div class="waveform mini" data-src="Te necesito (Radio Edit).mp3?v=1"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="Te necesito (Radio Edit).mp3?v=1" download="Te Necesito (Radio Edit).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>La misma historia de siempre: una canción nacida de una amistad, con una idea que un amigo le acercó a Santiago y que terminó siendo el corazón de la letra. Esta versión Radio Edit no la reinventa: es esa canción original, respetada tal cual nació, llevada a un formato pensado para sonar en cualquier lado.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Caía en tus redes y en tus garras,
-te perseguía, me poseías, me dominabas.
-Pero eso quedó atrás, hoy me dices que me extrañas
-y yo te digo, nena, que para mí estás muerta.
-
-¿Te necesito? ¡No!
-Te tengo en el olvido, amor,
-y estás ahí queriendo volver a entrar en mí.
-¿Te necesito? ¡No!
-Te tengo en el olvido, amor,
-y estás ahí queriendo volver a entrar en mí.
-
-Solías ser la dueña de esta calesita,
-yo te compraba dulces mientras robabas sortijas.
-El circo ha cerrado, se cayeron tus trapecistas,
-y ya no te queda otra que pagar todas tus vueltitas.
-
-¿Te necesito? ¡No!
-Te tengo en el olvido, amor,
-y estás ahí queriendo volver a entrar en mí.
-¿Te necesito? ¡No!
-Te tengo en el olvido, amor,
-y estás ahí queriendo volver a entrar en mí.</p>
-              <a class="lyrics-dl" href="Te Necesito - Letra.txt" download="Te Necesito - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ Contame la historia detrás de "Te Necesito" y qué cambia en esta versión Radio Edit.</p>
             </div>
           </div>
         </div>
 
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">03</span>
             <button class="icon-btn play-btn" data-src="Tierna de ojos tristes (Radio Edit).mp3" data-name="Tierna de Ojos Tristes (Estudio)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Tierna de Ojos Tristes">▶</button>
             <span class="track-name">Tierna de Ojos Tristes</span>
             <div class="waveform mini" data-src="Tierna de ojos tristes (Radio Edit).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
               <a class="icon-btn" href="Tierna de ojos tristes (Radio Edit).mp3" download="Tierna de Ojos Tristes (Estudio).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>Nace de un amor no muy correspondido hacia una persona muy especial, tal como lo cuenta la letra. Con el tiempo, Santiago fue mutando esa idea hacia imaginar lo que esa persona vivía por dentro, sus cambios y su forma de pensar, a partir de conjeturas propias que, visto en perspectiva, resultaron bastante certeras.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Tierna de ojos tristes... te mueves en secuencia y quieres cambiar...
-Marcas en matices... son aquellos moldes a los cuales pudiste dejar...
-
-Y no te bastó con romper esquemas...
-y con arte emerger...
-Poseés de esa fuerza que nadie pudo tener...
-
-Luchas contra ideas innatas... que forman figuras extrañas acerca de vos...
-Y no te das cuenta... que hay gente a tu alrededor...
-
-Y aunque no puedas ver... lo que otros pueden encontrar...
-seguís buscando respuestas donde no las hallarás...
-Tal vez sea tiempo... de dejar de preguntar...
-
-No dejes que el miedo te diga quién sos...
-Ni aquellas miradas apaguen tu voz...
-Si todo se rompe... volvelo a intentar...
-Que nadie decida hasta dónde llegar...
-
-Y aunque no puedas ver... lo que otros pueden encontrar...
-seguís buscando respuestas donde no las hallarás...
-Tal vez sea tiempo... de dejar de preguntar...
-
-No dejes que el miedo te diga quién sos...
-Ni aquellas miradas apaguen tu voz...
-Si todo se rompe... volvelo a intentar...
-Que nadie decida hasta dónde llegar...</p>
-              <a class="lyrics-dl" href="Tierna de Ojos Tristes - Letra.txt" download="Tierna de Ojos Tristes - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿Quién es la "Tierna de Ojos Tristes"? Contame de dónde salió esta canción.</p>
             </div>
           </div>
         </div>
 
         <div class="track">
-          <div class="track-row">
+          <div class="track-row" data-story-toggle>
             <span class="track-num">04</span>
-            <button class="icon-btn play-btn" data-src="Categoría Bañero (Radio Edit).mp3" data-name="Categoría Bañero (Estudio)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Categoría Bañero">▶</button>
+            <button class="icon-btn play-btn" data-src="Categoria Bañero (Radio Edit).mp3" data-name="Categoría Bañero (Estudio)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Categoría Bañero">▶</button>
             <span class="track-name">Categoría Bañero</span>
-            <div class="waveform mini" data-src="Categoría Bañero (Radio Edit).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
+            <div class="waveform mini" data-src="Categoria Bañero (Radio Edit).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
             <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
-              <a class="icon-btn" href="Categoría Bañero (Radio Edit).mp3" download="Categoría Bañero (Estudio).mp3" aria-label="Descargar">⬇</a>
+              <span class="story-toggle"><span class="plus">+</span><span>Historia</span></span>
+              <a class="icon-btn" href="Categoria Bañero (Radio Edit).mp3" download="Categoría Bañero (Estudio).mp3" aria-label="Descargar">⬇</a>
             </div>
           </div>
           <div class="track-story">
             <div class="track-story-inner">
-              <p>Nace de la época en la que Santiago trabajó como guardavidas en el Club Gimnasia y Esgrima de Buenos Aires. Fueron años gloriosos, con experiencias muy amenas junto a compañeros con los que trabajó durante siete años y a quienes todavía recuerda y aprecia.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Llego, me siento y miro bajo una sombrilla.
-Escucho un buen día y contesto ya sin energía.
-El reflejo del mosaico me quema hasta el cuello
-y empiezan a llegar de a poquito todos los pendejos.
-
-Qué calor que hace, me dice una vieja y protesta
-por no tener reposera.
-Me agarro un huevo y la mando bien a la mierda
-y me gano una nota al pedo,
-y me gano una nota al pedo.
-
-No soy bañero, soy guardavidas.
-No soy bañero, no, soy guardavidas.
-No soy bañero, no, soy guardavidas.
-Pues yo no baño a nadie a menos que me lo pida.
-
-Aquélla pendeja se metió sin gorrito.
-Llamala a la pampita que vaya porque no encuentro a Dieguito.
-Se está yendo la colonia, le digo a Marcelito.
-Entonces tipo seis y media voy por mi cafecito.
-
-Mientras que unos corren y otros se cruzan por el andarivel,
-silbatos siguen sonando al ritmo de la música de Miguel.
-Y Pablo me cuenta historias sobre chapulines,
-Rulo avisando que hay agua allí, parece vendedor de pirulines.
-
-No soy bañero, soy guardavidas.
-No soy bañero, no, soy guardavidas.
-No soy bañero, no, soy guardavidas.
-Pues yo no baño a nadie a menos que me lo pida.
-
-De repente se larga a llover, ya no queda nada más que hacer.
-Nos refugiamos en el vestuario y cantamos con la guitarra de Fernando.
-
-No soy bañero, no, soy guardavidas.
-No soy bañero, no, soy guardavidas.
-No soy bañero, soy guardavidas.
-Pues yo no baño a nadie a menos que me lo pida.</p>
-              <a class="lyrics-dl" href="Categoría Bañero - Letra.txt" download="Categoría Bañero - Letra.txt">⬇ Descargar letra completa</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="track">
-          <div class="track-row">
-            <span class="track-num">05</span>
-            <button class="icon-btn play-btn" data-src="Kernel (Radio Edit).mp3" data-name="Kernel (Radio Edit)" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Kernel Radio Edit">▶</button>
-            <span class="track-name">Kernel (Radio Edit)</span>
-            <div class="waveform mini" data-src="Kernel (Radio Edit).mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
-            <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
-              <a class="icon-btn" href="Kernel (Radio Edit).mp3" download="Kernel (Radio Edit).mp3" aria-label="Descargar">⬇</a>
-            </div>
-          </div>
-          <div class="track-story">
-            <div class="track-story-inner">
-              <p>La misma historia de siempre: en programación, el "kernel" es el núcleo del sistema, el corazón y el foco del que depende todo lo demás. Santiago usó esa idea como metáfora de una compañera de la época en que estudiaba programación (allá por 2010) que se había convertido en su foco, en el corazón de esa etapa, con la atracción que le generaba convertida en canción.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>I can't start si vos no estás...
-No logro ver aquella luz en tu mirada.
-De nada sirve que te escondas,
-because I see you aquí.
-
-Te volvés a poner tu camisón,
-de animal print que no es de seda.
-Te queda... realmente bien.
-I try to understand...
-
-Ooh, Kernel, guíame...
-Hoy y ayer, ámame.
-Ooh, Kernel, guíame...
-Hoy y ayer, ámame.
-
-Porque without you, no sé quién soy...
-Quizás mañana... seré tu boy.
-Boy, boy... ¡Boy!
-
-Why es tan difícil entenderte...
-Quisiera que estuviésemos en el mismo channel,
-en el que pudiésemos ser amantes...
-There is another...
-
-Ooh, Kernel, guíame...
-Hoy y ayer, ámame.
-Ooh, Kernel, guíame...
-Hoy y ayer, ámame.
-
-Porque without you, no sé quién soy...
-Quizás mañana... seré tu boy.
-Boy, boy... ¡Boy!</p>
-              <a class="lyrics-dl" href="Kernel - Letra.txt" download="Kernel - Letra.txt">⬇ Descargar letra completa</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="track">
-          <div class="track-row">
-            <span class="track-num">06</span>
-            <button class="icon-btn play-btn" data-src="Tania.mp3" data-name="Tania" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Tania">▶</button>
-            <span class="track-name">Tania</span>
-            <div class="waveform mini" data-src="Tania.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
-            <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
-              <a class="icon-btn" href="Tania.mp3" download="Tania.mp3" aria-label="Descargar">⬇</a>
-            </div>
-          </div>
-          <div class="track-story">
-            <div class="track-story-inner">
-              <p>Nace de la época en que Santiago trabajaba como barista, allá por 2006-2007, y conoció a una chica llamada Tania de la que se enamoró sin que fuera correspondido.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Estoy clavado y... no puedo seguir,
-mintiéndote a los ojos, no sé qué decir.
-Todo es tan perfecto desde su raíz,
-cada parte es protagonista de la misma matriz.
-Son esclavos ya mis ojos de tu sonreír,
-de tu pelo, de tu cuerpo,
-de la forma en que te vestís.
-
-Pero sé...
-que no puedo vivir así,
-soportando tus rechazos
-y las maromas dentro de mí.
-Solo ven,
-y endeudate con un sí,
-que la espera se hace dulce
-y no ha de morir...
-
-Puedo ver
-que no soy tu tipo
-y no puedo competir
-con el pasado y el presente,
-por lo que sentís por él.
-Es tan incierto que...
-te vuelva a ver,
-te has ido muy lejos
-y yo cambié.
-
-Pero sé...
-que no puedo vivir así,
-soportando tus rechazos
-y las maromas dentro de mí.
-Solo ven,
-y endeudate con un sí,
-que la espera se hace dulce
-y no ha de morir...
-
-Pero sé...
-que no puedo vivir así,
-soportando tus rechazos
-y las maromas dentro de mí.
-Solo ven,
-y endeudate con un sí,
-que la espera se hace dulce
-y no ha de morir...</p>
-              <a class="lyrics-dl" href="Tania - Letra.txt" download="Tania - Letra.txt">⬇ Descargar letra completa</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="track">
-          <div class="track-row">
-            <span class="track-num">07</span>
-            <button class="icon-btn play-btn" data-src="Algo_cambiara_.mp3" data-name="Algo Cambiará" data-album="Máquina del Tiempo" data-art="cover-maquina-del-tiempo.jpg" aria-label="Reproducir Algo Cambiará">▶</button>
-            <span class="track-name">Algo Cambiará</span>
-            <div class="waveform mini" data-src="Algo_cambiara_.mp3"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div>
-            <div class="track-actions">
-              <span class="story-toggle" data-toggle="story"><span class="plus">+</span><span>Historia</span></span>
-              <span class="story-toggle" data-toggle="lyrics"><span class="plus">+</span><span>Letra</span></span>
-              <a class="icon-btn" href="Algo_cambiara_.mp3" download="Algo Cambiará.mp3" aria-label="Descargar">⬇</a>
-            </div>
-          </div>
-          <div class="track-story">
-            <div class="track-story-inner">
-              <p>Surge a partir de un amor con una chica extranjera, un amor a distancia que no se pudo concretar de la mejor manera.</p>
-            </div>
-          </div>
-          <div class="track-lyrics">
-            <div class="track-lyrics-inner">
-              <p>Hoy es un día gris...
-en el que puedo respirar...
-Todo se aleja...
-no lo puedo controlar...
-No sé por qué
-me recuerda a ti...
-Y me doy cuenta
-que ya no estás...
-Es tan oscuro
-dentro de mí...
-Sé que algo cambiará...
-
-Lo puedo sentir...
-estoy más allá...
-Yo quiero dormir...
-yo quiero dormir...
-entre tus piernas...
-y morir...
-No quiero pensar...
-en no verte nunca más...
-Quiero sufrir...
-si es necesario...
-por amar...
-
-¿Por qué te escondés?
-Igual te voy a buscar...
-En mi cabeza y en mis sueños...
-te vuelvo a encontrar...
-Aunque sé que ya es tarde...
-y no vas a regresar...
-Sigo esperando ese momento...
-que nunca sucederá...
-
-Lo puedo sentir...
-estoy más allá...
-Yo quiero dormir...
-yo quiero dormir...
-entre tus piernas...
-y morir...
-No quiero pensar...
-en no verte nunca más...
-Quiero sufrir...
-si es necesario...
-por amar...
-
-Lo puedo sentir...
-estoy más allá...
-
-Quiero sufrir...
-si es necesario...
-por amar...</p>
-              <a class="lyrics-dl" href="Algo Cambiará - Letra.txt" download="Algo Cambiará - Letra.txt">⬇ Descargar letra completa</a>
+              <p>✎ ¿Qué significa "Categoría Bañero"? Contame la historia detrás del tema.</p>
             </div>
           </div>
         </div>
@@ -1620,89 +764,18 @@ por amar...</p>
 
 <section class="gallery" id="galeria">
   <span class="section-label">03 — Fotos</span>
-  <h2 class="title">Todo el registro, disco por disco.</h2>
-
-  <div class="photo-albums">
-
-    <div class="photo-album">
-      <div class="photo-album-head">
-        <h3>Ruido Interior</h3>
-        <button class="ver-fotos-btn" data-toggle="photos">Ver fotos <span class="plus">+</span></button>
-      </div>
-      <div class="photo-panel">
-      <div class="photo-carousel">
-        <div class="photo reveal"><img src="hero-crowd-back.jpg" alt="Más y Atrás tocando de espaldas frente al público"></div>
-        <div class="photo reveal"><img src="kernel-en-vivo-photo.jpg" alt="Más y Atrás en vivo con vientos, tema Kernel"></div>
-        <div class="photo reveal"><img src="ruido-interior-banda-completa.jpg" alt="Más y Atrás con banda completa en vivo"></div>
-        <div class="photo reveal"><img src="duo-singing.jpg" alt="Más y Atrás cantando juntos en vivo"></div>
-        <div class="photo reveal"><img src="guitarist-crowd.jpg" alt="Guitarrista de Más y Atrás con el público"></div>
-        <div class="photo reveal"><img src="singer-front.jpg" alt="Cantante de Más y Atrás en escena"></div>
-        <div class="photo reveal"><img src="singer-profile.jpg" alt="Cantante de Más y Atrás de perfil"></div>
-        <div class="photo reveal"><img src="ruido-interior-german-bajo.jpg" alt="Germán tocando el bajo en vivo"></div>
-        <div class="photo reveal"><img src="ruido-interior-guitarrista.jpg" alt="Guitarrista invitado de Más y Atrás en vivo"></div>
-      </div>
-      </div>
-    </div>
-
-    <div class="photo-album">
-      <div class="photo-album-head">
-        <h3>Musilencio</h3>
-        <button class="ver-fotos-btn" data-toggle="photos">Ver fotos <span class="plus">+</span></button>
-      </div>
-      <div class="photo-panel">
-      <div class="photo-carousel">
-        <div class="photo reveal"><img src="infidelidad-photo.jpg" alt="Más y Atrás en sesión acústica"></div>
-        <div class="photo reveal"><img src="ella-es-para-mi-photo.jpg" alt="Más y Atrás tocando frente al público"></div>
-        <div class="photo reveal"><img src="recuerdos-de-mar-photo.jpg" alt="Escenario de Más y Atrás"></div>
-        <div class="photo reveal"><img src="mientes-photo.jpg" alt="Más y Atrás en vivo íntimo, tema Mientes"></div>
-      </div>
-      </div>
-    </div>
-
-    <div class="photo-album">
-      <div class="photo-album-head">
-        <h3>Máquina del Tiempo</h3>
-        <button class="ver-fotos-btn" data-toggle="photos">Ver fotos <span class="plus">+</span></button>
-      </div>
-      <div class="photo-panel">
-      <div class="photo-carousel">
-        <div class="photo reveal"><img src="maquina-radio-edit-photo.jpg" alt="Más y Atrás en estudio grabando Máquina del Tiempo"></div>
-        <div class="photo reveal"><img src="kernel-radio-edit-photo.jpg" alt="Más y Atrás en estudio grabando Kernel"></div>
-        <div class="photo reveal"><img src="tierna-radio-edit-photo.jpg" alt="Más y Atrás en estudio grabando Tierna de Ojos Tristes"></div>
-        <div class="photo reveal"><img src="maquina-galeria-santiago-1.jpg" alt="Santiago cantando en estudio con la banda"></div>
-        <div class="photo reveal"><img src="maquina-galeria-german.jpg" alt="Germán en estudio con la banda"></div>
-        <div class="photo reveal"><img src="maquina-galeria-banda-completa.jpg" alt="Más y Atrás en estudio con vientos y coros"></div>
-        <div class="photo reveal"><img src="maquina-galeria-estudio-vacio-1.jpg" alt="Sala de control del estudio de grabación"></div>
-        <div class="photo reveal"><img src="maquina-galeria-estudio-vacio-2.jpg" alt="Instrumentos en la sala de grabación"></div>
-      </div>
-
-      <span class="photo-subheading">Músicos invitados</span>
-      <div class="photo-carousel photo-carousel-small">
-        <div class="photo reveal"><img src="maquina-galeria-guitarrista.jpg" alt="Guitarrista invitado de Más y Atrás en vivo"></div>
-        <div class="photo reveal"><img src="maquina-galeria-guitarrista-2.jpg" alt="Guitarrista invitado de Más y Atrás sonriendo en vivo"></div>
-        <div class="photo reveal"><img src="maquina-galeria-violinistas.jpg" alt="Violinistas invitados de Más y Atrás en estudio"></div>
-        <div class="photo reveal"><img src="maquina-galeria-tecladista.jpg" alt="Tecladista invitado de Más y Atrás en estudio"></div>
-      </div>
-
-      <div class="photo-featured-large">
-        <div class="photo reveal"><img src="categoria-radio-edit-photo.jpg" alt="Más y Atrás en la pileta, tema Categoría Bañero"></div>
-        <div class="photo reveal"><img src="te-necesito-radio-edit-photo.jpg" alt="Calesita, tema Te Necesito"></div>
-        <div class="photo reveal"><img src="algo-cambiara-photo.jpg" alt="Atardecer en la playa, tema Algo Cambiará"></div>
-      </div>
-      </div>
-    </div>
-
+  <h2 class="title">Registro en vivo.</h2>
+  <div class="gallery-grid">
+    <div class="photo reveal"><img src="duo-singing.jpg" alt="Más y Atrás cantando juntos en vivo"></div>
+    <div class="photo reveal"><img src="guitarist-crowd.jpg" alt="Guitarrista de Más y Atrás con el público"></div>
+    <div class="photo reveal"><img src="singer-front.jpg" alt="Cantante de Más y Atrás en escena"></div>
+    <div class="photo reveal"><img src="singer-profile.jpg" alt="Cantante de Más y Atrás de perfil"></div>
+    <div class="photo reveal"><img src="duo-bw-sign.jpg" alt="Más y Atrás en formato acústico"></div>
   </div>
 </section>
 
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lightbox-close" aria-label="Cerrar">✕</button>
-  <img id="lightbox-img" src="" alt="">
-</div>
-
 <footer id="contacto">
   <span class="section-label">04 — Contacto</span>
-
   <div class="contact-row">
     <h2 class="title">Fechas, prensa y shows: escribinos directamente.</h2>
     <div class="social">
@@ -1719,24 +792,13 @@ por amar...</p>
   </div>
 </footer>
 
-<div class="karaoke-panel" id="karaoke-panel">
-  <div class="karaoke-head">
-    <span class="karaoke-title" id="karaoke-title">Letra</span>
-    <button class="karaoke-close" id="karaoke-close" aria-label="Cerrar letra">✕</button>
-  </div>
-  <div class="karaoke-inner" id="karaoke-inner"></div>
-</div>
-
 <div class="player" id="player">
   <div class="player-art photo"><img id="p-art" src="" alt=""></div>
   <div class="player-info">
     <div class="p-track" id="p-track">—</div>
     <div class="p-album" id="p-album">—</div>
   </div>
-  <div class="player-controls">
-    <button class="icon-btn" id="p-toggle" aria-label="Pausar / reproducir">▶</button>
-    <button class="icon-btn" id="p-lyrics-toggle" aria-label="Ver letra" style="display:none;">Aa</button>
-  </div>
+  <div class="player-controls"><button class="icon-btn" id="p-toggle" aria-label="Pausar / reproducir">▶</button></div>
   <div class="player-scrub">
     <span class="p-time" id="p-current">0:00</span>
     <div class="scrub-track" id="p-scrub"><div class="player-wf" id="p-wf"><div class="wf-bars wf-bg"></div><div class="wf-bars wf-fg"></div></div></div>
@@ -1747,6 +809,17 @@ por amar...</p>
 
 <audio id="audio" preload="none"></audio>
 
+<div class="listener-poll" id="listener-poll" aria-hidden="true">
+  <div class="listener-poll-card" role="dialog" aria-modal="true" aria-labelledby="poll-title">
+    <div class="listener-poll-kicker">Antes de irte</div>
+    <h3 id="poll-title">¿Qué tema te gustó más?</h3>
+    <p>Elegí uno. Nos ayuda a saber qué canciones conectan más con quienes nos escuchan.</p>
+    <div class="poll-options" id="poll-options"></div>
+    <div class="poll-footer"><button class="poll-skip" id="poll-skip" type="button">Ahora no</button></div>
+  </div>
+</div>
+
+
 <script>
   // ---------- reveal on scroll ----------
   const revealEls = document.querySelectorAll('.reveal');
@@ -1756,520 +829,16 @@ por amar...</p>
   revealEls.forEach(el=>io.observe(el));
 
   // ---------- story toggles ----------
-  document.querySelectorAll('[data-toggle]').forEach(trigger=>{
+  document.querySelectorAll('[data-story-toggle]').forEach(trigger=>{
     trigger.addEventListener('click', (e)=>{
       e.stopPropagation();
-      const holder = trigger.closest('.track, .track-multi, .session-card');
-      if(!holder) return;
-      const panel = holder.querySelector(trigger.dataset.toggle === 'lyrics' ? '.track-lyrics' : '.track-story');
-      trigger.classList.toggle('open');
-      if(panel) panel.classList.toggle('open');
+      const holder = trigger.closest('.track, .session-card');
+      if(holder) holder.classList.toggle('open');
     });
   });
 
   // ---------- seeded waveform generator ----------
   const audio = document.getElementById('audio');
-
-  // ---------- estado compartido del reproductor entre páginas ----------
-  const NOW_PLAYING_KEY = 'masyatras_now_playing';
-
-  function saveNowPlaying(isPlaying){
-    if(!audio.src) return;
-    try{
-      localStorage.setItem(NOW_PLAYING_KEY, JSON.stringify({
-        src: audio.currentSrc || audio.src,
-        currentTime: audio.currentTime,
-        volume: audio.volume,
-        isPlaying: isPlaying,
-        name: pTrack.textContent,
-        album: pAlbum.textContent,
-        art: pArt.src,
-        downloadHref: pDownload.href,
-        downloadName: pDownload.download,
-        ts: Date.now()
-      }));
-    }catch(e){}
-  }
-
-  function resumeNowPlaying(){
-    let state;
-    try{ state = JSON.parse(localStorage.getItem(NOW_PLAYING_KEY)); }catch(e){ return; }
-    if(!state || !state.src) return;
-    // ignore stale state older than a few hours
-    if(Date.now() - (state.ts||0) > 1000*60*60*6) return;
-
-    audio.src = state.src;
-    audio.volume = (typeof state.volume === 'number') ? state.volume : 1;
-    pTrack.textContent = state.name || '—';
-    pAlbum.textContent = state.album || '—';
-    if(state.art) pArt.src = state.art;
-    if(state.downloadHref) pDownload.href = state.downloadHref;
-    if(state.downloadName) pDownload.download = state.downloadName;
-    player.classList.add('active');
-    if(typeof loadKaraokeFor === 'function') loadKaraokeFor(fileNameFromPath(state.src));
-
-    const onReady = ()=>{
-      audio.currentTime = state.currentTime || 0;
-      if(state.isPlaying){
-        audio.play().then(()=>{
-          const curFile = getCurrentAudioFile();
-          document.querySelectorAll('.play-btn, .featured-play').forEach(node=>{
-            if(fileNameFromPath(node.dataset.src) === curFile){
-              node.classList.add('playing');
-              node.textContent = '❚❚';
-              activeEls.push(node);
-            }
-          });
-        }).catch(()=>{ armResumeOnFirstTouch(); });
-      }
-      audio.removeEventListener('loadedmetadata', onReady);
-    };
-    audio.addEventListener('loadedmetadata', onReady);
-  }
-
-  function armResumeOnFirstTouch(){
-    const tryResume = ()=>{
-      audio.play().catch(()=>{});
-      document.removeEventListener('click', tryResume);
-      document.removeEventListener('touchstart', tryResume);
-    };
-    document.addEventListener('click', tryResume, { once:true });
-    document.addEventListener('touchstart', tryResume, { once:true });
-  }
-
-
-  // ---------- karaoke lyrics (modo aproximado: reparte las líneas parejo a lo largo de la duración real) ----------
-  const karaokeLyrics = {
-    "Te Necesito": [
-      "Caía en tus redes y en tus garras,",
-      "te perseguía, me poseías, me dominabas.",
-      "Pero eso quedó atrás, hoy me dices que me extrañas",
-      "y yo te digo, nena, que para mí estás muerta.",
-      "¿Te necesito? ¡No!",
-      "Te tengo en el olvido, amor,",
-      "y estás ahí queriendo volver a entrar en mí.",
-      "¿Te necesito? ¡No!",
-      "Te tengo en el olvido, amor,",
-      "y estás ahí queriendo volver a entrar en mí.",
-      "Solías ser la dueña de esta calesita,",
-      "yo te compraba dulces mientras robabas sortijas.",
-      "El circo ha cerrado, se cayeron tus trapecistas,",
-      "y ya no te queda otra que pagar todas tus vueltitas.",
-      "¿Te necesito? ¡No!",
-      "Te tengo en el olvido, amor,",
-      "y estás ahí queriendo volver a entrar en mí.",
-      "¿Te necesito? ¡No!",
-      "Te tengo en el olvido, amor,",
-      "y estás ahí queriendo volver a entrar en mí.",
-    ],
-    "Kernel": [
-      "I can't start si vos no estás...",
-      "No logro ver aquella luz en tu mirada.",
-      "De nada sirve que te escondas,",
-      "because I see you aquí.",
-      "Te volvés a poner tu camisón,",
-      "de animal print que no es de seda.",
-      "Te queda... realmente bien.",
-      "I try to understand...",
-      "Ooh, Kernel, guíame...",
-      "Hoy y ayer, ámame.",
-      "Ooh, Kernel, guíame...",
-      "Hoy y ayer, ámame.",
-      "Porque without you, no sé quién soy...",
-      "Quizás mañana... seré tu boy.",
-      "Boy, boy... ¡Boy!",
-      "Why es tan difícil entenderte...",
-      "Quisiera que estuviésemos en el mismo channel,",
-      "en el que pudiésemos ser amantes...",
-      "There is another...",
-      "Ooh, Kernel, guíame...",
-      "Hoy y ayer, ámame.",
-      "Ooh, Kernel, guíame...",
-      "Hoy y ayer, ámame.",
-      "Porque without you, no sé quién soy...",
-      "Quizás mañana... seré tu boy.",
-      "Boy, boy... ¡Boy!",
-    ],
-    "La Apuesta": [
-      "Dejo de pensar",
-      "y entro en un soplo lento de ilógicas ideas.",
-      "Vuelvo a anotar",
-      "cada frase que me digas y esté mal,",
-      "que no encuentres una salida.",
-      "Me importa muy poco tu presencia,",
-      "tu bipolaridad.",
-      "No estoy hecho de secuelas que me inviten a recordar,",
-      "esta historia llegó a su final.",
-      "Lejos de este acá,",
-      "cerca de tus besos me dejás,",
-      "sin las ganas de esperar.",
-      "No me extrañes si el hoy se fue,",
-      "mañana volverás o no lo sé.",
-      "Tengo la tranquilidad",
-      "que en este juego no me quedan fichas por jugar.",
-      "No me quedan fichas por jugar,",
-      "no me quedan fichas por jugar,",
-      "no me quedan fichas por jugar,",
-      "no me quedan fichas por jugar.",
-      "Esta historia llegó a su final.",
-    ],
-    "Infidelidad": [
-      "Solo respiro de tu ombligo para poder llegar... más lejos.",
-      "Y sentirme vivo en tu cuerpo.",
-      "La naturaleza es sabia, más cuando somos uno...",
-      "y nos rozamos mutuamente, dejando nuestro rastro en el suelo...",
-      "La fidelidad ya no existe más.",
-      "Todos pecamos, decimos que amamos...",
-      "y nada se puede remediar...",
-      "Siempre la misma historia... hay que contar.",
-      "Siempre la misma mierda... hay que aguantar.",
-      "Cuando estás conmigo, sueles pensar...",
-      "en tu mejor amigo, y eso ya no es amistad.",
-      "Solo un sueño sigo, la lujuria es mi guía...",
-      "de pensar en un trío, una fantasía más...",
-      "Siempre la misma historia... hay que contar.",
-      "Siempre la misma mierda... hay que aguantar.",
-      "Siempre la misma historia... hay que contar.",
-      "Siempre la misma mierda... hay que aguantar.",
-    ],
-    "Ella es para Mí": [
-      "Ella es para mí,",
-      "todo lo que quiero en esta vida.",
-      "Ella es para mí,",
-      "una noche sin salida.",
-      "Ella es para mí,",
-      "una linda sensación.",
-      "Ella es para mí,",
-      "una tortura, una confusión.",
-      "Y cómo puedo hacer",
-      "para poder estar con ella.",
-      "Y cómo detener",
-      "las maromas en mi cabeza.",
-      "No, no puedo olvidarme",
-      "de ese sabor de tus besos,",
-      "de pasar mi lengua por tu cuello",
-      "y sentir que somos dos locos de amor.",
-      "Que nada está prohibido, por favor,",
-      "quédate conmigo.",
-      "Ella es para mí,",
-      "una gran bienvenida.",
-      "Ella es para mí,",
-      "una noble despedida.",
-      "Ella es para mí,",
-      "una droga que me inspira.",
-      "Ella es para mí,",
-      "una enfermedad divina.",
-      "Y cómo puedo hacer",
-      "para poder estar con ella.",
-      "Y cómo detener",
-      "las maromas en mi cabeza.",
-      "No, no puedo olvidarme",
-      "de ese sabor de tus besos,",
-      "de pasar mi lengua por tu cuello",
-      "y sentir que somos dos locos de amor.",
-      "Que nada está prohibido, por favor,",
-      "quédate conmigo.",
-      "Que nada está prohibido, por favor,",
-      "quédate conmigo.",
-    ],
-    "Recuerdos de Mar": [
-      "Era una de esas noches de verano.",
-      "Con Gairol, Goro y Chelo, en Sacoa nos juntamos.",
-      "La paliza daba risa, y un sobrador humorista",
-      "se burlaba del perdedor que iba acumulando ira...",
-      "Un gol para Yugoslavia era un festejo que irritaba,",
-      "y los chistes que agitaban a la masa que escuchaba.",
-      "Pero el mejor de los hechos, ahora se los voy a contar.",
-      "Chelito jugando a sus jueguitos, una mina ha de rechazar...",
-      "La pobre, ilusionada, su nombre quería averiguar,",
-      "y este gil le contestó Marcelo por y la dejaba atontada...",
-      "Y así fueron los días pasando poco a poco.",
-      "Personajes aparecían en las carpas vecinas.",
-      "Cómo olvidar a Rape, cara de pez, cara de don.",
-      "A Julius, Orach y Miriam, a Piget en el mostrador.",
-      "Al Tanque, a Orne y a Walter, a Yiyo y a la modelito.",
-      "A Toto y su bigote porno, y a los panchos amigos de Nacho.",
-      "Más allá de estas figuras, recordemos el inicio del libro,",
-      "que fue en dedicación de esa noche con Gasti y el Chino.",
-      "Después de ingerir veinte litros entre cinco de alcohol,",
-      "la víctima llamada Sofía del piso emergió.",
-      "La teoría era simple, no sé cómo no funcionó.",
-      "La pobre se pensó que era un insulto para ella...",
-      "y lloró...",
-      "Las mejores vacaciones de mi vida las pasamos en MDQ.",
-      "Con la máscara de arena de Lara y de fuego sobre María Luz.",
-      "Chip and Deil me están faltando y la canción estoy terminando.",
-      "Un saludo para mis fieles soldados,",
-      "que en aventuras me han acompañado...",
-      "Oh, oh, oh...",
-      "Oh, oh, oh...",
-      "Oh, oh, oh...",
-    ],
-    "Máquina del Tiempo": [
-      "Qué tal si te digo que he creado una ilusión...",
-      "Que no sé... si quiero ver...",
-      "Parece que a veces...",
-      "el dinero vale más que el tiempo...",
-      "Pero es cierto que... es lo único que no se recupera...",
-      "Sin embargo yo seguiré...",
-      "en la espera de mi...",
-      "Máquina del tiempo... llévame... hacia atrás...",
-      "Máquina del tiempo... llévame... más allá...",
-      "Máquina del tiempo... llévame... hacia atrás...",
-      "Máquina del tiempo... llévame... más allá...",
-      "Has inventado un mundo... donde el sufrimiento es goce...",
-      "Y es triste saber... que al final...",
-      "eso ya no sirve...",
-      "Quizás no tengas claro... qué deseás...",
-      "y apuntás... al objetivo equivocado...",
-      "Será que la luz... me ha cegado...",
-      "Será que la vida me ha dejado...",
-      "sin mí...",
-      "Máquina del tiempo... llévame... hacia atrás...",
-      "Máquina del tiempo... llévame... más allá...",
-      "Máquina del tiempo... llévame... hacia atrás...",
-      "Máquina del tiempo... llévame... más allá...",
-      "Máquina del tiempo... llévame... hacia atrás...",
-      "Máquina del tiempo... llévame... más allá...",
-      "Máquina del tiempo... llévame... hacia atrás...",
-      "Máquina del tiempo... llévame... más allá...",
-      "Máquina del tiempo... hacia atrás...",
-      "Máquina del tiempo... más allá...",
-      "Hacia atrás... más allá...",
-      "Máquina del tiempo...",
-      "Hacia atrás... más allá...",
-      "Máquina del tiempo... máquina del tiempo...",
-      "Hacia atrás... más allá...",
-    ],
-    "Tierna de Ojos Tristes": [
-      "Tierna de ojos tristes... te mueves en secuencia y quieres cambiar...",
-      "Marcas en matices... son aquellos moldes a los cuales pudiste dejar...",
-      "Y no te bastó con romper esquemas...",
-      "y con arte emerger...",
-      "Poseés de esa fuerza que nadie pudo tener...",
-      "Luchas contra ideas innatas... que forman figuras extrañas acerca de vos...",
-      "Y no te das cuenta... que hay gente a tu alrededor...",
-      "Y aunque no puedas ver... lo que otros pueden encontrar...",
-      "seguís buscando respuestas donde no las hallarás...",
-      "Tal vez sea tiempo... de dejar de preguntar...",
-      "No dejes que el miedo te diga quién sos...",
-      "Ni aquellas miradas apaguen tu voz...",
-      "Si todo se rompe... volvelo a intentar...",
-      "Que nadie decida hasta dónde llegar...",
-      "Y aunque no puedas ver... lo que otros pueden encontrar...",
-      "seguís buscando respuestas donde no las hallarás...",
-      "Tal vez sea tiempo... de dejar de preguntar...",
-      "No dejes que el miedo te diga quién sos...",
-      "Ni aquellas miradas apaguen tu voz...",
-      "Si todo se rompe... volvelo a intentar...",
-      "Que nadie decida hasta dónde llegar...",
-    ],
-    "Categoría Bañero": [
-      "Llego, me siento y miro bajo una sombrilla.",
-      "Escucho un buen día y contesto ya sin energía.",
-      "El reflejo del mosaico me quema hasta el cuello",
-      "y empiezan a llegar de a poquito todos los pendejos.",
-      "Qué calor que hace, me dice una vieja y protesta",
-      "por no tener reposera.",
-      "Me agarro un huevo y la mando bien a la mierda",
-      "y me gano una nota al pedo,",
-      "y me gano una nota al pedo.",
-      "No soy bañero, soy guardavidas.",
-      "No soy bañero, no, soy guardavidas.",
-      "No soy bañero, no, soy guardavidas.",
-      "Pues yo no baño a nadie a menos que me lo pida.",
-      "Aquélla pendeja se metió sin gorrito.",
-      "Llamala a la pampita que vaya porque no encuentro a Dieguito.",
-      "Se está yendo la colonia, le digo a Marcelito.",
-      "Entonces tipo seis y media voy por mi cafecito.",
-      "Mientras que unos corren y otros se cruzan por el andarivel,",
-      "silbatos siguen sonando al ritmo de la música de Miguel.",
-      "Y Pablo me cuenta historias sobre chapulines,",
-      "Rulo avisando que hay agua allí, parece vendedor de pirulines.",
-      "No soy bañero, soy guardavidas.",
-      "No soy bañero, no, soy guardavidas.",
-      "No soy bañero, no, soy guardavidas.",
-      "Pues yo no baño a nadie a menos que me lo pida.",
-      "De repente se larga a llover, ya no queda nada más que hacer.",
-      "Nos refugiamos en el vestuario y cantamos con la guitarra de Fernando.",
-      "No soy bañero, no, soy guardavidas.",
-      "No soy bañero, no, soy guardavidas.",
-      "No soy bañero, soy guardavidas.",
-      "Pues yo no baño a nadie a menos que me lo pida.",
-    ],
-    "Tania": [
-      "Estoy clavado y... no puedo seguir,",
-      "mintiéndote a los ojos, no sé qué decir.",
-      "Todo es tan perfecto desde su raíz,",
-      "cada parte es protagonista de la misma matriz.",
-      "Son esclavos ya mis ojos de tu sonreír,",
-      "de tu pelo, de tu cuerpo,",
-      "de la forma en que te vestís.",
-      "Pero sé...",
-      "que no puedo vivir así,",
-      "soportando tus rechazos",
-      "y las maromas dentro de mí.",
-      "Solo ven,",
-      "y endeudate con un sí,",
-      "que la espera se hace dulce",
-      "y no ha de morir...",
-      "Puedo ver",
-      "que no soy tu tipo",
-      "y no puedo competir",
-      "con el pasado y el presente,",
-      "por lo que sentís por él.",
-      "Es tan incierto que...",
-      "te vuelva a ver,",
-      "te has ido muy lejos",
-      "y yo cambié.",
-      "Pero sé...",
-      "que no puedo vivir así,",
-      "soportando tus rechazos",
-      "y las maromas dentro de mí.",
-      "Solo ven,",
-      "y endeudate con un sí,",
-      "que la espera se hace dulce",
-      "y no ha de morir...",
-    ],
-    "Algo Cambiará": [
-      "Hoy es un día gris...",
-      "en el que puedo respirar...",
-      "Todo se aleja...",
-      "no lo puedo controlar...",
-      "No sé por qué",
-      "me recuerda a ti...",
-      "Y me doy cuenta",
-      "que ya no estás...",
-      "Es tan oscuro",
-      "dentro de mí...",
-      "Sé que algo cambiará...",
-      "Lo puedo sentir...",
-      "estoy más allá...",
-      "Yo quiero dormir...",
-      "yo quiero dormir...",
-      "entre tus piernas...",
-      "y morir...",
-      "No quiero pensar...",
-      "en no verte nunca más...",
-      "Quiero sufrir...",
-      "si es necesario...",
-      "por amar...",
-      "¿Por qué te escondés?",
-      "Igual te voy a buscar...",
-      "En mi cabeza y en mis sueños...",
-      "te vuelvo a encontrar...",
-      "Aunque sé que ya es tarde...",
-      "y no vas a regresar...",
-      "Sigo esperando ese momento...",
-      "que nunca sucederá...",
-      "Lo puedo sentir...",
-      "estoy más allá...",
-      "Yo quiero dormir...",
-      "yo quiero dormir...",
-      "entre tus piernas...",
-      "y morir...",
-      "No quiero pensar...",
-      "en no verte nunca más...",
-      "Quiero sufrir...",
-      "si es necesario...",
-      "por amar...",
-    ],
-    "Mientes": [
-      "Basta con un poco de alcoholemia",
-      "y empiezo a decir pavadas...",
-      "La locura es sana",
-      "siempre y cuando la manejas es paciada...",
-      "Y sin embargo todo...",
-      "es del color de tu mirada...",
-      "Y me dejas sentirme cómo...",
-      "una especie jamás provista de ese aroma...",
-      "Tan particular...",
-      "No, no...",
-      "y no, no...",
-      "Con un toque de astucia",
-      "puedes envolverte en mis palabras...",
-      "Solo tengo que hacer de cuenta",
-      "que del montón sos la privilegiada...",
-      "Pero resulta extraño...",
-      "que todo lo que diga, es un engaño...",
-      "Pero me causa placer",
-      "el pensar que estás cayendo sobre mí...",
-      "No, no, no, no...",
-      "No puedo dejar de mentir...",
-      "Se ha vuelto una adicción,",
-      "no puedo salir...",
-      "Esta enfermedad",
-      "se está propagando...",
-      "Y me condena,",
-      "me ata a las cadenas de la verdad...",
-      "Y...",
-      "no puedo escapar...",
-    ],
-  };
-
-  const srcToSong = {
-    "Te Necesito (En Vivo).mp3?v=4": "Te Necesito",
-    "Te necesito (Radio Edit).mp3?v=1": "Te Necesito",
-    "Kernel (En Vivo).mp3": "Kernel",
-    "Kernel (Radio Edit).mp3": "Kernel",
-    "Tania.mp3": "Tania",
-    "Algo_cambiara_.mp3": "Algo Cambiará",
-    "Mientes.mp3": "Mientes",
-    "La Apuesta( En Vivo).mp3": "La Apuesta",
-    "Infidelidad (Acústico).mp3": "Infidelidad",
-    "Ella es para mí (Acústico).mp3": "Ella es para Mí",
-    "Recuerdos De Mar (Acústico).mp3": "Recuerdos de Mar",
-    "Máquina del Tiempo (en Vivo).mp3": "Máquina del Tiempo",
-    "Máquina del tiempo (Radio Edit).mp3": "Máquina del Tiempo",
-    "Tierna De Ojos Tristes (En Vivo).mp3": "Tierna de Ojos Tristes",
-    "Tierna de ojos tristes (Radio Edit).mp3": "Tierna de Ojos Tristes",
-    "Categoria Bañero (En Vivo).mp3": "Categoría Bañero",
-    "Categoría Bañero (Radio Edit).mp3": "Categoría Bañero",
-  };
-
-  const karaokePanel = document.getElementById('karaoke-panel');
-  const karaokeInner = document.getElementById('karaoke-inner');
-  const pLyricsToggle = document.getElementById('p-lyrics-toggle');
-  const karaokeTitle = document.getElementById('karaoke-title');
-  const karaokeClose = document.getElementById('karaoke-close');
-  let currentKaraokeSrc = null;
-  let karaokeOpen = false;
-
-  function loadKaraokeFor(src){
-    currentKaraokeSrc = src;
-    const song = srcToSong[src];
-    const lines = song && karaokeLyrics[song];
-    if(!lines || !lines.length){
-      pLyricsToggle.style.display = 'none';
-      karaokePanel.classList.remove('open');
-      karaokeOpen = false;
-      pLyricsToggle.classList.remove('active');
-      return;
-    }
-    pLyricsToggle.style.display = '';
-    karaokeTitle.textContent = 'Letra — ' + song;
-    karaokeInner.innerHTML = '';
-    lines.forEach(text=>{
-      const div = document.createElement('div');
-      div.className = 'karaoke-line';
-      div.textContent = text;
-      karaokeInner.appendChild(div);
-    });
-  }
-
-  function closeKaraoke(){
-    karaokeOpen = false;
-    karaokePanel.classList.remove('open');
-    pLyricsToggle.classList.remove('active');
-  }
-
-  pLyricsToggle.addEventListener('click', ()=>{
-    karaokeOpen = !karaokeOpen;
-    karaokePanel.classList.toggle('open', karaokeOpen);
-    pLyricsToggle.classList.toggle('active', karaokeOpen);
-  });
-  karaokeClose.addEventListener('click', closeKaraoke);
-
 
   function fileNameFromPath(path){
     return (path || '').split('/').pop();
@@ -2435,7 +1004,6 @@ por amar...</p>
     audio.volume = 1;
     audio.src = src;
     audio.play();
-    loadKaraokeFor(fileNameFromPath(src));
     if(afterPlayCb) pendingSeekFn = afterPlayCb;
 
     // mark every control tied to this src as playing (button, featured play)
@@ -2467,7 +1035,6 @@ por amar...</p>
       audio.volume = 1;
       audio.src = t.src;
       audio.play();
-      loadKaraokeFor(fileNameFromPath(t.src));
       pArt.src = t.art;
       pTrack.textContent = t.name;
       pAlbum.textContent = t.album;
@@ -2499,20 +1066,17 @@ por amar...</p>
     pToggle.textContent = '❚❚';
     activeEls.forEach(el=> el.textContent = '❚❚');
     if(pendingSeekFn){ pendingSeekFn(); pendingSeekFn=null; }
-    saveNowPlaying(true);
   });
   audio.addEventListener('pause', ()=>{
     stopFade();
     pToggle.textContent = '▶';
     activeEls.forEach(el=> el.textContent = '▶');
-    saveNowPlaying(false);
   });
   audio.addEventListener('timeupdate', ()=>{
     if(!audio.duration) return;
     const ratio = audio.currentTime/audio.duration;
     pCurrent.textContent = fmt(audio.currentTime);
     pFgEl.style.clipPath = 'inset(0 '+((1-ratio)*100)+'% 0 0)';
-    saveNowPlaying(!audio.paused);
 
     // start a short fade-out right before the track ends
     if(!fadeOutTriggered && (audio.duration - audio.currentTime) <= FADE_OUT_SECONDS && (audio.duration - audio.currentTime) > 0){
@@ -2573,23 +1137,16 @@ por amar...</p>
   // ✎ Cada track usa una foto de placeholder repetida. Si me pasás una foto
   // por tema, la reemplazo acá (campo "photo" de cada objeto).
   const featuredTracks = [
-    { src:'Te Necesito (En Vivo).mp3?v=4', name:'Te Necesito (En Vivo)', album:'Ruido Interior (En Vivo)', eyebrow:'Ruido Interior — En Vivo', sub:'De Ruido Interior, grabado en vivo.', art:'cover-ruido-interior.jpg', photo:'hero-crowd-back.jpg', pos:'center center' },
-    { src:'Kernel (En Vivo).mp3', name:'Kernel (En Vivo)', album:'Ruido Interior (En Vivo)', eyebrow:'Ruido Interior — En Vivo', sub:'De Ruido Interior, grabado en vivo.', art:'cover-ruido-interior.jpg', photo:'kernel-en-vivo-photo.jpg', pos:'center 30%' },
-    { src:'La Apuesta( En Vivo).mp3', name:'La Apuesta (En Vivo)', album:'Ruido Interior (En Vivo)', eyebrow:'Ruido Interior — En Vivo', sub:'De Ruido Interior, grabado en vivo.', art:'cover-ruido-interior.jpg', photo:'guitarist-crowd.jpg', pos:'center 15%' },
-    { src:'Máquina del Tiempo (en Vivo).mp3', name:'Máquina del Tiempo (En Vivo)', album:'Ruido Interior (En Vivo)', eyebrow:'Ruido Interior — En Vivo', sub:'De Ruido Interior, grabado en vivo.', art:'cover-ruido-interior.jpg', photo:'duo-singing.jpg', pos:'center 15%' },
-    { src:'Tierna De Ojos Tristes (En Vivo).mp3', name:'Tierna de Ojos Tristes (En Vivo)', album:'Ruido Interior (En Vivo)', eyebrow:'Ruido Interior — En Vivo', sub:'De Ruido Interior, grabado en vivo.', art:'cover-ruido-interior.jpg', photo:'singer-profile.jpg', pos:'center 15%' },
-    { src:'Categoria Bañero (En Vivo).mp3', name:'Categoría Bañero (En Vivo)', album:'Ruido Interior (En Vivo)', eyebrow:'Ruido Interior — En Vivo', sub:'De Ruido Interior, grabado en vivo.', art:'cover-ruido-interior.jpg', photo:'singer-front.jpg', pos:'center 12%' },
-    { src:'Infidelidad (Acústico).mp3', name:'Infidelidad', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'cover-musilencio.jpg', photo:'infidelidad-photo.jpg', pos:'center 10%' },
-    { src:'Ella es para mí (Acústico).mp3', name:'Ella es para Mí', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'cover-musilencio.jpg', photo:'ella-es-para-mi-photo.jpg', pos:'center 35%' },
-    { src:'Recuerdos De Mar (Acústico).mp3', name:'Recuerdos de Mar', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'cover-musilencio.jpg', photo:'recuerdos-de-mar-photo.jpg', pos:'center center' },
-    { src:'Mientes.mp3', name:'Mientes', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'cover-musilencio.jpg', photo:'mientes-photo.jpg', pos:'center 25%' },
-    { src:'Máquina del tiempo (Radio Edit).mp3', name:'Máquina del Tiempo (Radio Edit)', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'maquina-radio-edit-photo.jpg', pos:'center 30%' },
-    { src:'Te necesito (Radio Edit).mp3?v=1', name:'Te Necesito (Radio Edit)', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'te-necesito-radio-edit-photo.jpg', pos:'center 45%' },
-    { src:'Tierna de ojos tristes (Radio Edit).mp3', name:'Tierna de Ojos Tristes', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'tierna-radio-edit-photo.jpg', pos:'center 22%' },
-    { src:'Categoría Bañero (Radio Edit).mp3', name:'Categoría Bañero', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'categoria-radio-edit-photo.jpg', pos:'center 35%' },
-    { src:'Kernel (Radio Edit).mp3', name:'Kernel (Radio Edit)', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'kernel-radio-edit-photo.jpg', pos:'center 25%' },
-    { src:'Tania.mp3', name:'Tania', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'tania-photo.jpg', pos:'center 35%' },
-    { src:'Algo_cambiara_.mp3', name:'Algo Cambiará', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'algo-cambiara-photo.jpg', pos:'center 55%' },
+    { src:'Te Necesito (En Vivo).mp3?v=4', name:'Te Necesito', album:'Sencillo', eyebrow:'Sencillo', sub:'El single que abrió el camino.', art:'cover-te-necesito.jpg', photo:'hero-crowd-back.jpg' },
+    { src:'Kernel (En Vivo).mp3', name:'Kernel (En Vivo)', album:'Ruido Interior (En Vivo)', eyebrow:'Ruido Interior — En Vivo', sub:'De Ruido Interior, grabado en vivo.', art:'cover-ruido-interior.jpg', photo:'guitarist-crowd.jpg' },
+    { src:'La Apuesta( En Vivo).mp3', name:'La Apuesta (En Vivo)', album:'Ruido Interior (En Vivo)', eyebrow:'Ruido Interior — En Vivo', sub:'De Ruido Interior, grabado en vivo.', art:'cover-ruido-interior.jpg', photo:'singer-front.jpg' },
+    { src:'Infidelidad (Acústico).mp3', name:'Infidelidad', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'cover-musilencio.jpg', photo:'duo-bw-sign.jpg' },
+    { src:'Ella es para mí (Acústico).mp3', name:'Ella es para Mí', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'cover-musilencio.jpg', photo:'duo-singing.jpg' },
+    { src:'Recuerdos De Mar (Acústico).mp3', name:'Recuerdos de Mar', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'cover-musilencio.jpg', photo:'singer-profile.jpg' },
+    { src:'Máquina del tiempo (Radio Edit).mp3', name:'Máquina del Tiempo (Radio Edit)', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'hero-crowd-back.jpg' },
+    { src:'Te necesito (Radio Edit).mp3?v=1', name:'Te Necesito (Radio Edit)', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'duo-singing.jpg' },
+    { src:'Tierna de ojos tristes (Radio Edit).mp3', name:'Tierna de Ojos Tristes', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'guitarist-crowd.jpg' },
+    { src:'Categoria Bañero (Radio Edit).mp3', name:'Categoría Bañero', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'singer-front.jpg' },
   ];
 
   let featIndex = 0;
@@ -2610,7 +1167,6 @@ por amar...</p>
     const img = face.querySelector('.feat-face-photo');
     img.src = t.photo;
     img.alt = t.name;
-    img.style.objectPosition = t.pos || 'center center';
 
     const playBtn = face.querySelector('.featured-play');
     playBtn.dataset.src = t.src;
@@ -2663,10 +1219,9 @@ por amar...</p>
     featDotsWrap.appendChild(dot);
   });
 
-  // one tab per album, jumping to that album's first track in the carousel (el sencillo suelto no tiene pestaña propia)
+  // one tab per album, jumping to that album's first track in the carousel
   const featAlbumOrder = [];
   featuredTracks.forEach((t,i)=>{
-    if(t.album === 'Sencillo') return;
     if(!featAlbumOrder.some(a=> a.album === t.album)) featAlbumOrder.push({ album: t.album, firstIndex: i });
   });
   featAlbumOrder.forEach((a, ai)=>{
@@ -2681,9 +1236,8 @@ por amar...</p>
   function updateFeatDots(index){
     featDotsWrap.querySelectorAll('.dot').forEach((d,i)=> d.classList.toggle('active', i===index));
     const activeAlbum = featuredTracks[index].album;
-    featAlbumTabsWrap.querySelectorAll('.tab').forEach(tabEl=> tabEl.classList.toggle('active', tabEl.textContent === activeAlbum));
+    featAlbumTabsWrap.querySelectorAll('.tab').forEach((tabEl, ai)=> tabEl.classList.toggle('active', featAlbumOrder[ai].album === activeAlbum));
   }
-
 
   function goToFeatured(targetIndex){
     if(featAnimating) return;
@@ -2703,7 +1257,6 @@ por amar...</p>
     featAnimating = true;
     featIndex = targetIndex;
     const t = featuredTracks[featIndex];
-    updateFeatDots(featIndex);
 
     populateFace(standbyFace, t);
 
@@ -2732,6 +1285,7 @@ por amar...</p>
       standbyFace.style.transition = '';
 
       const tmp = currentFace; currentFace = standbyFace; standbyFace = tmp;
+      updateFeatDots(featIndex);
       featAnimating = false;
     };
     standbyFace.addEventListener('transitionend', onEnd);
@@ -2747,46 +1301,231 @@ por amar...</p>
     populateFace(standbyFace, featuredTracks[1]);
     standbyFace.style.transform = 'translateX(100%)';
     updateFeatDots(0);
-    // fonts/images can shift layout slightly after load; realign once more shortly after
   })();
-
-  // ---------- "Ver fotos" toggles ----------
-  document.querySelectorAll('.ver-fotos-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const album = btn.closest('.photo-album');
-      if(!album) return;
-      const panel = album.querySelector('.photo-panel');
-      const isOpen = btn.classList.toggle('open');
-      if(panel) panel.classList.toggle('open', isOpen);
-      btn.childNodes[0].textContent = isOpen ? 'Ocultar fotos ' : 'Ver fotos ';
-    });
-  });
-
-  // ---------- lightbox (ver foto completa al tocarla) ----------
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
-  const lightboxClose = document.getElementById('lightbox-close');
-
-  document.querySelectorAll('.photo-carousel .photo img, .photo-featured-large .photo img').forEach(img=>{
-    img.parentElement.addEventListener('click', ()=>{
-      lightboxImg.src = img.src;
-      lightboxImg.alt = img.alt;
-      lightbox.classList.add('open');
-    });
-  });
-
-  function closeLightbox(){ lightbox.classList.remove('open'); lightboxImg.src=''; }
-  lightboxClose.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
-  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
-
-  resumeNowPlaying();
-  window.addEventListener('beforeunload', ()=>{ if(audio.src) saveNowPlaying(!audio.paused); });
 
   window.addEventListener('resize', ()=>{
     if(featAnimating) return;
     currentFace.style.transform = 'translateX(0)';
   });
+</script>
+
+
+
+<script>
+/* =========================================================
+   ESTADÍSTICAS DE MÁS Y ATRÁS
+   Requiere Supabase. Completá las 3 constantes de CONFIG.
+   ========================================================= */
+(() => {
+  const CONFIG = {
+    SUPABASE_URL: 'https://vrqgetxfixjmfitgowtu.supabase.co',
+    SUPABASE_ANON_KEY: 'sb_publishable_fdEAuqY_-SFl8H_pXcVWwA_YLtCNute',
+    // Para excluir por IP sin publicar tu IP real: pegá aquí su SHA-256.
+    // El archivo owner-ip-hash.html incluido te genera ese hash localmente.
+    OWNER_IP_HASH: 'PEGA_AQUI_EL_HASH_SHA256_DE_TU_IP',
+    VALID_PLAY_SECONDS: 10,
+    VOTE_VERSION: '2026-09-v1'
+  };
+
+  const audioEl = document.getElementById('audio');
+  const poll = document.getElementById('listener-poll');
+  const pollOptions = document.getElementById('poll-options');
+  const pollSkip = document.getElementById('poll-skip');
+  const countedThisSession = new Set(JSON.parse(sessionStorage.getItem('mya-counted-tracks') || '[]'));
+  const listenedThisSession = new Set(JSON.parse(sessionStorage.getItem('mya-listened-tracks') || '[]'));
+  const secondsByTrack = new Map();
+  let currentTrackId = '';
+  let isOwner = false;
+  let ownerReady = false;
+  let pollShownThisPage = false;
+
+  const cleanSrc = (src='') => {
+    try { return decodeURIComponent(src.split('?')[0].split('/').pop() || ''); } catch { return src.split('?')[0].split('/').pop() || ''; }
+  };
+  const trackIdFromSrc = (src='') => cleanSrc(src).toLowerCase().replace(/\.mp3$/i,'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+
+  const trackCatalog = (() => {
+    const map = new Map();
+    document.querySelectorAll('.play-btn[data-src]').forEach(btn => {
+      const id = trackIdFromSrc(btn.dataset.src);
+      if(!id || map.has(id)) return;
+      map.set(id,{ id, src:btn.dataset.src, name:btn.dataset.name || cleanSrc(btn.dataset.src), album:btn.dataset.album || '' });
+    });
+    return map;
+  })();
+
+  const configured = () => CONFIG.SUPABASE_URL.includes('.supabase.co') && !CONFIG.SUPABASE_URL.includes('TU-PROYECTO') && !CONFIG.SUPABASE_ANON_KEY.includes('PEGA_AQUI');
+
+  async function sha256(text){
+    const bytes = new TextEncoder().encode(text);
+    const hash = await crypto.subtle.digest('SHA-256', bytes);
+    return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+
+  async function detectOwner(){
+    const qs = new URLSearchParams(location.search);
+    if(qs.get('owner') === '1'){ localStorage.setItem('mya-owner-device','1'); }
+    if(qs.get('owner') === '0'){ localStorage.removeItem('mya-owner-device'); }
+    if(localStorage.getItem('mya-owner-device') === '1'){ isOwner=true; ownerReady=true; return; }
+    const expected = CONFIG.OWNER_IP_HASH.trim();
+    if(!expected || expected.includes('PEGA_AQUI')){ ownerReady=true; return; }
+    try{
+      const r = await fetch('https://api.ipify.org?format=json',{cache:'no-store'});
+      if(!r.ok) throw new Error('ip lookup');
+      const {ip} = await r.json();
+      isOwner = (await sha256(ip)) === expected.toLowerCase();
+    }catch(e){ console.warn('No se pudo validar IP del propietario:',e); }
+    ownerReady=true;
+  }
+
+  async function api(path, options={}){
+    if(!configured()) return null;
+    const r = await fetch(CONFIG.SUPABASE_URL + path,{
+      ...options,
+      headers:{
+        'apikey':CONFIG.SUPABASE_ANON_KEY,
+        'Authorization':'Bearer '+CONFIG.SUPABASE_ANON_KEY,
+        'Content-Type':'application/json',
+        ...(options.headers||{})
+      }
+    });
+    if(!r.ok) throw new Error('Supabase '+r.status);
+    if(r.status===204) return null;
+    const txt=await r.text();
+    return txt ? JSON.parse(txt) : null;
+  }
+
+  function attachCountNodes(){
+    document.querySelectorAll('.track-row').forEach(row => {
+      const btn=row.querySelector('.play-btn[data-src]');
+      const name=row.querySelector('.track-name');
+      if(!btn || !name || name.querySelector('.play-count')) return;
+      const span=document.createElement('span');
+      span.className='play-count';
+      span.dataset.trackId=trackIdFromSrc(btn.dataset.src);
+      span.textContent='— reproducciones';
+      name.appendChild(span);
+    });
+  }
+
+  function formatPlays(n){
+    const value=Number(n)||0;
+    return new Intl.NumberFormat('es-AR').format(value)+' '+(value===1?'reproducción':'reproducciones');
+  }
+
+  async function refreshCounts(){
+    attachCountNodes();
+    if(!configured()) return;
+    try{
+      const rows=await api('/rest/v1/track_stats?select=track_id,plays');
+      const counts=new Map((rows||[]).map(r=>[r.track_id,Number(r.plays)||0]));
+      document.querySelectorAll('.play-count[data-track-id]').forEach(el=>{ el.textContent=formatPlays(counts.get(el.dataset.trackId)||0); });
+    }catch(e){ console.warn('No se pudieron cargar reproducciones:',e); }
+  }
+
+  async function registerPlay(id){
+    if(!id || isOwner || countedThisSession.has(id) || !configured()) return;
+    const t=trackCatalog.get(id); if(!t) return;
+    countedThisSession.add(id);
+    sessionStorage.setItem('mya-counted-tracks',JSON.stringify([...countedThisSession]));
+    try{
+      await api('/rest/v1/rpc/increment_play',{method:'POST',body:JSON.stringify({p_track_id:id,p_track_name:t.name})});
+      await refreshCounts();
+    }catch(e){
+      countedThisSession.delete(id);
+      sessionStorage.setItem('mya-counted-tracks',JSON.stringify([...countedThisSession]));
+      console.warn('No se pudo registrar reproducción:',e);
+    }
+  }
+
+  function markListened(id){
+    if(!id) return;
+    listenedThisSession.add(id);
+    sessionStorage.setItem('mya-listened-tracks',JSON.stringify([...listenedThisSession]));
+  }
+
+  function votedAlready(){ return localStorage.getItem('mya-favorite-vote')===CONFIG.VOTE_VERSION; }
+
+  function buildPoll(){
+    pollOptions.innerHTML='';
+    const options=[...trackCatalog.values()];
+    options.forEach(t=>{
+      const b=document.createElement('button');
+      b.className='poll-track'; b.type='button';
+      b.innerHTML='<strong></strong><span></span>';
+      b.querySelector('strong').textContent=t.name;
+      b.querySelector('span').textContent=t.album;
+      b.addEventListener('click',()=>submitFavorite(t));
+      pollOptions.appendChild(b);
+    });
+  }
+
+  function canShowPoll(){
+    return ownerReady && !isOwner && !votedAlready() && listenedThisSession.size>0 && !pollShownThisPage;
+  }
+
+  function showPoll(){
+    if(!canShowPoll()) return false;
+    pollShownThisPage=true; buildPoll();
+    poll.classList.add('open'); poll.setAttribute('aria-hidden','false');
+    return true;
+  }
+  function hidePoll(){ poll.classList.remove('open'); poll.setAttribute('aria-hidden','true'); }
+
+  async function submitFavorite(t){
+    localStorage.setItem('mya-favorite-vote',CONFIG.VOTE_VERSION);
+    hidePoll();
+    if(!configured()) return;
+    try{ await api('/rest/v1/rpc/increment_favorite',{method:'POST',body:JSON.stringify({p_track_id:t.id,p_track_name:t.name})}); }
+    catch(e){ console.warn('No se pudo registrar favorito:',e); }
+  }
+
+  pollSkip.addEventListener('click',hidePoll);
+  poll.addEventListener('click',e=>{ if(e.target===poll) hidePoll(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hidePoll(); });
+
+  // Exit intent realista: los navegadores no permiten mostrar un modal personalizado
+  // después de que la pestaña ya empezó a cerrarse. Lo mostramos al salir con el mouse
+  // por la parte superior, antes de que el cierre ocurra.
+  document.addEventListener('mouseout',e=>{
+    if(e.clientY<=0 && !e.relatedTarget) showPoll();
+  });
+
+  // En móvil, si el usuario vuelve después de ocultar la página, mostramos la encuesta.
+  let wasHidden=false;
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden) wasHidden=true;
+    else if(wasHidden){ wasHidden=false; showPoll(); }
+  });
+
+  // Al intentar abandonar por un link externo, primero mostramos la elección.
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('a[href]');
+    if(!a || a.hasAttribute('download') || a.href.startsWith(location.origin+'#') || a.getAttribute('href')==='#') return;
+    if(canShowPoll()) {
+      e.preventDefault();
+      const href=a.href, target=a.target;
+      showPoll();
+      const resume=()=>{ if(target==='_blank') window.open(href,'_blank','noopener'); else location.href=href; };
+      const observer=new MutationObserver(()=>{ if(!poll.classList.contains('open')){ observer.disconnect(); resume(); } });
+      observer.observe(poll,{attributes:true,attributeFilter:['class']});
+    }
+  },true);
+
+  // Acumula segundos de escucha reales. Una reproducción válida cuenta después de 10 s.
+  setInterval(()=>{
+    if(!ownerReady || !audioEl || audioEl.paused || !audioEl.currentSrc) return;
+    const id=trackIdFromSrc(audioEl.currentSrc);
+    if(!id) return;
+    if(currentTrackId!==id) currentTrackId=id;
+    markListened(id);
+    const sec=(secondsByTrack.get(id)||0)+1; secondsByTrack.set(id,sec);
+    if(sec>=CONFIG.VALID_PLAY_SECONDS) registerPlay(id);
+  },1000);
+
+  detectOwner().then(refreshCounts);
+  attachCountNodes();
+})();
 </script>
 
 </body>
