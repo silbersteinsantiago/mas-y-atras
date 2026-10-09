@@ -143,8 +143,19 @@
   }
   .feat-play-zone{ flex:1; min-height:0; z-index:3; }
   .feat-face .photo{ position:absolute; inset:0; z-index:0; }
+  .feat-face .photo.is-contained{
+    background-position:center;
+    background-size:cover;
+  }
+  .feat-face .photo.is-contained::before{
+    content:''; position:absolute; inset:-24px; z-index:0;
+    background:inherit; filter:blur(18px) brightness(.42); transform:scale(1.08);
+  }
+  .feat-face .photo.is-contained .feat-face-photo{
+    position:relative; z-index:1; object-fit:contain; object-position:center;
+  }
   .feat-face .photo::after{
-    content:''; position:absolute; inset:0; z-index:1;
+    content:''; position:absolute; inset:0; z-index:2;
     background:linear-gradient(180deg, rgba(10,10,10,.15) 0%, rgba(10,10,10,.55) 55%, rgba(10,10,10,.92) 100%);
   }
   .feat-arrow{
@@ -2895,7 +2906,7 @@ por amar...</p>
     { src:'Recuerdos De Mar (Acústico).mp3', name:'Recuerdos de Mar', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'cover-musilencio.jpg', photo:'recuerdos-de-mar-photo.jpg', pos:'center center' },
     { src:'Mientes.mp3', name:'Mientes', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'cover-musilencio.jpg', photo:'mientes-photo.jpg', pos:'center 25%' },
     { src:'Todo puede ser.mp3', name:'Todo puede ser', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'todo-puede-ser-photo.png', photo:'todo-puede-ser-photo.png', pos:'center 35%' },
-    { src:'Sin Códigos.mp3', name:'Sin Códigos', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'sin-codigos-photo.png', photo:'sin-codigos-photo.png', pos:'center center' },
+    { src:'Sin Códigos.mp3', name:'Sin Códigos', album:'Musilencio', eyebrow:'Musilencio — Acústico', sub:'De Musilencio, en formato acústico.', art:'sin-codigos-photo.png', photo:'sin-codigos-photo.png', pos:'center center', fit:'contain' },
     { src:'Máquina del tiempo (Radio Edit).mp3', name:'Máquina del Tiempo (Radio Edit)', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'maquina-radio-edit-photo.jpg', pos:'center 30%' },
     { src:'Te necesito (Radio Edit).mp3?v=1', name:'Te Necesito (Radio Edit)', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'te-necesito-radio-edit-photo.jpg', pos:'center 45%' },
     { src:'Tierna de ojos tristes (Radio Edit).mp3', name:'Tierna de Ojos Tristes', album:'Máquina del Tiempo', eyebrow:'Máquina del Tiempo', sub:'Del álbum Máquina del Tiempo.', art:'cover-maquina-del-tiempo.jpg', photo:'tierna-radio-edit-photo.jpg', pos:'center 22%' },
@@ -2921,9 +2932,13 @@ por amar...</p>
 
   function populateFace(face, t){
     const img = face.querySelector('.feat-face-photo');
+    const photo = face.querySelector('.photo');
     img.src = t.photo;
     img.alt = t.name;
     img.style.objectPosition = t.pos || 'center center';
+    const showFullPhoto = t.fit === 'contain';
+    photo.classList.toggle('is-contained', showFullPhoto);
+    photo.style.backgroundImage = showFullPhoto ? `url(${JSON.stringify(t.photo)})` : '';
 
     const playBtn = face.querySelector('.featured-play');
     playBtn.dataset.src = t.src;
