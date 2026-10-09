@@ -1963,7 +1963,7 @@ por amar...</p>
 
 <div class="listener-poll" id="listener-poll" aria-hidden="true">
   <div class="listener-poll-card" role="dialog" aria-modal="true" aria-labelledby="poll-title">
-    <div class="listener-poll-kicker">Antes de irte</div>
+    <div class="listener-poll-kicker">Tu escucha</div>
     <h3 id="poll-title">¿Qué tema te gustó más?</h3>
     <p>Elegí uno. Nos ayuda a saber qué canciones conectan más con quienes nos escuchan.</p>
     <div class="poll-options" id="poll-options"></div>
@@ -3125,12 +3125,13 @@ por amar...</p>
    ========================================================= */
 (() => {
   const CONFIG = {
-    SUPABASE_URL: 'https://vrqgetxfixjmfitgowtu.supabase.co',
+    SUPABASE_URL: 'https://vrqgetxfxijmfitgowtu.supabase.co',
     SUPABASE_ANON_KEY: 'sb_publishable_fdEAuqY_-SFl8H_pXcVWwA_YLtCNute',
     // Para excluir por IP sin publicar tu IP real: pegá aquí su SHA-256.
     // El archivo owner-ip-hash.html incluido te genera ese hash localmente.
     OWNER_IP_HASH: 'PEGA_AQUI_EL_HASH_SHA256_DE_TU_IP',
     VALID_PLAY_SECONDS: 10,
+    POLL_DELAY_AFTER_PLAY_MS: 12000,
     VOTE_VERSION: '2026-09-v1'
   };
 
@@ -3144,7 +3145,7 @@ por amar...</p>
   let currentTrackId = '';
   let isOwner = false;
   let ownerReady = false;
-  let pollShownThisPage = false;
+  let pollTimer = null;
 
   const cleanSrc = (src='') => {
     try { return decodeURIComponent(src.split('?')[0].split('/').pop() || ''); } catch { return src.split('?')[0].split('/').pop() || ''; }
@@ -3251,7 +3252,8 @@ por amar...</p>
     sessionStorage.setItem('mya-listened-tracks',JSON.stringify([...listenedThisSession]));
   }
 
-  function votedAlready(){ return localStorage.getItem('mya-favorite-vote')===CONFIG.VOTE_VERSION; }
+  function votedAlready(){ return sessionStorage.getItem('mya-favorite-vote')===CONFIG.VOTE_VERSION; }
+  function pollPromptedAlready(){ return sessionStorage.getItem('mya-favorite-prompted')===CONFIG.VOTE_VERSION; }
 
   function buildPoll(){
     pollOptions.innerHTML='';
@@ -3268,19 +3270,28 @@ por amar...</p>
   }
 
   function canShowPoll(){
-    return ownerReady && !isOwner && !votedAlready() && listenedThisSession.size>0 && !pollShownThisPage;
+    return ownerReady && !isOwner && !votedAlready() && !pollPromptedAlready() && listenedThisSession.size>0;
   }
 
   function showPoll(){
     if(!canShowPoll()) return false;
-    pollShownThisPage=true; buildPoll();
+    sessionStorage.setItem('mya-favorite-prompted',CONFIG.VOTE_VERSION);
+    buildPoll();
     poll.classList.add('open'); poll.setAttribute('aria-hidden','false');
     return true;
   }
   function hidePoll(){ poll.classList.remove('open'); poll.setAttribute('aria-hidden','true'); }
 
+  function schedulePoll(){
+    if(pollTimer || !canShowPoll()) return;
+    pollTimer=setTimeout(()=>{
+      pollTimer=null;
+      showPoll();
+    },CONFIG.POLL_DELAY_AFTER_PLAY_MS);
+  }
+
   async function submitFavorite(t){
-    localStorage.setItem('mya-favorite-vote',CONFIG.VOTE_VERSION);
+    sessionStorage.setItem('mya-favorite-vote',CONFIG.VOTE_VERSION);
     hidePoll();
     if(!configured()) return;
     try{ await api('/rest/v1/rpc/increment_favorite',{method:'POST',body:JSON.stringify({p_track_id:t.id,p_track_name:t.name})}); }
@@ -3325,9 +3336,12 @@ por amar...</p>
     const id=trackIdFromSrc(audioEl.currentSrc);
     if(!id) return;
     if(currentTrackId!==id) currentTrackId=id;
-    markListened(id);
     const sec=(secondsByTrack.get(id)||0)+1; secondsByTrack.set(id,sec);
-    if(sec>=CONFIG.VALID_PLAY_SECONDS) registerPlay(id);
+    if(sec>=CONFIG.VALID_PLAY_SECONDS){
+      markListened(id);
+      registerPlay(id);
+      schedulePoll();
+    }
   },1000);
 
   detectOwner().then(refreshCounts);
