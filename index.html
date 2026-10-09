@@ -3131,7 +3131,7 @@ por amar...</p>
     // El archivo owner-ip-hash.html incluido te genera ese hash localmente.
     OWNER_IP_HASH: 'PEGA_AQUI_EL_HASH_SHA256_DE_TU_IP',
     VALID_PLAY_SECONDS: 10,
-    POLL_DELAY_AFTER_PLAY_MS: 12000,
+    POLL_AFTER_LISTEN_SECONDS: 360,
     VOTE_VERSION: '2026-09-v1'
   };
 
@@ -3142,10 +3142,10 @@ por amar...</p>
   const countedThisSession = new Set(JSON.parse(sessionStorage.getItem('mya-counted-tracks') || '[]'));
   const listenedThisSession = new Set(JSON.parse(sessionStorage.getItem('mya-listened-tracks') || '[]'));
   const secondsByTrack = new Map();
+  let totalListenedSeconds = Number(sessionStorage.getItem('mya-listened-seconds')) || 0;
   let currentTrackId = '';
   let isOwner = false;
   let ownerReady = false;
-  let pollTimer = null;
 
   const cleanSrc = (src='') => {
     try { return decodeURIComponent(src.split('?')[0].split('/').pop() || ''); } catch { return src.split('?')[0].split('/').pop() || ''; }
@@ -3282,14 +3282,6 @@ por amar...</p>
   }
   function hidePoll(){ poll.classList.remove('open'); poll.setAttribute('aria-hidden','true'); }
 
-  function schedulePoll(){
-    if(pollTimer || !canShowPoll()) return;
-    pollTimer=setTimeout(()=>{
-      pollTimer=null;
-      showPoll();
-    },CONFIG.POLL_DELAY_AFTER_PLAY_MS);
-  }
-
   async function submitFavorite(t){
     sessionStorage.setItem('mya-favorite-vote',CONFIG.VOTE_VERSION);
     hidePoll();
@@ -3336,12 +3328,14 @@ por amar...</p>
     const id=trackIdFromSrc(audioEl.currentSrc);
     if(!id) return;
     if(currentTrackId!==id) currentTrackId=id;
+    totalListenedSeconds+=1;
+    sessionStorage.setItem('mya-listened-seconds',String(totalListenedSeconds));
     const sec=(secondsByTrack.get(id)||0)+1; secondsByTrack.set(id,sec);
     if(sec>=CONFIG.VALID_PLAY_SECONDS){
       markListened(id);
       registerPlay(id);
-      schedulePoll();
     }
+    if(totalListenedSeconds>=CONFIG.POLL_AFTER_LISTEN_SECONDS) showPoll();
   },1000);
 
   detectOwner().then(refreshCounts);
