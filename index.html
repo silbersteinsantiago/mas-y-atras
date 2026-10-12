@@ -270,7 +270,8 @@
   .story-toggle.open .plus{ transform:rotate(45deg); }
   .story-toggle.open{ color:var(--orange); }
   .track-story, .track-lyrics{ max-height:0; overflow:hidden; transition:max-height .5s ease; }
-  .track-story.open, .track-lyrics.open{ max-height:600px; }
+    .track-story.open{ max-height:600px; }
+  .track-lyrics.open{ max-height:none; overflow:visible; }
   .track-story-inner{ padding:0 1.1rem 1.4rem 2.4rem; }
   .track-story-inner p{ font-size:.9rem; color:rgba(255,255,255,.7); max-width:56ch; font-style:italic; line-height:1.55; }
   .track-lyrics-inner{ padding:0 1.1rem 1.4rem 2.4rem; }
